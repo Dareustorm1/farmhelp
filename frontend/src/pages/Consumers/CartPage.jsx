@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import { motion } from "framer-motion";
 import {
   FiArrowLeft,
@@ -48,12 +49,32 @@ const CartPage = () => {
   const discountAmount = couponApplied ? subtotal * 0.1 : 0; // 10% discount if coupon applied
   const totalAmount = subtotal + shippingFee + taxAmount - discountAmount;
 
-  // Load cart data from localStorage when component mounts
+  // Load cart data when component mounts
   useEffect(() => {
-    loadCart();
+    const token = localStorage.getItem("token");
+    if (token) {
+      // try to load from server first
+      fetchServerCart(token);
+    } else {
+      loadCart();
+    }
   }, []);
 
-  // Function to load cart data
+  // Listen for cartUpdated events to refresh data automatically
+  useEffect(() => {
+    const handler = () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        fetchServerCart(token);
+      } else {
+        loadCart();
+      }
+    };
+    window.addEventListener('cartUpdated', handler);
+    return () => window.removeEventListener('cartUpdated', handler);
+  }, []);
+
+  // Function to load cart data from localStorage (fallback)
   const loadCart = () => {
     setLoading(true);
     try {
@@ -88,8 +109,79 @@ const CartPage = () => {
     }
   };
 
-  // Update item quantity
-  const updateQuantity = (itemId, change) => {
+  // Load cart from server using API when user authenticated
+  const fetchServerCart = async (token) => {
+    try {
+      setLoading(true);
+
+      // merge any local cart items first
+      const localCartRaw = localStorage.getItem('cart');
+      if (localCartRaw) {
+        try {
+          const localCartItems = JSON.parse(localCartRaw);
+          for (const item of localCartItems) {
+            await axios.post(
+              `${API_BASE_URL}/api/cart/add`,
+              { productId: item._id, quantity: item.quantity },
+              { headers: { Authorization: `Bearer ${token}` } }
+            );
+          }
+        } catch (mergeErr) {
+          console.warn('Error merging local cart into server:', mergeErr.message);
+        }
+        localStorage.removeItem('cart');
+      }
+
+      const response = await axios.get(`${API_BASE_URL}/api/cart`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      console.log('Server cart response:', response.data);
+      if (response.data.success) {
+        // handle possible structure differences
+        const items = response.data.cart.items || [];
+        // if each item has product_details.price, copy it to top-level price for calculations
+        const normalized = items.map(item => {
+          if (item.product_details && item.product_details.price && !item.price) {
+            return { ...item, price: item.product_details.price };
+          }
+          return item;
+        });
+        setCart(normalized);
+      } else {
+        setError("Unable to fetch cart from server");
+      }
+    } catch (err) {
+      console.error("Server cart fetch error:", err.response || err.message);
+      // fallback to local
+      loadCart();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Update item quantity (local or server)
+  const updateQuantity = async (itemId, change) => {
+    const token = localStorage.getItem("token");
+    // calculate new quantity based on current cart state
+    const currentItem = cart.find(item => item._id === itemId);
+    const newQty = currentItem ? Math.max(1, currentItem.quantity + change) : change;
+    if (token) {
+      try {
+        const response = await axios.put(
+          `${API_BASE_URL}/api/cart/update`,
+          { itemId, quantity: newQty },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        if (response.data.success) {
+          fetchServerCart(token);
+        }
+      } catch (err) {
+        console.error("Error updating server cart quantity:", err);
+      }
+      return;
+    }
+
+    // fallback to local
     const updatedCart = cart.map((item) => {
       if (item._id === itemId) {
         const newQuantity = Math.max(1, item.quantity + change);
@@ -111,22 +203,70 @@ const CartPage = () => {
   };
 
   // Remove item from cart
-  const removeFromCart = (itemId) => {
+  const removeFromCart = async (itemId) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        await axios.delete(`${API_BASE_URL}/api/cart/remove/${itemId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        fetchServerCart(token);
+      } catch (err) {
+        console.error("Error removing server cart item:", err);
+      }
+      return;
+    }
+
     const updatedCart = cart.filter((item) => item._id !== itemId);
     setCart(updatedCart);
     localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
   // Clear entire cart
-  const clearCart = () => {
-    if (window.confirm("Are you sure you want to clear your cart?")) {
-      setCart([]);
-      localStorage.removeItem("cart");
+  const clearCart = async () => {
+    if (!window.confirm("Are you sure you want to clear your cart?")) return;
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        await axios.delete(`${API_BASE_URL}/api/cart/clear`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        fetchServerCart(token);
+      } catch (err) {
+        console.error("Error clearing server cart:", err);
+      }
+      return;
     }
+
+    setCart([]);
+    localStorage.removeItem("cart");
   };
 
-  // Apply coupon code
-  const applyCoupon = () => {
+  // Apply coupon code (uses server if authenticated)
+  const applyCoupon = async () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await axios.post(`${API_BASE_URL}/api/cart/coupon`,
+          { couponCode },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        if (response.data.success) {
+          // re-fetch cart to update discount
+          fetchServerCart(token);
+          setCouponApplied(true);
+        } else {
+          setError(response.data.message || "Invalid coupon code");
+          setTimeout(() => setError(null), 3000);
+        }
+      } catch (err) {
+        console.error('Apply coupon error', err);
+        setError('Failed to apply coupon');
+        setTimeout(() => setError(null), 3000);
+      }
+      return;
+    }
+
     const validCoupons = ["discount10", "welcome", "AGROSYNC"];
 
     if (validCoupons.includes(couponCode.toLowerCase())) {
@@ -148,7 +288,7 @@ const CartPage = () => {
       setError("Your cart is empty");
       return;
     }
-    
+
     // Create a deep copy of cart items and ensure locations are strings
     const processedItems = cart.map(item => {
       const processedItem = {...item};
@@ -187,11 +327,12 @@ const CartPage = () => {
       total: totalAmount,
       couponCode: couponApplied ? couponCode : null
     };
-    
-    // Save checkout data to localStorage
+
+    // Save checkout data to localStorage regardless of login state
+    console.log('Saving checkout data:', checkoutData);
     localStorage.setItem("checkout", JSON.stringify(checkoutData));
-    
-    // Navigate to checkout page
+
+    // Now navigate to checkout page
     navigate("/consumer/checkout");
   };
 
@@ -240,7 +381,7 @@ const CartPage = () => {
         <div className="flex items-center space-x-3 mb-6">
           <button
             onClick={continueShopping}
-            className="flex items-center space-x-2 text-teal-400 hover:text-teal-300 transition-colors"
+            className="flex items-center space-x-2 text-emerald-400 hover:text-emerald-300 transition-colors"
           >
             <FiArrowLeft className="w-5 h-5" />
             <span>Continue Shopping</span>
@@ -249,7 +390,7 @@ const CartPage = () => {
           {/* Add refresh button for debugging */}
           <button
             onClick={loadCart}
-            className="flex items-center space-x-2 text-blue-400 hover:text-blue-300 transition-colors ml-4"
+            className="flex items-center space-x-2 text-emerald-400 hover:text-emerald-300 transition-colors ml-4"
           >
             <FiRefreshCw className="w-4 h-4" />
             <span>Refresh Cart</span>
@@ -257,7 +398,7 @@ const CartPage = () => {
         </div>
 
         <div className="flex items-center space-x-3">
-          <FiShoppingCart className="w-7 h-7 text-teal-400" />
+          <FiShoppingCart className="w-7 h-7 text-emerald-400" />
           <h1 className="text-3xl font-bold text-white">Your Cart</h1>
         </div>
         <p className="text-gray-400 mt-2">
@@ -271,13 +412,13 @@ const CartPage = () => {
 
       {loading ? (
         <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500"></div>
         </div>
       ) : cart.length === 0 ? (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-center py-16 bg-white/5 backdrop-blur-sm rounded-xl border border-green-200/20 dark:border-teal-800/20"
+          className="text-center py-16 bg-white/5 backdrop-blur-sm rounded-xl border border-green-200/20 dark:border-emerald-800/20"
         >
           <FiShoppingCart className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h2 className="text-xl font-semibold text-white mb-2">
@@ -288,7 +429,7 @@ const CartPage = () => {
           </p>
           <button
             onClick={continueShopping}
-            className="px-5 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors"
+            className="px-5 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors"
           >
             Browse Products
           </button>
@@ -300,8 +441,8 @@ const CartPage = () => {
             animate={{ opacity: 1, x: 0 }}
             className="md:w-2/3"
           >
-            <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-green-200/20 dark:border-teal-800/20 overflow-hidden">
-              <div className="p-6 border-b border-green-200/20 dark:border-teal-800/20 flex justify-between">
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-green-200/20 dark:border-emerald-800/20 overflow-hidden">
+              <div className="p-6 border-b border-green-200/20 dark:border-emerald-800/20 flex justify-between">
                 <h2 className="text-xl font-semibold text-white">
                   Product Details
                 </h2>
@@ -314,7 +455,7 @@ const CartPage = () => {
                 </button>
               </div>
 
-              <div className="divide-y divide-green-200/10 dark:divide-teal-800/10">
+              <div className="divide-y divide-green-200/10 dark:divide-emerald-800/10">
                 {cart.map((item, index) => (
                   <div
                     key={item._id || index}
@@ -345,7 +486,7 @@ const CartPage = () => {
                     <div className="flex-grow">
                       <h3 className="text-white font-medium">{item.name}</h3>
                       {item.category && (
-                        <span className="text-xs px-2 py-1 rounded-full bg-teal-900/30 text-teal-400 inline-block mt-1">
+                        <span className="text-xs px-2 py-1 rounded-full bg-emerald-900/30 text-emerald-400 inline-block mt-1">
                           {item.category}
                         </span>
                       )}
@@ -355,7 +496,7 @@ const CartPage = () => {
                           item.farmer_details.location)) && (
                         <div className="mt-2 text-xs text-gray-400 space-y-1">
                           <p>
-                            <span className="text-teal-400">
+                            <span className="text-emerald-400">
                               Farmer location:
                             </span>{" "}
                             {ensureString(item.farmer_location || item.farmer_details?.location)}
@@ -363,14 +504,14 @@ const CartPage = () => {
                           {item.farmer_mobile ||
                           item.farmer_details?.contact ? (
                             <p>
-                              <span className="text-teal-400">Contact:</span>{" "}
+                              <span className="text-emerald-400">Contact:</span>{" "}
                               {item.farmer_mobile ||
                                 item.farmer_details?.contact}
                             </p>
                           ) : null}
                           {item.farmer_details?.rating && (
                             <p>
-                              <span className="text-teal-400">Rating:</span>{" "}
+                              <span className="text-emerald-400">Rating:</span>{" "}
                               {item.farmer_details.rating}★
                             </p>
                           )}
@@ -380,7 +521,7 @@ const CartPage = () => {
                       {item.traceability && (
                         <div className="mt-2 text-xs text-gray-400">
                           <details className="group">
-                            <summary className="cursor-pointer text-teal-400 hover:text-teal-300 flex items-center">
+                            <summary className="cursor-pointer text-emerald-400 hover:text-emerald-300 flex items-center">
                               View traceability info
                               <svg
                                 className="ml-1 w-3 h-3 transition-transform group-open:rotate-180"
@@ -430,7 +571,7 @@ const CartPage = () => {
                         <div className="flex items-center space-x-2">
                           <button
                             onClick={() => updateQuantity(item._id, -1)}
-                            className="w-8 h-8 rounded-full border border-teal-700 flex items-center justify-center text-white hover:bg-teal-800/50"
+                            className="w-8 h-8 rounded-full border border-emerald-700 flex items-center justify-center text-white hover:bg-emerald-800/50"
                           >
                             <FiMinus className="w-3 h-3" />
                           </button>
@@ -439,13 +580,13 @@ const CartPage = () => {
                           </span>
                           <button
                             onClick={() => updateQuantity(item._id, 1)}
-                            className="w-8 h-8 rounded-full border border-teal-700 flex items-center justify-center text-white hover:bg-teal-800/50"
+                            className="w-8 h-8 rounded-full border border-emerald-700 flex items-center justify-center text-white hover:bg-emerald-800/50"
                           >
                             <FiPlus className="w-3 h-3" />
                           </button>
                         </div>
                         <div className="flex items-center space-x-3">
-                          <span className="text-teal-400 font-semibold">
+                          <span className="text-emerald-400 font-semibold">
                           ₹{(item.price * item.quantity).toFixed(2)}
                           </span>
                           <button
@@ -468,8 +609,8 @@ const CartPage = () => {
             animate={{ opacity: 1, x: 0 }}
             className="md:w-1/3"
           >
-            <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-green-200/20 dark:border-teal-800/20 sticky top-28">
-              <div className="p-6 border-b border-green-200/20 dark:border-teal-800/20">
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-green-200/20 dark:border-emerald-800/20 sticky top-28">
+              <div className="p-6 border-b border-green-200/20 dark:border-emerald-800/20">
                 <h2 className="text-xl font-semibold text-white">
                   Order Summary
                 </h2>
@@ -496,7 +637,7 @@ const CartPage = () => {
                 </div>
 
                 {couponApplied && (
-                  <div className="flex justify-between text-teal-400">
+                  <div className="flex justify-between text-emerald-400">
                     <span>Discount (10%)</span>
                     <span className="font-medium">
                       -₹{discountAmount.toFixed(2)}
@@ -504,16 +645,16 @@ const CartPage = () => {
                   </div>
                 )}
 
-                <div className="pt-4 border-t border-green-200/10 dark:border-teal-800/10">
+                <div className="pt-4 border-t border-green-200/10 dark:border-emerald-800/10">
                   <div className="flex justify-between text-white">
                     <span className="font-semibold">Total</span>
-                    <span className="font-bold text-teal-400">
+                    <span className="font-bold text-emerald-400">
                     ₹{totalAmount.toFixed(2)}
                     </span>
                   </div>
                 </div>
 
-                {/* <div className="pt-4 mt-4 border-t border-green-200/10 dark:border-teal-800/10">
+                {/* <div className="pt-4 mt-4 border-t border-green-200/10 dark:border-emerald-800/10">
                   <p className="text-sm text-gray-400 mb-2">
                     Apply Coupon Code
                   </p>
@@ -524,22 +665,22 @@ const CartPage = () => {
                       onChange={(e) => setCouponCode(e.target.value)}
                       disabled={couponApplied}
                       placeholder="Enter coupon code"
-                      className="flex-grow px-3 py-2 bg-white/5 border border-green-200/20 dark:border-teal-800/20 rounded-lg text-white focus:outline-none focus:ring-1 focus:ring-teal-500"
+                      className="flex-grow px-3 py-2 bg-white/5 border border-green-200/20 dark:border-emerald-800/20 rounded-lg text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
                     />
                     <button
                       onClick={applyCoupon}
                       disabled={couponApplied || !couponCode}
                       className={`px-4 py-2 rounded-lg ${
                         couponApplied
-                          ? "bg-teal-900/50 text-teal-200 cursor-not-allowed"
-                          : "bg-teal-600 text-white hover:bg-teal-700 transition-colors"
+                          ? "bg-emerald-900/50 text-emerald-200 cursor-not-allowed"
+                          : "bg-emerald-600 text-white hover:bg-emerald-700 transition-colors"
                       }`}
                     >
                       Apply
                     </button>
                   </div>
                   {couponApplied && (
-                    <p className="text-sm text-teal-400 mt-2">
+                    <p className="text-sm text-emerald-400 mt-2">
                       Coupon applied successfully!
                     </p>
                   )}
@@ -547,7 +688,7 @@ const CartPage = () => {
 
                 <button
                   onClick={handleCheckout}
-                  className="w-full mt-6 py-3 px-4 bg-teal-500 text-white rounded-lg font-medium hover:bg-teal-600 transition-colors flex items-center justify-center space-x-2"
+                  className="w-full mt-6 py-3 px-4 bg-emerald-500 text-white rounded-lg font-medium hover:bg-emerald-600 transition-colors flex items-center justify-center space-x-2"
                 >
                   <FiCreditCard className="w-5 h-5" />
                   <span>Proceed to Checkout</span>
@@ -555,7 +696,7 @@ const CartPage = () => {
 
                 <button
                   onClick={continueShopping}
-                  className="w-full mt-3 py-3 px-4 border border-teal-600 text-teal-400 rounded-lg font-medium hover:bg-teal-900/30 transition-colors"
+                  className="w-full mt-3 py-3 px-4 border border-emerald-600 text-emerald-400 rounded-lg font-medium hover:bg-emerald-900/30 transition-colors"
                 >
                   Continue Shopping
                 </button>

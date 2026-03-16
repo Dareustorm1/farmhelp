@@ -94,7 +94,7 @@ function Home() {
 
   return (
     <div
-      className="min-h-screen bg-gradient-to-b from-[#0c1816] to-[#0b1f1a]"
+      className="min-h-screen bg-gradient-to-b from-[#0d1612] to-[#0f1f18]"
       ref={targetRef}
     >
       <Navbar />
@@ -110,7 +110,7 @@ function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <div className="inline-flex items-center rounded-full border border-green-200 bg-white px-3 py-1 text-sm text-green-800 shadow-sm dark:border-teal-800 dark:bg-teal-950 dark:text-teal-200">
+                  <div className="inline-flex items-center rounded-full border border-green-200 bg-white px-3 py-1 text-sm text-green-800 shadow-sm dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-200">
                     <span>🌿 Trusted by 1000+ farmers</span>
                   </div>
                 </motion.div>
@@ -140,7 +140,7 @@ function Home() {
                       className="block mt-2"
                     >
                       Secure with{' '}
-                      <span className="text-blue-400 dark:text-cyan-300 font-extrabold">
+                      <span className="text-emerald-400 font-extrabold">
                         Blockchain
                       </span>
                     </motion.span>
@@ -234,14 +234,14 @@ function Home() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
-              How KrushiSetu Works
+            <h2 className="text-4xl font-bold bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 bg-clip-text text-transparent">
+              How Farmhelp Works
             </h2>
             <motion.div
               initial={{ width: "0%" }}
               whileInView={{ width: "200px" }}
               transition={{ duration: 1.2, ease: "easeOut" }}
-              className="h-1 bg-gradient-to-r from-green-400 via-blue-400 to-purple-400 mx-auto mt-4 rounded-full"
+              className="h-1 bg-gradient-to-r from-emerald-400 via-green-500 to-amber-500 mx-auto mt-4 rounded-full"
             ></motion.div>
             <p className="text-gray-100 mt-4 text-lg max-w-2xl mx-auto">
               Our platform makes verification simple, secure, and transparent
@@ -269,9 +269,9 @@ function Home() {
               },
               {
                 icon: "🔗",
-                iconBg: "bg-gradient-to-br from-cyan-500/20 to-blue-700/20",
-                borderColor: "border-blue-600/30",
-                shadowColor: "shadow-blue-500/10",
+                iconBg: "bg-gradient-to-br from-emerald-500/20 to-green-700/20",
+                borderColor: "border-emerald-600/30",
+                shadowColor: "shadow-emerald-500/10",
                 title: "2. Blockchain Verification",
                 description:
                   "Our system verifies and secures the information on the blockchain for immutable proof.",
@@ -318,12 +318,12 @@ function Home() {
               {
                 number: "10,000+",
                 label: "Verified Farmers",
-                gradient: "from-emerald-400 to-teal-500",
+                gradient: "from-emerald-400 to-green-600",
               },
               {
                 number: "24 Hours",
                 label: "Avg. Verification Time",
-                gradient: "from-cyan-400 to-blue-500",
+                gradient: "from-green-400 to-emerald-500",
               },
               {
                 number: "100%",
@@ -377,19 +377,19 @@ function Home() {
               transition={{ duration: 0.5 }}
               className="mb-4"
             >
-              <span className="inline-block px-5 py-2 rounded-full bg-gradient-to-r from-green-900/40 via-emerald-800/30 to-teal-700/40 text-sm font-medium text-emerald-100 backdrop-blur-sm border border-green-500/30 shadow-sm shadow-green-700/20 hover:shadow-green-500/30 hover:border-green-400/40 transition-all duration-300 select-none tracking-wide">
+              <span className="inline-block px-5 py-2 rounded-full bg-gradient-to-r from-green-900/40 via-emerald-800/30 to-green-700/40 text-sm font-medium text-emerald-100 backdrop-blur-sm border border-green-500/30 shadow-sm shadow-green-700/20 hover:shadow-green-500/30 hover:border-green-400/40 transition-all duration-300 select-none tracking-wide">
                 <span className="mr-1.5 inline-block">🌱</span>
                 Innovation for Agriculture
               </span>
             </motion.div>
-            <h2 className="text-4xl font-bold bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
+            <h2 className="text-4xl font-bold bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 bg-clip-text text-transparent">
               Bridging Nature and Technology
             </h2>
             <motion.div
               initial={{ width: "0%" }}
               whileInView={{ width: "200px" }}
               transition={{ duration: 1.2, ease: "easeOut" }}
-              className="h-1 bg-gradient-to-r from-green-400 via-blue-400 to-purple-400 mx-auto mt-4 rounded-full"
+              className="h-1 bg-gradient-to-r from-emerald-400 via-green-500 to-amber-500 mx-auto mt-4 rounded-full"
             ></motion.div>
             <p className="mt-6 text-lg max-w-2xl mx-auto text-gray-600 dark:text-gray-300 md:text-xl">
               Combining traditional farming wisdom with modern blockchain
@@ -405,7 +405,7 @@ function Home() {
             className="grid md:grid-cols-3 gap-8 relative"
           >
             {/* Decorative elements */}
-            {/* <div className="absolute -z-10 inset-0 bg-gradient-to-b from-green-500/5 via-blue-500/5 to-purple-500/5 rounded-3xl blur-3xl"></div> */}
+            {/* <div className="absolute -z-10 inset-0 bg-gradient-to-b from-green-500/5 via-emerald-500/5 to-purple-500/5 rounded-3xl blur-3xl"></div> */}
 
             {[
               {
@@ -445,10 +445,10 @@ function Home() {
               {
                 icon: "💳",
                 color: "blue",
-                bgGradient: "from-blue-900/20 to-blue-700/10",
-                borderGradient: "from-blue-700/30 to-blue-500/20",
-                hoverGradient: "hover:from-blue-700/40 hover:to-blue-500/30",
-                glow: "shadow-blue-500/20",
+                bgGradient: "from-emerald-900/20 to-emerald-700/10",
+                borderGradient: "from-emerald-700/30 to-emerald-500/20",
+                hoverGradient: "hover:from-emerald-700/40 hover:to-emerald-500/30",
+                glow: "shadow-emerald-500/20",
                 title: "Digital Wallet",
                 description:
                   "Manage your digital certificates and credentials securely in our integrated wallet system.",

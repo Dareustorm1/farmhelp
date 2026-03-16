@@ -238,8 +238,8 @@ const OrderManagement = () => {
                             onClick={() => handleStatusUpdate(order._id, 'shipped')}
                             className={`px-4 py-2 rounded-lg transition-all duration-300 ${isUpdating ? 'opacity-50 cursor-not-allowed' : ''
                                 } ${order.orderStatus === 'shipped'
-                                    ? 'bg-blue-500 text-white'
-                                    : 'bg-blue-500/20 text-blue-500 hover:bg-blue-500/30'
+                                    ? 'bg-emerald-500 text-white'
+                                    : 'bg-emerald-500/20 text-emerald-500 hover:bg-emerald-500/30'
                                 }`}
                             disabled={order.orderStatus === 'shipped' || isUpdating}
                         >
@@ -321,7 +321,7 @@ const OrderManagement = () => {
                         </div>
                         <div className="text-right">
                             <p className="text-white">{item.quantity} x ₹{item.price}</p>
-                            <p className="text-teal-500">₹{item.quantity * item.price}</p>
+                            <p className="text-emerald-500">₹{item.quantity * item.price}</p>
                         </div>
                     </div>
                 ))}
@@ -371,7 +371,7 @@ const OrderManagement = () => {
             <div className="max-w-7xl mx-auto">
                 <button
                     onClick={() => navigate('/admin')}
-                    className="flex items-center text-teal-500 hover:text-teal-400 mb-6"
+                    className="flex items-center text-emerald-500 hover:text-emerald-400 mb-6"
                 >
                     <FaArrowLeft className="mr-2" /> Back to Dashboard
                 </button>

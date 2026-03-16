@@ -78,9 +78,9 @@ const OrderConfirmationPage = () => {
         className="max-w-3xl mx-auto"
       >
         {/* Success message */}
-        <div className="bg-teal-500/10 border border-teal-500/30 rounded-xl p-6 mb-8 text-center">
-          <div className="w-16 h-16 rounded-full bg-teal-500/20 flex items-center justify-center mx-auto mb-4">
-            <FiCheck className="w-8 h-8 text-teal-500" />
+        <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-6 mb-8 text-center">
+          <div className="w-16 h-16 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto mb-4">
+            <FiCheck className="w-8 h-8 text-emerald-500" />
           </div>
           <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">Order Confirmed!</h1>
           <p className="text-gray-400">
@@ -91,13 +91,13 @@ const OrderConfirmationPage = () => {
         </div>
 
         {/* Order details */}
-        <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-green-200/20 dark:border-teal-800/20 overflow-hidden mb-6">
-          <div className="p-6 border-b border-green-200/20 dark:border-teal-800/20 flex justify-between items-center">
+        <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-green-200/20 dark:border-emerald-800/20 overflow-hidden mb-6">
+          <div className="p-6 border-b border-green-200/20 dark:border-emerald-800/20 flex justify-between items-center">
             <div className="flex items-center space-x-3">
-              <FiPackage className="w-5 h-5 text-teal-400" />
+              <FiPackage className="w-5 h-5 text-emerald-400" />
               <h2 className="text-xl font-semibold text-white">Order Details</h2>
             </div>
-            <span className="text-teal-400 font-medium">#{order.order_id || order.orderId || "New Order"}</span>
+            <span className="text-emerald-400 font-medium">#{order.order_id || order.orderId || "New Order"}</span>
           </div>
 
           <div className="p-6 space-y-4">
@@ -105,7 +105,7 @@ const OrderConfirmationPage = () => {
               <div className="mb-4 md:mb-0">
                 <div className="text-gray-400 mb-1">Order Date</div>
                 <div className="flex items-center text-white">
-                  <FiCalendar className="w-4 h-4 mr-2 text-teal-400" />
+                  <FiCalendar className="w-4 h-4 mr-2 text-emerald-400" />
                   {formatDate(orderDate)} at {formatTime(orderDate)}
                 </div>
               </div>
@@ -113,7 +113,7 @@ const OrderConfirmationPage = () => {
               <div className="mb-4 md:mb-0">
                 <div className="text-gray-400 mb-1">Payment Method</div>
                 <div className="flex items-center text-white">
-                  <FiCreditCard className="w-4 h-4 mr-2 text-teal-400" />
+                  <FiCreditCard className="w-4 h-4 mr-2 text-emerald-400" />
                   {order.paymentMethod === "razorpay" ? "Online Payment (Razorpay)" : "Cash on Delivery"}
                 </div>
               </div>
@@ -121,13 +121,13 @@ const OrderConfirmationPage = () => {
               <div>
                 <div className="text-gray-400 mb-1">Estimated Delivery</div>
                 <div className="flex items-center text-white">
-                  <FiTruck className="w-4 h-4 mr-2 text-teal-400" />
+                  <FiTruck className="w-4 h-4 mr-2 text-emerald-400" />
                   {formatDate(deliveryDate)}
                 </div>
               </div>
             </div>
 
-            <div className="border-t border-green-200/10 dark:border-teal-800/10 pt-4 mt-4">
+            <div className="border-t border-green-200/10 dark:border-emerald-800/10 pt-4 mt-4">
               <h3 className="font-medium text-white mb-3">Order Items</h3>
               <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
                 {order.items.map((item, index) => (
@@ -147,7 +147,7 @@ const OrderConfirmationPage = () => {
                     <div className="flex-grow">
                       <div className="flex justify-between">
                         <span className="text-white">{item.name}</span>
-                        <span className="text-teal-400 font-medium">₹{(item.price * item.quantity).toFixed(2)}</span>
+                        <span className="text-emerald-400 font-medium">₹{(item.price * item.quantity).toFixed(2)}</span>
                       </div>
                       <div className="text-gray-400 text-xs">
                         Quantity: {item.quantity} × ₹{item.price.toFixed(2)}
@@ -162,9 +162,9 @@ const OrderConfirmationPage = () => {
 
         {/* Shipping & Payment Info */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-green-200/20 dark:border-teal-800/20 overflow-hidden">
-            <div className="p-4 border-b border-green-200/20 dark:border-teal-800/20 flex items-center space-x-2">
-              <FiMapPin className="w-4 h-4 text-teal-400" />
+          <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-green-200/20 dark:border-emerald-800/20 overflow-hidden">
+            <div className="p-4 border-b border-green-200/20 dark:border-emerald-800/20 flex items-center space-x-2">
+              <FiMapPin className="w-4 h-4 text-emerald-400" />
               <h3 className="font-medium text-white">Shipping Address</h3>
             </div>
             <div className="p-4">
@@ -175,14 +175,14 @@ const OrderConfirmationPage = () => {
                 {order.shippingAddress.address}<br />
                 {order.shippingAddress.city}, {order.shippingAddress.state} {order.shippingAddress.pincode}<br />
                 {order.shippingAddress.country}<br />
-                <span className="text-teal-400">Phone:</span> {order.shippingAddress.phone}
+                <span className="text-emerald-400">Phone:</span> {order.shippingAddress.phone}
               </p>
             </div>
           </div>
 
-          <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-green-200/20 dark:border-teal-800/20 overflow-hidden">
-            <div className="p-4 border-b border-green-200/20 dark:border-teal-800/20 flex items-center space-x-2">
-              <FiCreditCard className="w-4 h-4 text-teal-400" />
+          <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-green-200/20 dark:border-emerald-800/20 overflow-hidden">
+            <div className="p-4 border-b border-green-200/20 dark:border-emerald-800/20 flex items-center space-x-2">
+              <FiCreditCard className="w-4 h-4 text-emerald-400" />
               <h3 className="font-medium text-white">Payment Information</h3>
             </div>
             <div className="p-4">
@@ -201,26 +201,26 @@ const OrderConfirmationPage = () => {
                 </div>
               )}
               {order.discount > 0 && (
-                <div className="flex justify-between items-center text-teal-400 text-sm mb-2">
+                <div className="flex justify-between items-center text-emerald-400 text-sm mb-2">
                   <span>Discount</span>
                   <span>-₹{order.discount.toFixed(2)}</span>
                 </div>
               )}
-              <div className="flex justify-between items-center text-white font-medium pt-2 border-t border-green-200/10 dark:border-teal-800/10">
+              <div className="flex justify-between items-center text-white font-medium pt-2 border-t border-green-200/10 dark:border-emerald-800/10">
                 <span>Total</span>
-                <span className="text-teal-400">₹{order.totalAmount.toFixed(2)}</span>
+                <span className="text-emerald-400">₹{order.totalAmount.toFixed(2)}</span>
               </div>
               
               {order.paymentMethod === "razorpay" && (order.paymentId || (order.paymentDetails && order.paymentDetails.razorpay_payment_id)) && (
-                <div className="mt-3 pt-3 border-t border-green-200/10 dark:border-teal-800/10 text-xs text-gray-400">
-                  <p><span className="text-teal-400">Transaction ID:</span> {order.paymentId || order.paymentDetails.razorpay_payment_id}</p>
-                  <p><span className="text-teal-400">Status:</span> Paid</p>
+                <div className="mt-3 pt-3 border-t border-green-200/10 dark:border-emerald-800/10 text-xs text-gray-400">
+                  <p><span className="text-emerald-400">Transaction ID:</span> {order.paymentId || order.paymentDetails.razorpay_payment_id}</p>
+                  <p><span className="text-emerald-400">Status:</span> Paid</p>
                 </div>
               )}
 
               {order.paymentMethod === "cod" && (
-                <div className="mt-3 pt-3 border-t border-green-200/10 dark:border-teal-800/10 text-xs text-gray-400">
-                  <p><span className="text-teal-400">Status:</span> Payment due on delivery</p>
+                <div className="mt-3 pt-3 border-t border-green-200/10 dark:border-emerald-800/10 text-xs text-gray-400">
+                  <p><span className="text-emerald-400">Status:</span> Payment due on delivery</p>
                 </div>
               )}
             </div>
@@ -231,15 +231,19 @@ const OrderConfirmationPage = () => {
         <div className="flex flex-col md:flex-row justify-center gap-4 mb-8">
           <Link
             to="/consumer/track-orders"
-            className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg flex items-center justify-center"
+            state={{ newOrder: order }}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg flex items-center justify-center"
           >
             <FiClock className="mr-2" />
             Track Your Order
           </Link>
+
+          {/* automatically move to tracking after a short pause */}
+          <AutoRedirect order={order} />
           
           <Link
             to="/consumer"
-            className="bg-teal-900/50 hover:bg-teal-900 text-white px-6 py-3 rounded-lg flex items-center justify-center"
+            className="bg-emerald-900/50 hover:bg-emerald-900 text-white px-6 py-3 rounded-lg flex items-center justify-center"
           >
             <FiHome className="mr-2" />
             Go to Dashboard
@@ -255,11 +259,32 @@ const OrderConfirmationPage = () => {
         </div>
 
         <div className="text-center text-gray-400 text-sm">
-          <p>Any questions about your order? <a href="mailto:support@agrosync.com" className="text-teal-400 hover:underline">Contact our support team</a></p>
+          <p>Any questions about your order? <a href="mailto:support@agrosync.com" className="text-emerald-400 hover:underline">Contact our support team</a></p>
         </div>
       </motion.div>
     </div>
   );
 };
+
+function AutoRedirect({ order }) {
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/cart/clear`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
+      }).catch(err => console.warn('Auto-clear cart failed', err));
+    }
+
+    const timer = setTimeout(() => {
+      navigate('/consumer/track-orders', { state: { newOrder: order } });
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, [order, navigate]);
+
+  return null;
+}
 
 export default OrderConfirmationPage;

@@ -84,7 +84,7 @@ function FarmerCertificate() {
           {/* Back Button */}
           <Link 
             to="/farmer/documents"
-            className="inline-flex items-center text-teal-400 hover:text-teal-300 mb-6 transition-colors"
+            className="inline-flex items-center text-emerald-400 hover:text-emerald-300 mb-6 transition-colors"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
             Back to Documents
@@ -103,7 +103,7 @@ function FarmerCertificate() {
           {/* Certificate */}
           {loading ? (
             <div className="flex justify-center items-center h-[400px]">
-              <div className="animate-pulse text-teal-400">Loading certificate...</div>
+              <div className="animate-pulse text-emerald-400">Loading certificate...</div>
             </div>
           ) : error ? (
             <div className="bg-red-500/20 text-red-300 p-6 rounded-xl border border-red-500/30">
@@ -121,7 +121,7 @@ function FarmerCertificate() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`bg-gradient-to-br ${isExpired() ? 'from-yellow-900/30 to-red-900/30 border-red-500/30' : 'from-teal-900/30 to-green-900/30 border-teal-500/30'} p-8 rounded-xl border`}
+              className={`bg-gradient-to-br ${isExpired() ? 'from-yellow-900/30 to-red-900/30 border-red-500/30' : 'from-emerald-900/30 to-green-900/30 border-emerald-500/30'} p-8 rounded-xl border`}
             >
               <div className="flex justify-between items-start mb-8">
                 <div>
@@ -140,11 +140,11 @@ function FarmerCertificate() {
                 </div>
               </div>
 
-              <div className="bg-[#1a332e] p-6 rounded-lg border border-teal-500/20 mb-8">
+              <div className="bg-[#1a332e] p-6 rounded-lg border border-emerald-500/20 mb-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <div className="flex items-center mb-2">
-                      <User className="w-5 h-5 text-teal-400 mr-2" />
+                      <User className="w-5 h-5 text-emerald-400 mr-2" />
                       <p className="text-gray-300 font-medium">Farmer ID</p>
                     </div>
                     <p className="text-white">{certificate.farmerId}</p>
@@ -152,7 +152,7 @@ function FarmerCertificate() {
                   
                   <div>
                     <div className="flex items-center mb-2">
-                      <User className="w-5 h-5 text-teal-400 mr-2" />
+                      <User className="w-5 h-5 text-emerald-400 mr-2" />
                       <p className="text-gray-300 font-medium">Farmer Name</p>
                     </div>
                     <p className="text-white">{certificate.farmerName}</p>
@@ -160,7 +160,7 @@ function FarmerCertificate() {
                   
                   <div>
                     <div className="flex items-center mb-2">
-                      <Calendar className="w-5 h-5 text-teal-400 mr-2" />
+                      <Calendar className="w-5 h-5 text-emerald-400 mr-2" />
                       <p className="text-gray-300 font-medium">Issue Date</p>
                     </div>
                     <p className="text-white">{formatDate(certificate.issuedDate)}</p>
@@ -168,7 +168,7 @@ function FarmerCertificate() {
                   
                   <div>
                     <div className="flex items-center mb-2">
-                      <Calendar className="w-5 h-5 text-teal-400 mr-2" />
+                      <Calendar className="w-5 h-5 text-emerald-400 mr-2" />
                       <p className="text-gray-300 font-medium">Expiry Date</p>
                     </div>
                     <p className={`${isExpired() ? 'text-red-400' : 'text-white'}`}>
@@ -178,9 +178,9 @@ function FarmerCertificate() {
                 </div>
               </div>
 
-              <div className="bg-[#1a332e] p-6 rounded-lg border border-teal-500/20 mb-8">
+              <div className="bg-[#1a332e] p-6 rounded-lg border border-emerald-500/20 mb-8">
                 <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-                  <FileText className="w-5 h-5 mr-2 text-teal-400" />
+                  <FileText className="w-5 h-5 mr-2 text-emerald-400" />
                   Blockchain Verification
                 </h3>
                 <div className="space-y-4">
@@ -207,9 +207,9 @@ function FarmerCertificate() {
                           href={`https://hashscan.io/testnet/transaction/${certificate.transactionHash}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="ml-2 p-2 bg-teal-500/20 rounded hover:bg-teal-500/30 transition-colors"
+                          className="ml-2 p-2 bg-emerald-500/20 rounded hover:bg-emerald-500/30 transition-colors"
                         >
-                          <ExternalLink className="w-5 h-5 text-teal-300" />
+                          <ExternalLink className="w-5 h-5 text-emerald-300" />
                         </a>
                       )}
                     </div>
@@ -220,7 +220,7 @@ function FarmerCertificate() {
               <div className="flex justify-center">
                 <button
                   onClick={() => window.print()}
-                  className="bg-teal-500 hover:bg-teal-600 text-white px-6 py-2 rounded-lg transition-colors"
+                  className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2 rounded-lg transition-colors"
                 >
                   Print Certificate
                 </button>

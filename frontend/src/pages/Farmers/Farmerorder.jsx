@@ -27,8 +27,8 @@ const OrderStatusBadge = ({ status }) => {
 
   switch (status) {
     case 'created':
-      bgColor = 'bg-blue-500/20';
-      textColor = 'text-blue-400';
+      bgColor = 'bg-emerald-500/20';
+      textColor = 'text-emerald-400';
       icon = <Package size={14} className="mr-1" />;
       break;
     case 'processing':
@@ -165,9 +165,9 @@ const FarmerOrders = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#0c1816] to-[#0b1f1a] pt-20 px-6">
+      <div className="min-h-screen bg-gradient-to-b from-[#0d1612] to-[#0f1f18] pt-20 px-6">
         <div className="min-h-[60vh] flex flex-col items-center justify-center">
-          <div className="w-12 h-12 border-t-4 border-teal-500 border-solid rounded-full animate-spin"></div>
+          <div className="w-12 h-12 border-t-4 border-emerald-500 border-solid rounded-full animate-spin"></div>
           <p className="mt-4 text-gray-400">Loading orders...</p>
         </div>
       </div>
@@ -176,14 +176,14 @@ const FarmerOrders = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#0c1816] to-[#0b1f1a] pt-20 px-6">
+      <div className="min-h-screen bg-gradient-to-b from-[#0d1612] to-[#0f1f18] pt-20 px-6">
         <div className="max-w-4xl mx-auto p-6 bg-red-900/20 border border-red-700/20 rounded-lg text-center">
           <AlertCircle className="mx-auto h-12 w-12 text-red-500 mb-4" />
           <h2 className="text-xl font-bold text-red-400 mb-2">Error Loading Orders</h2>
           <p className="text-gray-300 mb-4">{error}</p>
           <button 
             onClick={fetchOrders}
-            className="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg"
+            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg"
           >
             Try Again
           </button>
@@ -193,20 +193,20 @@ const FarmerOrders = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0c1816] to-[#0b1f1a]">
+    <div className="min-h-screen bg-gradient-to-b from-[#0d1612] to-[#0f1f18]">
       <div className="pt-20 px-6 pb-12">
         <div className="max-w-7xl mx-auto">
           <div className="mb-8">
             <div className="flex items-center gap-4 mb-4">
               <button
                 onClick={handleBack}
-                className="flex items-center gap-2 text-teal-400 hover:text-teal-300 transition-colors"
+                className="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-colors"
               >
                 <ChevronLeft size={20} />
                 <span>Back to Dashboard</span>
               </button>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-teal-50 mb-2">Your Orders</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-emerald-50 mb-2">Your Orders</h1>
             <p className="text-gray-400">View and track orders containing your products</p>
           </div>
           
@@ -224,7 +224,7 @@ const FarmerOrders = () => {
                   setSearchTerm(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="w-full pl-10 pr-4 py-2 bg-gray-800/50 border border-gray-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 text-gray-200"
+                className="w-full pl-10 pr-4 py-2 bg-gray-800/50 border border-gray-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-gray-200"
               />
             </div>
             
@@ -236,7 +236,7 @@ const FarmerOrders = () => {
                   setStatusFilter(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="bg-gray-800/50 border border-gray-700/50 text-gray-200 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                className="bg-gray-800/50 border border-gray-700/50 text-gray-200 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               >
                 <option value="all">All Statuses</option>
                 <option value="created">Created</option>
@@ -248,7 +248,7 @@ const FarmerOrders = () => {
               
               <button
                 onClick={fetchOrders}
-                className="bg-teal-600 hover:bg-teal-700 text-white p-2 rounded-lg transition-colors duration-200"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white p-2 rounded-lg transition-colors duration-200"
                 title="Refresh Orders"
               >
                 <RefreshCcw size={18} />
@@ -287,7 +287,7 @@ const FarmerOrders = () => {
                     >
                       <div className="flex flex-col md:flex-row md:items-center gap-3">
                         <div className="flex items-center gap-2">
-                          <Package className="h-5 w-5 text-teal-400" />
+                          <Package className="h-5 w-5 text-emerald-400" />
                           <span className="font-medium text-gray-200">{order.orderNumber}</span>
                         </div>
                         
@@ -305,7 +305,7 @@ const FarmerOrders = () => {
                       </div>
                       
                       <div className="flex items-center gap-3 mt-3 md:mt-0">
-                        <span className="text-teal-400 font-medium">
+                        <span className="text-emerald-400 font-medium">
                           ₹{order.totalAmount.toFixed(2)}
                         </span>
                         
@@ -399,7 +399,7 @@ const FarmerOrders = () => {
                               </div>
                               <div className="flex justify-between">
                                 <span className="text-gray-400">Total Amount:</span>
-                                <span className="text-teal-400 font-medium">₹{order.totalAmount.toFixed(2)}</span>
+                                <span className="text-emerald-400 font-medium">₹{order.totalAmount.toFixed(2)}</span>
                               </div>
                             </div>
                           </div>
@@ -419,7 +419,7 @@ const FarmerOrders = () => {
                     className={`p-2 rounded-lg ${
                       currentPage === 1
                         ? 'bg-gray-800/50 text-gray-600 cursor-not-allowed'
-                        : 'bg-gray-800/50 text-teal-400 hover:bg-gray-700/50 transition-colors duration-200'
+                        : 'bg-gray-800/50 text-emerald-400 hover:bg-gray-700/50 transition-colors duration-200'
                     }`}
                   >
                     <ChevronLeft size={20} />
@@ -443,8 +443,8 @@ const FarmerOrders = () => {
                             onClick={() => handlePageChange(pageNum)}
                             className={`px-4 py-2 rounded-lg transition-colors duration-200 ${
                               currentPage === pageNum
-                                ? 'bg-teal-500/20 text-teal-400 border border-teal-500/50'
-                                : 'bg-gray-800/50 text-teal-400 hover:bg-gray-700/50'
+                                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50'
+                                : 'bg-gray-800/50 text-emerald-400 hover:bg-gray-700/50'
                             }`}
                           >
                             {pageNum}
@@ -459,7 +459,7 @@ const FarmerOrders = () => {
                     className={`p-2 rounded-lg ${
                       currentPage === totalPages
                         ? 'bg-gray-800/50 text-gray-600 cursor-not-allowed'
-                        : 'bg-gray-800/50 text-teal-400 hover:bg-gray-700/50 transition-colors duration-200'
+                        : 'bg-gray-800/50 text-emerald-400 hover:bg-gray-700/50 transition-colors duration-200'
                     }`}
                   >
                     <ChevronRight size={20} />

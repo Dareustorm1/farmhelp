@@ -9,7 +9,7 @@ const router = express.Router();
 router.get('/profile', authenticate, async (req, res) => {
   try {
     // Fetch complete user profile from database using ID from middleware
-    const user = await User.findById(req.user.id).select('-password');
+    const user = await User.findById(req.user.id).select('-password -refreshToken');
     console.log(user)
     console.log('User profile fetched:', user);
     if (!user) {
@@ -109,7 +109,7 @@ router.put('/profile', authenticate, upload.single('profileImage'), async (req, 
     await user.save();
     
     // Return updated user without password
-    const updatedUser = await User.findById(req.user.id).select('-password');
+    const updatedUser = await User.findById(req.user.id).select('-password -refreshToken');
     res.json({ success: true, user: updatedUser });
   } catch (error) {
     console.error('Error updating profile:', error);

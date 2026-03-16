@@ -79,14 +79,14 @@ function ProductList() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#0c1816] to-[#0b1f1a] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-[#0d1612] to-[#0f1f18] flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
       </div>
     );
   }
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#0c1816] to-[#0b1f1a] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-[#0d1612] to-[#0f1f18] flex items-center justify-center">
         <div className="text-center text-red-500">
           <h2 className="text-2xl font-bold mb-4">Error Loading Products</h2>
           <p>{error}</p>
@@ -102,7 +102,7 @@ function ProductList() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0c1816] to-[#0b1f1a] w-full">
+    <div className="min-h-screen bg-gradient-to-b from-[#0d1612] to-[#0f1f18] w-full">
       {/* Top Bar */}
       <div className="w-full flex flex-col md:flex-row md:items-center md:justify-between gap-4 px-4 py-4 bg-transparent">
         <motion.button
@@ -136,7 +136,7 @@ function ProductList() {
           <Search className="absolute right-4 top-1/2 -translate-y-1/2 text-green-400 w-5 h-5" />
         </div>
         <div className="flex flex-col items-center mt-2">
-          <div className="inline-block p-3 rounded-full bg-teal-500/10 mb-2">
+          <div className="inline-block p-3 rounded-full bg-emerald-500/10 mb-2">
             <Package className="w-8 h-8 text-green-400" />
           </div>
           <h1 className="font-serif text-4xl md:text-5xl font-bold text-green-200 mb-2 tracking-tight">Fresh Products</h1>

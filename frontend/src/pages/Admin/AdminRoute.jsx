@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AdminDashboard from './Dashboard';
-import ProtectedAdminRoute from '../../components/ProtectedAdminRoute';
+import AdminAnalytics from './Analytics';
 import ProfilePage from '../Profile';
 import FarmersList from './FarmersList';
 import ConsumersList from './ConsumersList';
@@ -14,12 +14,13 @@ const AdminRoutes = () => {
         <Routes>
             <Route path="/" element={<AdminDashboard />} />
             <Route path="/dashboard" element={<AdminDashboard />} />
-            <Route path="/profile" element={<ProtectedAdminRoute><ProfilePage /></ProtectedAdminRoute>} />
-            <Route path="/consumers" element={<ProtectedAdminRoute><ConsumersList /></ProtectedAdminRoute>} />
-            <Route path="/orders" element={<ProtectedAdminRoute><OrderManagement /></ProtectedAdminRoute>} />
-            <Route path="/farmers" element={<ProtectedAdminRoute><FarmersList /></ProtectedAdminRoute>} />
-            <Route path="/document-verification" element={<ProtectedAdminRoute><DocumentVerification /></ProtectedAdminRoute>} />
-            <Route path="/certificates" element={<ProtectedAdminRoute><Certificates /></ProtectedAdminRoute>} />
+            <Route path="/analytics" element={<AdminAnalytics />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/consumers" element={<ConsumersList />} />
+            <Route path="/orders" element={<OrderManagement />} />
+            <Route path="/farmers" element={<FarmersList />} />
+            <Route path="/document-verification" element={<DocumentVerification />} />
+            <Route path="/certificates" element={<Certificates />} />
         </Routes>
     );
 };

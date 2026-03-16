@@ -76,9 +76,17 @@ function FarmerDashboard() {
       setStatsLoading(true);
       const token = localStorage.getItem('token');
       
+      // Allow page to load even without token (demo mode)
       if (!token) {
-        console.error('No authentication token found');
-        navigate('/login');
+        console.log('Demo mode: No authentication token. Displaying default stats.');
+        setStats({
+          totalProducts: 0,
+          pendingOrders: 0,
+          activeOrders: 0,
+          completedOrders: 0,
+          totalRevenue: 0,
+          verificationStatus: 'demo'
+        });
         return;
       }
 
@@ -111,8 +119,7 @@ function FarmerDashboard() {
       console.error('❌ Error fetching farmer stats:', error);
       
       if (error.response?.status === 401 || error.response?.status === 403) {
-        console.log('🚪 Redirecting to login due to auth error');
-        navigate('/login');
+        console.log('🚪 Auth error - displaying default stats');
       } else {
         setError(error.response?.data?.message || 'Failed to fetch statistics');
       }
@@ -128,7 +135,8 @@ function FarmerDashboard() {
       const token = localStorage.getItem('token');
       
       if (!token) {
-        console.error('No authentication token found');
+        console.log('Demo mode: No authentication token. Showing empty orders.');
+        setRecentOrders([]);
         return;
       }
 
@@ -165,27 +173,21 @@ function FarmerDashboard() {
   };
 
   useEffect(() => {
-    // Check authentication first
+    // Allow page to load in demo mode (no authentication required)
     const token = localStorage.getItem('token');
     const user = localStorage.getItem('user');
     
-    if (!token || !user) {
-      console.log('No authentication found, redirecting to login');
-      navigate('/login');
-      return;
-    }
-
-    try {
-      const userData = JSON.parse(user);
-      if (userData.role !== 'farmer') {
-        console.log('User is not a farmer, redirecting');
-        navigate('/login');
-        return;
+    if (token && user) {
+      try {
+        const userData = JSON.parse(user);
+        if (userData.role !== 'farmer') {
+          console.log('User is not a farmer, but continuing in demo mode');
+        }
+      } catch (parseError) {
+        console.error('Error parsing user data:', parseError);
       }
-    } catch (parseError) {
-      console.error('Error parsing user data:', parseError);
-      navigate('/login');
-      return;
+    } else {
+      console.log('Demo mode: No user authentication found - showing demo content');
     }
 
     // Fetch stats first, then orders based on verification status
@@ -329,7 +331,7 @@ function FarmerDashboard() {
                     setShowPincodeModal(false);
                     navigate('/farmer/profile');
                   }}
-                  className="flex-1 px-6 py-3 bg-teal-500 hover:bg-teal-600 text-white rounded-lg transition-colors font-semibold"
+                  className="flex-1 px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition-colors font-semibold"
                 >
                   Go to Profile
                 </button>
@@ -348,7 +350,7 @@ function FarmerDashboard() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-16"
           >
-            <h1 className="font-serif text-4xl font-bold tracking-tighter text-green-900 dark:text-teal-50 mb-4">
+            <h1 className="font-serif text-4xl font-bold tracking-tighter text-green-900 dark:text-emerald-50 mb-4">
               Farmer Dashboard
             </h1>
             <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
@@ -396,7 +398,7 @@ function FarmerDashboard() {
                 </div>
                 <button
                   onClick={() => navigate("/farmer/documents")}
-                  className="px-6 py-3 bg-teal-500 hover:bg-teal-600 text-white rounded-lg transition-colors flex items-center gap-2 font-semibold"
+                  className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition-colors flex items-center gap-2 font-semibold"
                 >
                   <FileText className="w-5 h-5" />
                   {needsDocumentUpload() ? 'Upload Documents' : 'View Status'}
@@ -437,7 +439,7 @@ function FarmerDashboard() {
 
           {/* Quick Actions Row - LOCKED/UNLOCKED based on verification */}
           <div className="mb-8">
-            <h2 className="text-2xl font-semibold text-teal-50 mb-6">
+            <h2 className="text-2xl font-semibold text-emerald-50 mb-6">
               {isVerified() ? 'Quick Actions' : 'Locked Features (Verification Required)'}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
@@ -456,7 +458,7 @@ function FarmerDashboard() {
                 className={`bg-white/5 backdrop-blur-sm rounded-xl p-6 border transition-all duration-300 text-left cursor-pointer group relative ${
                   !isVerified() 
                     ? 'opacity-40 border-red-500/20 hover:border-red-500/30' 
-                    : 'border-green-200/20 dark:border-teal-800/20 hover:border-green-300/30 dark:hover:border-teal-700/30'
+                    : 'border-green-200/20 dark:border-emerald-800/20 hover:border-green-300/30 dark:hover:border-emerald-700/30'
                 }`}
               >
                 {!isVerified() && (
@@ -468,9 +470,9 @@ function FarmerDashboard() {
                   <div className={`p-3 rounded-full mb-3 transition-colors ${
                     !isVerified() 
                       ? 'bg-gray-500/20' 
-                      : 'bg-teal-500/20 group-hover:bg-teal-500/30'
+                      : 'bg-emerald-500/20 group-hover:bg-emerald-500/30'
                   }`}>
-                    <Package className={`w-6 h-6 ${!isVerified() ? 'text-gray-500' : 'text-teal-400'}`} />
+                    <Package className={`w-6 h-6 ${!isVerified() ? 'text-gray-500' : 'text-emerald-400'}`} />
                   </div>
                   <span className={`text-lg font-semibold mb-1 ${!isVerified() ? 'text-gray-500' : 'text-white'}`}>
                     Manage Products
@@ -492,7 +494,7 @@ function FarmerDashboard() {
                 className={`bg-white/5 backdrop-blur-sm rounded-xl p-6 border transition-all duration-300 text-left cursor-pointer group relative ${
                   !isVerified() 
                     ? 'opacity-40 border-red-500/20 hover:border-red-500/30' 
-                    : 'border-green-200/20 dark:border-teal-800/20 hover:border-green-300/30 dark:hover:border-teal-700/30'
+                    : 'border-green-200/20 dark:border-emerald-800/20 hover:border-green-300/30 dark:hover:border-emerald-700/30'
                 }`}
               >
                 {!isVerified() && (
@@ -504,9 +506,9 @@ function FarmerDashboard() {
                   <div className={`p-3 rounded-full mb-3 transition-colors ${
                     !isVerified() 
                       ? 'bg-gray-500/20' 
-                      : 'bg-blue-500/20 group-hover:bg-blue-500/30'
+                      : 'bg-emerald-500/20 group-hover:bg-emerald-500/30'
                   }`}>
-                    <ShoppingCart className={`w-6 h-6 ${!isVerified() ? 'text-gray-500' : 'text-blue-400'}`} />
+                    <ShoppingCart className={`w-6 h-6 ${!isVerified() ? 'text-gray-500' : 'text-emerald-400'}`} />
                   </div>
                   <span className={`text-lg font-semibold mb-1 ${!isVerified() ? 'text-gray-500' : 'text-white'}`}>
                     View Orders
@@ -519,7 +521,7 @@ function FarmerDashboard() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => navigate("/farmer/documents")}
-                className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-green-200/20 dark:border-teal-800/20 hover:border-green-300/30 dark:hover:border-teal-700/30 transition-colors text-left cursor-pointer group"
+                className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-green-200/20 dark:border-emerald-800/20 hover:border-green-300/30 dark:hover:border-emerald-700/30 transition-colors text-left cursor-pointer group"
               >
                 <div className="flex flex-col items-center text-center">
                   <div className="p-3 bg-orange-500/20 rounded-full mb-3 group-hover:bg-orange-500/30 transition-colors">
@@ -546,7 +548,7 @@ function FarmerDashboard() {
                 className={`bg-white/5 backdrop-blur-sm rounded-xl p-6 border transition-all duration-300 text-left cursor-pointer group relative ${
                   !isVerified() 
                     ? 'opacity-40 border-red-500/20 hover:border-red-500/30' 
-                    : 'border-green-200/20 dark:border-teal-800/20 hover:border-green-300/30 dark:hover:border-teal-700/30'
+                    : 'border-green-200/20 dark:border-emerald-800/20 hover:border-green-300/30 dark:hover:border-emerald-700/30'
                 }`}
               >
                 {!isVerified() && (
@@ -577,7 +579,7 @@ function FarmerDashboard() {
                 className={`bg-white/5 backdrop-blur-sm rounded-xl p-6 border transition-all duration-300 text-left cursor-pointer group relative ${
                   !isVerified() 
                     ? 'opacity-40 border-red-500/20 hover:border-red-500/30' 
-                    : 'border-green-200/20 dark:border-teal-800/20 hover:border-green-300/30 dark:hover:border-teal-700/30'
+                    : 'border-green-200/20 dark:border-emerald-800/20 hover:border-green-300/30 dark:hover:border-emerald-700/30'
                 }`}
               >
                 {!isVerified() && (
@@ -611,17 +613,17 @@ function FarmerDashboard() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
               className={`backdrop-blur-sm rounded-xl p-6 border ${
-                !isVerified() ? 'bg-red-500/5 border-red-500/20' : 'bg-white/5 border-green-200/20 dark:border-teal-800/20'
+                !isVerified() ? 'bg-red-500/5 border-red-500/20' : 'bg-white/5 border-green-200/20 dark:border-emerald-800/20'
               }`}
             >
               <div className="flex items-center gap-3 mb-2">
-                <Package className={`w-5 h-5 ${!isVerified() ? 'text-gray-500' : 'text-green-600 dark:text-teal-400'}`} />
+                <Package className={`w-5 h-5 ${!isVerified() ? 'text-gray-500' : 'text-green-600 dark:text-emerald-400'}`} />
                 <span className="text-gray-600 dark:text-gray-300">Total Products</span>
                 {!isVerified() && <Lock className="w-4 h-4 text-red-400" />}
               </div>
-              <p className={`text-2xl font-bold ${!isVerified() ? 'text-gray-500' : 'text-green-900 dark:text-teal-50'}`}>
+              <p className={`text-2xl font-bold ${!isVerified() ? 'text-gray-500' : 'text-green-900 dark:text-emerald-50'}`}>
                 {statsLoading ? (
-                  <div className="w-8 h-8 border-t-2 border-teal-500 rounded-full animate-spin"></div>
+                  <div className="w-8 h-8 border-t-2 border-emerald-500 rounded-full animate-spin"></div>
                 ) : !isVerified() ? (
                   '🔒'
                 ) : (
@@ -635,17 +637,17 @@ function FarmerDashboard() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
               className={`backdrop-blur-sm rounded-xl p-6 border ${
-                !isVerified() ? 'bg-red-500/5 border-red-500/20' : 'bg-white/5 border-green-200/20 dark:border-teal-800/20'
+                !isVerified() ? 'bg-red-500/5 border-red-500/20' : 'bg-white/5 border-green-200/20 dark:border-emerald-800/20'
               }`}
             >
               <div className="flex items-center gap-3 mb-2">
-                <ShoppingCart className={`w-5 h-5 ${!isVerified() ? 'text-gray-500' : 'text-blue-600 dark:text-blue-400'}`} />
+                <ShoppingCart className={`w-5 h-5 ${!isVerified() ? 'text-gray-500' : 'text-emerald-600 dark:text-emerald-400'}`} />
                 <span className="text-gray-600 dark:text-gray-300">Pending Orders</span>
                 {!isVerified() && <Lock className="w-4 h-4 text-red-400" />}
               </div>
-              <p className={`text-2xl font-bold ${!isVerified() ? 'text-gray-500' : 'text-green-900 dark:text-teal-50'}`}>
+              <p className={`text-2xl font-bold ${!isVerified() ? 'text-gray-500' : 'text-green-900 dark:text-emerald-50'}`}>
                 {statsLoading ? (
-                  <div className="w-8 h-8 border-t-2 border-teal-500 rounded-full animate-spin"></div>
+                  <div className="w-8 h-8 border-t-2 border-emerald-500 rounded-full animate-spin"></div>
                 ) : !isVerified() ? (
                   '🔒'
                 ) : (
@@ -659,7 +661,7 @@ function FarmerDashboard() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
               className={`backdrop-blur-sm rounded-xl p-6 border ${
-                !isVerified() ? 'bg-red-500/5 border-red-500/20' : 'bg-white/5 border-green-200/20 dark:border-teal-800/20'
+                !isVerified() ? 'bg-red-500/5 border-red-500/20' : 'bg-white/5 border-green-200/20 dark:border-emerald-800/20'
               }`}
             >
               <div className="flex items-center gap-3 mb-2">
@@ -667,9 +669,9 @@ function FarmerDashboard() {
                 <span className="text-gray-600 dark:text-gray-300">Completed Orders</span>
                 {!isVerified() && <Lock className="w-4 h-4 text-red-400" />}
               </div>
-              <p className={`text-2xl font-bold ${!isVerified() ? 'text-gray-500' : 'text-green-900 dark:text-teal-50'}`}>
+              <p className={`text-2xl font-bold ${!isVerified() ? 'text-gray-500' : 'text-green-900 dark:text-emerald-50'}`}>
                 {statsLoading ? (
-                  <div className="w-8 h-8 border-t-2 border-teal-500 rounded-full animate-spin"></div>
+                  <div className="w-8 h-8 border-t-2 border-emerald-500 rounded-full animate-spin"></div>
                 ) : !isVerified() ? (
                   '🔒'
                 ) : (
@@ -683,7 +685,7 @@ function FarmerDashboard() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
               className={`backdrop-blur-sm rounded-xl p-6 border ${
-                !isVerified() ? 'bg-red-500/5 border-red-500/20' : 'bg-white/5 border-green-200/20 dark:border-teal-800/20'
+                !isVerified() ? 'bg-red-500/5 border-red-500/20' : 'bg-white/5 border-green-200/20 dark:border-emerald-800/20'
               }`}
             >
               <div className="flex items-center gap-3 mb-2">
@@ -691,9 +693,9 @@ function FarmerDashboard() {
                 <span className="text-gray-600 dark:text-gray-300">Total Revenue</span>
                 {!isVerified() && <Lock className="w-4 h-4 text-red-400" />}
               </div>
-              <p className={`text-2xl font-bold ${!isVerified() ? 'text-gray-500' : 'text-green-900 dark:text-teal-50'}`}>
+              <p className={`text-2xl font-bold ${!isVerified() ? 'text-gray-500' : 'text-green-900 dark:text-emerald-50'}`}>
                 {statsLoading ? (
-                  <div className="w-8 h-8 border-t-2 border-teal-500 rounded-full animate-spin"></div>
+                  <div className="w-8 h-8 border-t-2 border-emerald-500 rounded-full animate-spin"></div>
                 ) : !isVerified() ? (
                   '🔒'
                 ) : (
@@ -729,7 +731,7 @@ function FarmerDashboard() {
               <div className="flex gap-2">
                 <button
                   onClick={() => navigate("/farmer/documents")}
-                  className="px-4 py-2 bg-teal-500/20 hover:bg-teal-500/30 border border-teal-500/30 rounded-lg text-teal-400 transition-colors"
+                  className="px-4 py-2 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 rounded-lg text-emerald-400 transition-colors"
                 >
                   {needsDocumentUpload() ? 'Upload Documents' : 'View Status'}
                 </button>
@@ -751,9 +753,9 @@ function FarmerDashboard() {
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-green-200/20 dark:border-teal-800/20"
+              className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-green-200/20 dark:border-emerald-800/20"
             >
-              <h2 className="font-serif text-2xl font-bold tracking-tighter text-green-900 dark:text-teal-50 mb-6">
+              <h2 className="font-serif text-2xl font-bold tracking-tighter text-green-900 dark:text-emerald-50 mb-6">
                 Recent Pending Orders
               </h2>
               
@@ -778,7 +780,7 @@ function FarmerDashboard() {
                   </div>
                   <button
                     onClick={() => navigate("/farmer/documents")}
-                    className="px-6 py-3 bg-teal-500 hover:bg-teal-600 text-white rounded-lg transition-colors font-semibold"
+                    className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition-colors font-semibold"
                   >
                     Upload Documents to Unlock
                   </button>
@@ -787,7 +789,7 @@ function FarmerDashboard() {
                 <div className="space-y-4">
                   {loading ? (
                     <div className="flex items-center justify-center py-8">
-                      <div className="w-8 h-8 border-t-2 border-teal-500 rounded-full animate-spin"></div>
+                      <div className="w-8 h-8 border-t-2 border-emerald-500 rounded-full animate-spin"></div>
                     </div>
                   ) : recentOrders.length === 0 ? (
                     <div className="text-center py-8">
@@ -797,10 +799,10 @@ function FarmerDashboard() {
                     recentOrders.map((order) => (
                       <div
                         key={order._id}
-                        className="flex items-center justify-between p-4 rounded-lg bg-white/5 border border-green-200/10 dark:border-teal-800/10"
+                        className="flex items-center justify-between p-4 rounded-lg bg-white/5 border border-green-200/10 dark:border-emerald-800/10"
                       >
                         <div>
-                          <p className="font-medium text-green-900 dark:text-teal-50">
+                          <p className="font-medium text-green-900 dark:text-emerald-50">
                             {order.items[0]?.productId?.name || 'Product'}
                             {order.items.length > 1 && ` +${order.items.length - 1} more`}
                           </p>
@@ -812,7 +814,7 @@ function FarmerDashboard() {
                           </p>
                         </div>
                         <div className="text-right">
-                          <p className="font-medium text-green-900 dark:text-teal-50">
+                          <p className="font-medium text-green-900 dark:text-emerald-50">
                             ₹{(order.farmerTotal || order.totalAmount || 0).toFixed(2)}
                           </p>
                           <div className="flex items-center gap-2 text-sm">
@@ -824,7 +826,7 @@ function FarmerDashboard() {
                           <span className={`text-xs px-2 py-1 rounded-full ${
                             order.status === 'pending' 
                               ? 'bg-yellow-500/20 text-yellow-400' 
-                              : 'bg-blue-500/20 text-blue-400'
+                              : 'bg-emerald-500/20 text-emerald-400'
                           }`}>
                             {order.status}
                           </span>
@@ -839,7 +841,7 @@ function FarmerDashboard() {
                 <div className="mt-6 text-center">
                   <button
                     onClick={() => navigate("/farmer/orders")}
-                    className="inline-flex items-center px-4 py-2 border border-green-200/20 dark:border-teal-800/20 rounded-md text-sm font-medium text-green-900 dark:text-teal-50 hover:bg-white/10 transition-colors"
+                    className="inline-flex items-center px-4 py-2 border border-green-200/20 dark:border-emerald-800/20 rounded-md text-sm font-medium text-green-900 dark:text-emerald-50 hover:bg-white/10 transition-colors"
                   >
                     View All Orders
                     <svg
@@ -914,7 +916,7 @@ function FarmerDashboard() {
                     setShowVerificationAlert(false);
                     navigate("/farmer/documents");
                   }}
-                  className="flex-1 px-6 py-3 bg-teal-500 hover:bg-teal-600 text-white rounded-lg transition-colors font-semibold"
+                  className="flex-1 px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg transition-colors font-semibold"
                 >
                   {needsDocumentUpload() ? 'Upload Documents' : 'Check Status'}
                 </button>

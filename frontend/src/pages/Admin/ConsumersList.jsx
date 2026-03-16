@@ -133,7 +133,7 @@ const ConsumersList = () => {
                         onClick={() => handleConsumerClick(selectedConsumer._id, pageNum)}
                         className={`px-3 py-2 text-sm rounded-lg ${
                             pageNum === currentPage
-                                ? 'bg-teal-500 text-white'
+                                ? 'bg-emerald-500 text-white'
                                 : 'bg-gray-700 text-white hover:bg-gray-600'
                         }`}
                     >
@@ -191,7 +191,7 @@ const ConsumersList = () => {
                 <div className="text-red-500 text-xl mb-4">{error}</div>
                 <button 
                     onClick={() => navigate('/admin')}
-                    className="text-teal-500 hover:text-teal-400"
+                    className="text-emerald-500 hover:text-emerald-400"
                 >
                     Back to Dashboard
                 </button>
@@ -206,7 +206,7 @@ const ConsumersList = () => {
                 <div className="text-white text-xl mb-4">No consumers found</div>
                 <button 
                     onClick={() => navigate('/admin')}
-                    className="text-teal-500 hover:text-teal-400"
+                    className="text-emerald-500 hover:text-emerald-400"
                 >
                     Back to Dashboard
                 </button>
@@ -221,7 +221,7 @@ const ConsumersList = () => {
                 <div className="max-w-7xl mx-auto">
                     <button 
                         onClick={() => setSelectedConsumer(null)}
-                        className="flex items-center text-teal-500 hover:text-teal-400 mb-6"
+                        className="flex items-center text-emerald-500 hover:text-emerald-400 mb-6"
                     >
                         <FaArrowLeft className="mr-2" /> Back to Consumers List
                     </button>
@@ -231,7 +231,7 @@ const ConsumersList = () => {
                             <h2 className="text-2xl font-bold text-white">
                                 {selectedConsumer.name}'s Orders
                             </h2>
-                            <span className="bg-teal-500/20 text-teal-500 px-4 py-2 rounded-full">
+                            <span className="bg-emerald-500/20 text-emerald-500 px-4 py-2 rounded-full">
                                 {pagination?.totalOrders || 0} Total Orders
                             </span>
                         </div>
@@ -341,7 +341,7 @@ const ConsumersList = () => {
                                                 </div>
                                                 <div className="text-right text-gray-300">
                                                     <p>{item.quantity} x ₹{item.price}</p>
-                                                    <p className="text-teal-500 font-medium">
+                                                    <p className="text-emerald-500 font-medium">
                                                         ₹{item.quantity * item.price}
                                                     </p>
                                                 </div>
@@ -372,7 +372,7 @@ const ConsumersList = () => {
                                         {order.couponCode && (
                                             <div className="flex justify-between items-center mb-2">
                                                 <span className="text-gray-400">Coupon Applied</span>
-                                                <span className="text-teal-500">{order.couponCode}</span>
+                                                <span className="text-emerald-500">{order.couponCode}</span>
                                             </div>
                                         )}
                                         <div className="flex justify-between items-center text-white font-semibold text-lg mt-2 pt-2 border-t border-gray-600">
@@ -396,7 +396,7 @@ const ConsumersList = () => {
             <div className="max-w-7xl mx-auto">
                 <button 
                     onClick={() => navigate('/admin')}
-                    className="flex items-center text-teal-500 hover:text-teal-400 mb-6"
+                    className="flex items-center text-emerald-500 hover:text-emerald-400 mb-6"
                 >
                     <FaArrowLeft className="mr-2" /> Back to Dashboard
                 </button>
@@ -417,19 +417,19 @@ const ConsumersList = () => {
                             </h2>
                             <div className="space-y-3">
                                 <div className="flex items-center text-gray-300">
-                                    <FaEnvelope className="text-teal-500 mr-2" />
+                                    <FaEnvelope className="text-emerald-500 mr-2" />
                                     {consumer.email || 'No email provided'}
                                 </div>
                                 <div className="flex items-center text-gray-300">
-                                    <FaPhone className="text-teal-500 mr-2" />
+                                    <FaPhone className="text-emerald-500 mr-2" />
                                     {consumer.phoneNumber || 'N/A'}
                                 </div>
                                 <div className="flex items-center text-gray-300">
-                                    <FaMapMarkerAlt className="text-teal-500 mr-2" />
+                                    <FaMapMarkerAlt className="text-emerald-500 mr-2" />
                                     {consumer.location?.city || 'N/A'}
                                 </div>
                                 <div className="flex items-center text-gray-300">
-                                    <FaShoppingBag className="text-teal-500 mr-2" />
+                                    <FaShoppingBag className="text-emerald-500 mr-2" />
                                     {consumer.totalOrders || 0} Orders
                                 </div>
                             </div>

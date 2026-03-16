@@ -496,7 +496,7 @@ export const getFarmerProfile = async (req, res) => {
     
     const farmerId = req.user.id || req.user._id || req.user.userId;
 
-    const farmer = await User.findById(farmerId).select('-password');
+    const farmer = await User.findById(farmerId).select('-password -refreshToken');
     if (!farmer) {
       return res.status(404).json({
         success: false,
@@ -513,10 +513,14 @@ export const getFarmerProfile = async (req, res) => {
       ]
     });
 
+    const farmerObj = farmer.toObject();
+    // Remove sensitive fields
+    delete farmerObj.refreshToken;
+
     res.json({
       success: true,
       farmer: {
-        ...farmer.toObject(),
+        ...farmerObj,
         verificationStatus: farmerDoc ? farmerDoc.verificationStatus : 'not_uploaded',
         documentUploaded: !!farmerDoc,
         certificateId: farmerDoc?.certificateId || null,

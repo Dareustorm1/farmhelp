@@ -106,12 +106,50 @@ function Navbar() {
     };
   }, []);
 
-  const navItems = [
-    { name: "Home", path: "/", icon: <Home size={18} /> },
-    { name: "Marketplace", path: "/marketplace", icon: <ShoppingBasket size={18} /> },
-    { name: "Verified Farmers", path: "/farmers", icon: <Users size={18} /> },
-    { name: "About", path: "/about", icon: <Info size={18} /> },
-  ];
+  // Conditionally render nav items based on authentication and role
+  const getNavItems = () => {
+    // Not logged in - show public pages
+    if (!localStorage.getItem("user")) {
+      return [
+        { name: "Home", path: "/", icon: <Home size={18} /> },
+        { name: "Marketplace", path: "/marketplace", icon: <ShoppingBasket size={18} /> },
+        { name: "Verified Farmers", path: "/farmers", icon: <Users size={18} /> },
+        { name: "About", path: "/about", icon: <Info size={18} /> },
+      ];
+    }
+
+    // Logged in - show role-specific pages
+    const userRole = userData?.role || "guest";
+    switch (userRole) {
+      case "admin":
+        return [
+          { name: "Dashboard", path: "/admin", icon: <Home size={18} /> },
+          { name: "Farmers", path: "/admin/farmers", icon: <Users size={18} /> },
+          { name: "Consumers", path: "/admin/consumers", icon: <ShoppingBasket size={18} /> },
+          { name: "Orders", path: "/admin/orders", icon: <FiPackage size={18} /> },
+          { name: "Verification", path: "/admin/document-verification", icon: <FiCheck size={18} /> },
+        ];
+      case "farmer":
+        return [
+          { name: "Dashboard", path: "/farmer", icon: <Home size={18} /> },
+          { name: "Products", path: "/farmer/products", icon: <ShoppingBasket size={18} /> },
+          { name: "Orders", path: "/farmer/orders", icon: <FiPackage size={18} /> },
+          { name: "Analytics", path: "/farmer/analytics", icon: <Users size={18} /> },
+          { name: "Documents", path: "/farmer/documents", icon: <User size={18} /> },
+        ];
+      case "consumer":
+        return [
+          { name: "Dashboard", path: "/consumer", icon: <Home size={18} /> },
+          { name: "Shop", path: "/consumer/shop", icon: <ShoppingBasket size={18} /> },
+          { name: "My Cart", path: "/consumer/cart", icon: <ShoppingCart size={18} /> },
+          { name: "Orders", path: "/consumer/orders", icon: <FiTruck size={18} /> },
+        ];
+      default:
+        return [];
+    }
+  };
+
+  const navItems = getNavItems();
 
   const toggleProfileDropdown = () => setProfileDropdownOpen(!isProfileDropdownOpen);
   const toggleMobileSidebar = () => setMobileSidebarOpen(!isMobileSidebarOpen);
@@ -151,14 +189,13 @@ function Navbar() {
   const role = userData?.role || "guest";
 
   return (
-    <header className="bg-gray-900 py-4 px-6 sm:px-10 flex justify-between items-center fixed w-full z-[100] border-b border-gray-700 shadow-lg">
+    <header className="bg-[#0f1a17] py-4 px-6 sm:px-10 flex justify-between items-center fixed w-full z-[100] border-b border-emerald-900/50 shadow-lg">
       <div className="text-white text-2xl font-bold flex items-center">
         <Link to="/" className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-teal-500 rounded-lg flex items-center justify-center">
-            <span className="text-black font-bold text-xl">K</span>
+          <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
+            <span className="text-white font-bold text-xl">F</span>
           </div>
-          <span className="text-teal-400 font-bold">Krushi</span>
-          <span className="text-white">Setu</span>
+          <span className="text-emerald-400 font-bold">Farmhelp</span>
         </Link>
       </div>
 
@@ -171,8 +208,8 @@ function Navbar() {
             className={({ isActive }) =>
               `relative flex items-center space-x-1 px-1 py-2 overflow-hidden group ${
                 isActive 
-                  ? "text-teal-400" 
-                  : "text-gray-300 hover:text-teal-400"
+                  ? "text-emerald-400" 
+                  : "text-gray-300 hover:text-emerald-400"
               }`
             }
           >
@@ -180,7 +217,7 @@ function Navbar() {
               <>
                 <span
                   className={`${
-                    isActive ? "text-teal-400" : "text-gray-400 group-hover:text-teal-400"
+                    isActive ? "text-emerald-400" : "text-gray-400 group-hover:text-emerald-400"
                   } transition-colors duration-300`}
                 >
                   {item.icon}
@@ -189,8 +226,8 @@ function Navbar() {
                 <span
                   className={`absolute bottom-0 left-0 w-full h-0.5 transition-all duration-300 ease-in-out transform ${
                     isActive
-                      ? "bg-teal-400 scale-x-100"
-                      : "bg-teal-500 scale-x-0 group-hover:scale-x-100"
+                      ? "bg-emerald-400 scale-x-100"
+                      : "bg-emerald-500 scale-x-0 group-hover:scale-x-100"
                   }`}
                 />
               </>
@@ -208,15 +245,15 @@ function Navbar() {
               <NavLink
                 to={getCartPath()}
                 className={({ isActive }) =>
-                  `relative p-2 rounded-full hover:bg-teal-500/20 ${
-                    isActive ? "text-teal-400" : "text-gray-300 hover:text-teal-400"
+                  `relative p-2 rounded-full hover:bg-emerald-500/20 ${
+                    isActive ? "text-emerald-400" : "text-gray-300 hover:text-emerald-400"
                   }`
                 }
               >
                 <div className="relative">
                   <ShoppingCart size={20} />
                   {cartCount > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-teal-500 text-black text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    <span className="absolute -top-2 -right-2 bg-emerald-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                       {cartCount}
                     </span>
                   )}
@@ -237,9 +274,9 @@ function Navbar() {
             <div className="relative">
               <button
                 onClick={toggleProfileDropdown}
-                className="flex items-center space-x-2 text-white bg-black/40 border border-teal-500/50 px-3 py-2 rounded-md hover:bg-teal-500/20 hover:border-teal-400 transition-all duration-300"
+                className="flex items-center space-x-2 text-white bg-black/40 border border-emerald-500/50 px-3 py-2 rounded-md hover:bg-emerald-500/20 hover:border-emerald-400 transition-all duration-300"
               >
-                <div className="w-6 h-6 rounded-full bg-teal-500 flex items-center justify-center text-black font-medium text-sm">
+                <div className="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-white font-medium text-sm">
                   {userData?.name?.charAt(0) || userData?.email?.charAt(0) || 'U'}
                 </div>
                 <span className="max-w-[120px] truncate">{userData?.name || userData?.email || "User"}</span>
@@ -247,7 +284,7 @@ function Navbar() {
               </button>
               
               {isProfileDropdownOpen && (
-                <div className="fixed top-0 right-0 h-full w-80 bg-gray-900 shadow-2xl transform z-[999] border-l border-gray-700"
+                <div className="fixed top-0 right-0 h-full w-80 bg-[#0f1a17] shadow-2xl transform z-[999] border-l border-emerald-900/50"
                     style={{ animation: 'slideIn 0.3s ease-out' }}
                 >
                     <div className="p-6">
@@ -264,7 +301,7 @@ function Navbar() {
 
                         {/* User Info */}
                         <div className="flex items-center space-x-3 mb-6 pb-6 border-b border-gray-700">
-                            <div className="w-12 h-12 rounded-full bg-teal-500 flex items-center justify-center text-black font-bold text-xl">
+                            <div className="w-12 h-12 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-xl">
                                 {userData?.name?.charAt(0) || userData?.email?.charAt(0) || 'U'}
                             </div>
                             <div>
@@ -317,14 +354,14 @@ function Navbar() {
         ) : (
           <>
             <button
-              className="text-white border border-teal-500 px-4 py-2 rounded-md hover:bg-teal-500/20 hover:border-teal-400 transition-all duration-300 flex items-center space-x-2"
+              className="text-white border border-emerald-500 px-4 py-2 rounded-md hover:bg-emerald-500/20 hover:border-emerald-400 transition-all duration-300 flex items-center space-x-2"
               onClick={() => navigate("/login")}
             >
               <LogIn size={16} />
               <span>Sign In</span>
             </button>
             <button
-              className="bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-500 transition-all duration-300 flex items-center space-x-2"
+              className="bg-emerald-600 text-white px-4 py-2 rounded-md hover:bg-emerald-500 transition-all duration-300 flex items-center space-x-2"
               onClick={() => navigate("/register")}
             >
               <UserPlus size={16} />
@@ -341,15 +378,15 @@ function Navbar() {
           <NavLink
             to={getCartPath()}
             className={({ isActive }) =>
-              `relative p-2 rounded-full hover:bg-teal-500/20 ${
-                isActive ? "text-teal-400" : "text-gray-300 hover:text-teal-400"
+              `relative p-2 rounded-full hover:bg-emerald-500/20 ${
+                isActive ? "text-emerald-400" : "text-gray-300 hover:text-emerald-400"
               }`
             }
           >
             <div className="relative">
               <ShoppingCart size={20} />
               {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-teal-500 text-black text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                <span className="absolute -top-2 -right-2 bg-emerald-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   {cartCount}
                 </span>
               )}
@@ -368,7 +405,7 @@ function Navbar() {
         
         <button
           onClick={toggleMobileSidebar}
-          className="text-white p-2 hover:bg-teal-500/20 rounded-md"
+          className="text-white p-2 hover:bg-emerald-500/20 rounded-md"
         >
           <Menu size={24} />
         </button>
@@ -384,7 +421,7 @@ function Navbar() {
           />
           
           {/* Sidebar */}
-          <div className="fixed top-0 right-0 h-full w-80 bg-gray-900 shadow-2xl transform z-[999] border-l border-gray-700 lg:hidden"
+          <div className="fixed top-0 right-0 h-full w-80 bg-[#0f1a17] shadow-2xl transform z-[999] border-l border-emerald-900/50 lg:hidden"
               style={{ animation: 'slideIn 0.3s ease-out' }}
           >
             <div className="p-6">
@@ -402,7 +439,7 @@ function Navbar() {
               {/* User Info (if logged in) */}
               {isLoggedIn && (
                 <div className="flex items-center space-x-3 mb-6 pb-6 border-b border-gray-700">
-                    <div className="w-12 h-12 rounded-full bg-teal-500 flex items-center justify-center text-black font-bold text-xl">
+                    <div className="w-12 h-12 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-xl">
                         {userData?.name?.charAt(0) || userData?.email?.charAt(0) || 'U'}
                     </div>
                     <div>
@@ -421,7 +458,7 @@ function Navbar() {
                     className={({ isActive }) =>
                       `flex items-center space-x-3 px-4 py-3 rounded-lg ${
                         isActive 
-                          ? "text-teal-400 bg-gray-800" 
+                          ? "text-emerald-400 bg-gray-800" 
                           : "text-gray-300 hover:bg-gray-800"
                       }`
                     }
@@ -478,7 +515,7 @@ function Navbar() {
                 /* Login/Register buttons (if not logged in) */
                 <div className="border-t border-gray-700 pt-4 space-y-3">
                   <button
-                    className="w-full text-white border border-teal-500 px-4 py-3 rounded-md hover:bg-teal-500/20 hover:border-teal-400 transition-all duration-300 flex items-center justify-center space-x-2"
+                    className="w-full text-white border border-emerald-500 px-4 py-3 rounded-md hover:bg-emerald-500/20 hover:border-emerald-400 transition-all duration-300 flex items-center justify-center space-x-2"
                     onClick={() => {
                       setMobileSidebarOpen(false);
                       navigate("/login");
@@ -488,7 +525,7 @@ function Navbar() {
                     <span>Sign In</span>
                   </button>
                   <button
-                    className="w-full bg-teal-600 text-white px-4 py-3 rounded-md hover:bg-teal-500 transition-all duration-300 flex items-center justify-center space-x-2"
+                    className="w-full bg-emerald-600 text-white px-4 py-3 rounded-md hover:bg-emerald-500 transition-all duration-300 flex items-center justify-center space-x-2"
                     onClick={() => {
                       setMobileSidebarOpen(false);
                       navigate("/register");

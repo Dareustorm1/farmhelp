@@ -21,22 +21,44 @@ export const loginUser = async (email, password) => {
             body: JSON.stringify({ email, password }),
         });
         const data = await response.json();
-        if (data.success) {
+
+        // Store token and user when returned by backend
+        if (data.token) {
             localStorage.setItem("token", data.token);
+        }
+        if (data.user) {
             localStorage.setItem("user", JSON.stringify(data.user));
         }
+
         return data;
     } catch (error) {
         return { success: false, message: "Network error. Please try again." };
     }
 };
 
-export const getCurrentUser = () => {
-    const userString = localStorage.getItem("user");
-    if (userString) {
-        return JSON.parse(userString);
+export const getCurrentUser = async (token) => {
+    try {
+        // If token not passed, try localStorage
+        const authToken = token || localStorage.getItem("token");
+        if (!authToken) return { success: false, message: 'No token provided' };
+
+        const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+
+        const data = await response.json();
+        // Backend returns { user } on success
+        if (response.ok) {
+            return { success: true, user: data.user };
+        }
+        return { success: false, message: data.message || 'Failed to fetch user' };
+    } catch (err) {
+        return { success: false, message: 'Network error' };
     }
-    return null;
 };
 
 

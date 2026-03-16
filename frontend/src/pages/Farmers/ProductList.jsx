@@ -320,7 +320,7 @@ function ProductList() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#0c1816] to-[#0b1f1a]">
+      <div className="min-h-screen bg-gradient-to-b from-[#0d1612] to-[#0f1f18]">
         <Navbar />
         <div className="pt-24 px-6">
           <div className="max-w-7xl mx-auto">
@@ -335,7 +335,7 @@ function ProductList() {
 
   if (error && !isNewUser) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#0c1816] to-[#0b1f1a]">
+      <div className="min-h-screen bg-gradient-to-b from-[#0d1612] to-[#0f1f18]">
         <Navbar />
         <div className="pt-24 px-6">
           <div className="max-w-7xl mx-auto">
@@ -351,7 +351,7 @@ function ProductList() {
   // New user: redirect to add product
   if (isNewUser || products.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#0c1816] to-[#0b1f1a]">
+      <div className="min-h-screen bg-gradient-to-b from-[#0d1612] to-[#0f1f18]">
         <Navbar />
         <div className="pt-24 px-6">
           <div className="max-w-7xl mx-auto">
@@ -364,11 +364,11 @@ function ProductList() {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2 }}
-                className="inline-block p-3 rounded-full bg-teal-500/10 mb-6"
+                className="inline-block p-3 rounded-full bg-emerald-500/10 mb-6"
               >
-                <Package className="w-10 h-10 text-green-600 dark:text-teal-400" />
+                <Package className="w-10 h-10 text-green-600 dark:text-emerald-400" />
               </motion.div>
-              <h1 className="font-serif text-4xl font-bold tracking-tighter text-green-900 dark:text-teal-50 mb-4">
+              <h1 className="font-serif text-4xl font-bold tracking-tighter text-green-900 dark:text-emerald-50 mb-4">
                 Welcome to Your Product Dashboard
               </h1>
               <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-8">
@@ -378,7 +378,7 @@ function ProductList() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate('/farmer/add-product')}
-                className="bg-green-600 dark:bg-teal-500 text-white px-8 py-3 rounded-lg flex items-center space-x-2 hover:bg-green-700 dark:hover:bg-teal-600 transition-colors mx-auto"
+                className="bg-green-600 dark:bg-emerald-500 text-white px-8 py-3 rounded-lg flex items-center space-x-2 hover:bg-green-700 dark:hover:bg-emerald-600 transition-colors mx-auto"
               >
                 <Plus className="w-5 h-5" />
                 <span>Add Your First Product</span>
@@ -389,9 +389,9 @@ function ProductList() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-white/5 backdrop-blur-sm rounded-xl border border-green-200/20 dark:border-teal-800/20 p-6"
+              className="bg-white/5 backdrop-blur-sm rounded-xl border border-green-200/20 dark:border-emerald-800/20 p-6"
             >
-              <h2 className="text-xl font-semibold text-green-900 dark:text-teal-50 mb-4">Getting Started Tips:</h2>
+              <h2 className="text-xl font-semibold text-green-900 dark:text-emerald-50 mb-4">Getting Started Tips:</h2>
               <ul className="space-y-3 text-gray-600 dark:text-gray-300">
                 <li className="flex items-start">
                   <span className="mr-2">•</span>
@@ -419,7 +419,7 @@ function ProductList() {
 
   // Regular user with products
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0c1816] to-[#0b1f1a]">
+    <div className="min-h-screen bg-gradient-to-b from-[#0d1612] to-[#0f1f18]">
       <Navbar />
       <div className="pt-24 px-6 pb-16">
         <div className="max-w-7xl mx-auto">
@@ -450,19 +450,19 @@ function ProductList() {
                 placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-[#2d4f47] text-white pl-10 pr-4 py-2.5 rounded-lg border border-teal-500/20 focus:outline-none focus:border-teal-500 transition-colors"
+                className="w-full bg-[#2d4f47] text-white pl-10 pr-4 py-2.5 rounded-lg border border-emerald-500/20 focus:outline-none focus:border-emerald-500 transition-colors"
               />
             </div>
             
             <div className="flex gap-3 w-full md:w-auto">
               {/* View toggle buttons */}
-              <div className="flex bg-[#2d4f47] rounded-lg overflow-hidden border border-teal-500/20">
+              <div className="flex bg-[#2d4f47] rounded-lg overflow-hidden border border-emerald-500/20">
                 <button
                   onClick={() => setViewMode('list')}
                   className={`p-2.5 flex items-center gap-1 ${
                     viewMode === 'list' 
-                      ? 'bg-teal-500 text-white' 
-                      : 'text-gray-400 hover:text-white hover:bg-teal-500/20'
+                      ? 'bg-emerald-500 text-white' 
+                      : 'text-gray-400 hover:text-white hover:bg-emerald-500/20'
                   } transition-colors`}
                   title="List View"
                 >
@@ -472,8 +472,8 @@ function ProductList() {
                   onClick={() => setViewMode('grid')}
                   className={`p-2.5 flex items-center gap-1 ${
                     viewMode === 'grid' 
-                      ? 'bg-teal-500 text-white' 
-                      : 'text-gray-400 hover:text-white hover:bg-teal-500/20'
+                      ? 'bg-emerald-500 text-white' 
+                      : 'text-gray-400 hover:text-white hover:bg-emerald-500/20'
                   } transition-colors`}
                   title="Grid View"
                 >
@@ -485,7 +485,7 @@ function ProductList() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setFiltersOpen(!filtersOpen)}
-                className="bg-[#2d4f47] text-white px-4 py-2.5 rounded-lg flex items-center gap-2 border border-teal-500/20 hover:border-teal-500/50 transition-colors"
+                className="bg-[#2d4f47] text-white px-4 py-2.5 rounded-lg flex items-center gap-2 border border-emerald-500/20 hover:border-emerald-500/50 transition-colors"
               >
                 <Filter className="w-5 h-5" />
                 <span>Filters</span>
@@ -496,7 +496,7 @@ function ProductList() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => navigate('/farmer/add-product')}
-                className="bg-teal-500 text-white px-4 py-2.5 rounded-lg flex items-center gap-2 hover:bg-teal-600 transition-colors"
+                className="bg-emerald-500 text-white px-4 py-2.5 rounded-lg flex items-center gap-2 hover:bg-emerald-600 transition-colors"
               >
                 <Plus className="w-5 h-5" />
                 <span>Add Product</span>
@@ -513,12 +513,12 @@ function ProductList() {
                 exit={{ opacity: 0, height: 0 }}
                 className="mb-6 overflow-hidden"
               >
-                <div className="bg-[#2d4f47] rounded-xl p-5 border border-teal-500/20">
+                <div className="bg-[#2d4f47] rounded-xl p-5 border border-emerald-500/20">
                   <div className="flex justify-between items-center mb-4">
                     <h3 className="text-white font-medium">Filter Products</h3>
                     <button 
                       onClick={resetFilters}
-                      className="text-teal-400 text-sm hover:text-teal-300 transition-colors flex items-center gap-1"
+                      className="text-emerald-400 text-sm hover:text-emerald-300 transition-colors flex items-center gap-1"
                     >
                       <X className="w-4 h-4" />
                       Reset All
@@ -532,7 +532,7 @@ function ProductList() {
                       <select
                         value={filters.category}
                         onChange={(e) => handleFilterChange('category', e.target.value)}
-                        className="w-full bg-[#1a332e] text-white px-3 py-2 rounded-lg border border-teal-500/20 focus:outline-none focus:border-teal-500 text-sm"
+                        className="w-full bg-[#1a332e] text-white px-3 py-2 rounded-lg border border-emerald-500/20 focus:outline-none focus:border-emerald-500 text-sm"
                       >
                         <option value="">All Categories</option>
                         {categories.map(category => (
@@ -550,7 +550,7 @@ function ProductList() {
                           placeholder="Min"
                           value={filters.priceRange.min}
                           onChange={(e) => handleFilterChange('priceRange.min', e.target.value)}
-                          className="w-1/2 bg-[#1a332e] text-white px-3 py-2 rounded-lg border border-teal-500/20 focus:outline-none focus:border-teal-500 text-sm"
+                          className="w-1/2 bg-[#1a332e] text-white px-3 py-2 rounded-lg border border-emerald-500/20 focus:outline-none focus:border-emerald-500 text-sm"
                           min="0"
                         />
                         <input
@@ -558,7 +558,7 @@ function ProductList() {
                           placeholder="Max"
                           value={filters.priceRange.max}
                           onChange={(e) => handleFilterChange('priceRange.max', e.target.value)}
-                          className="w-1/2 bg-[#1a332e] text-white px-3 py-2 rounded-lg border border-teal-500/20 focus:outline-none focus:border-teal-500 text-sm"
+                          className="w-1/2 bg-[#1a332e] text-white px-3 py-2 rounded-lg border border-emerald-500/20 focus:outline-none focus:border-emerald-500 text-sm"
                           min="0"
                         />
                       </div>
@@ -572,7 +572,7 @@ function ProductList() {
                         placeholder="Min. quantity"
                         value={filters.minQuantity}
                         onChange={(e) => handleFilterChange('minQuantity', e.target.value)}
-                        className="w-full bg-[#1a332e] text-white px-3 py-2 rounded-lg border border-teal-500/20 focus:outline-none focus:border-teal-500 text-sm"
+                        className="w-full bg-[#1a332e] text-white px-3 py-2 rounded-lg border border-emerald-500/20 focus:outline-none focus:border-emerald-500 text-sm"
                         min="0"
                       />
                     </div>
@@ -583,7 +583,7 @@ function ProductList() {
                       <select
                         value={filters.sortBy}
                         onChange={(e) => handleFilterChange('sortBy', e.target.value)}
-                        className="w-full bg-[#1a332e] text-white px-3 py-2 rounded-lg border border-teal-500/20 focus:outline-none focus:border-teal-500 text-sm"
+                        className="w-full bg-[#1a332e] text-white px-3 py-2 rounded-lg border border-emerald-500/20 focus:outline-none focus:border-emerald-500 text-sm"
                       >
                         {sortOptions.map(option => (
                           <option key={option.value} value={option.value}>{option.label}</option>
@@ -602,7 +602,7 @@ function ProductList() {
               <span className="text-sm text-gray-400">Active filters:</span>
               
               {filters.category && (
-                <span className="text-xs bg-teal-800/50 text-teal-300 px-2 py-1 rounded-full flex items-center gap-1">
+                <span className="text-xs bg-emerald-800/50 text-emerald-300 px-2 py-1 rounded-full flex items-center gap-1">
                   Category: {filters.category}
                   <button onClick={() => handleFilterChange('category', '')}>
                     <X className="w-3 h-3" />
@@ -611,7 +611,7 @@ function ProductList() {
               )}
               
               {(filters.priceRange.min || filters.priceRange.max) && (
-                <span className="text-xs bg-teal-800/50 text-teal-300 px-2 py-1 rounded-full flex items-center gap-1">
+                <span className="text-xs bg-emerald-800/50 text-emerald-300 px-2 py-1 rounded-full flex items-center gap-1">
                   Price: 
                   {filters.priceRange.min ? `₹${filters.priceRange.min}` : '₹0'} 
                   - 
@@ -623,7 +623,7 @@ function ProductList() {
               )}
               
               {filters.minQuantity && (
-                <span className="text-xs bg-teal-800/50 text-teal-300 px-2 py-1 rounded-full flex items-center gap-1">
+                <span className="text-xs bg-emerald-800/50 text-emerald-300 px-2 py-1 rounded-full flex items-center gap-1">
                   Min Qty: {filters.minQuantity}
                   <button onClick={() => handleFilterChange('minQuantity', '')}>
                     <X className="w-3 h-3" />
@@ -649,7 +649,7 @@ function ProductList() {
             
             <p className="text-sm text-gray-400">
               View: 
-              <span className="ml-1 text-teal-400 font-medium">
+              <span className="ml-1 text-emerald-400 font-medium">
                 {viewMode === 'list' ? 'List' : 'Grid'}
               </span>
             </p>
@@ -660,7 +660,7 @@ function ProductList() {
             key={viewMode} // Force re-render animation when view changes
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/5 backdrop-blur-sm rounded-xl border border-teal-800/20 overflow-hidden"
+            className="bg-white/5 backdrop-blur-sm rounded-xl border border-emerald-800/20 overflow-hidden"
           >
             {filteredProducts.length === 0 ? (
               <div className="text-center py-12">
@@ -668,7 +668,7 @@ function ProductList() {
                 <p className="text-gray-300 mb-2">No products found matching your criteria</p>
                 <button 
                   onClick={resetFilters}
-                  className="text-teal-400 hover:text-teal-300 transition-colors"
+                  className="text-emerald-400 hover:text-emerald-300 transition-colors"
                 >
                   Clear filters
                 </button>
@@ -678,7 +678,7 @@ function ProductList() {
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b border-teal-800/20">
+                    <tr className="border-b border-emerald-800/20">
                       <th className="text-left py-3 px-4 text-gray-300">Product</th>
                       <th className="text-left py-3 px-4 text-gray-300">Category</th>
                       <th className="text-left py-3 px-4 text-gray-300">Price</th>
@@ -690,7 +690,7 @@ function ProductList() {
                     {currentProducts.map((product) => (
                       <tr
                         key={product.id}
-                        className="border-b border-teal-800/20 hover:bg-white/5 transition-colors"
+                        className="border-b border-emerald-800/20 hover:bg-white/5 transition-colors"
                       >
                         <td className="py-4 px-4">
                           <div className="flex items-center space-x-3">
@@ -706,7 +706,7 @@ function ProductList() {
                               />
                             )}
                             <div>
-                              <div className="text-teal-50 font-medium">
+                              <div className="text-emerald-50 font-medium">
                                 {product.name}
                               </div>
                               <div className="text-sm text-gray-400 truncate max-w-xs">
@@ -716,11 +716,11 @@ function ProductList() {
                           </div>
                         </td>
                         <td className="py-4 px-4">
-                          <span className="px-2 py-1 text-xs font-medium rounded-full bg-teal-900/30 text-teal-300">
+                          <span className="px-2 py-1 text-xs font-medium rounded-full bg-emerald-900/30 text-emerald-300">
                             {product.category}
                           </span>
                         </td>
-                        <td className="py-4 px-4 text-teal-50">
+                        <td className="py-4 px-4 text-emerald-50">
                           ₹{product.price}
                           {product.discount > 0 && (
                             <span className="ml-2 text-xs text-red-400">
@@ -728,7 +728,7 @@ function ProductList() {
                             </span>
                           )}
                         </td>
-                        <td className="py-4 px-4 text-teal-50">
+                        <td className="py-4 px-4 text-emerald-50">
                           {product.available_quantity} {product.unit}
                         </td>
                         <td className="py-4 px-4">
@@ -737,7 +737,7 @@ function ProductList() {
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.9 }}
                               onClick={() => navigate(`/farmer/update/${product.id}`)}
-                              className="p-2 text-blue-400 hover:text-blue-300"
+                              className="p-2 text-emerald-400 hover:text-emerald-300"
                               title="Edit Product"
                             >
                               <Edit className="w-5 h-5" />
@@ -766,7 +766,7 @@ function ProductList() {
                     <motion.div
                       key={product.id}
                       whileHover={{ y: -5 }}
-                      className="bg-[#2d4f47] rounded-xl overflow-hidden border border-teal-500/20 transition-all hover:border-teal-500/40 h-full flex flex-col"
+                      className="bg-[#2d4f47] rounded-xl overflow-hidden border border-emerald-500/20 transition-all hover:border-emerald-500/40 h-full flex flex-col"
                     >
                       {/* Product Image */}
                       <div className="h-48 bg-[#1a332e] relative overflow-hidden">
@@ -782,7 +782,7 @@ function ProductList() {
                         
                         {/* Category Label */}
                         <div className="absolute top-3 left-3">
-                          <span className="px-2 py-1 text-xs font-medium rounded-full bg-teal-900/60 text-teal-300 backdrop-blur-sm">
+                          <span className="px-2 py-1 text-xs font-medium rounded-full bg-emerald-900/60 text-emerald-300 backdrop-blur-sm">
                             {product.category}
                           </span>
                         </div>
@@ -791,7 +791,7 @@ function ProductList() {
                         <div className="absolute top-3 right-3 flex space-x-1">
                           <button
                             onClick={() => navigate(`/farmer/update/${product.id}`)}
-                            className="p-2 rounded-full bg-black/30 text-white backdrop-blur-sm hover:bg-teal-600/80 transition-colors"
+                            className="p-2 rounded-full bg-black/30 text-white backdrop-blur-sm hover:bg-emerald-600/80 transition-colors"
                             title="Edit Product"
                           >
                             <Edit className="w-4 h-4" />
@@ -824,7 +824,7 @@ function ProductList() {
                           {/* Price */}
                           <div className="flex items-baseline justify-between">
                             <div className="flex items-center gap-2">
-                              <Tag className="w-4 h-4 text-teal-400" />
+                              <Tag className="w-4 h-4 text-emerald-400" />
                               <span className="text-gray-300 text-sm">Price:</span>
                             </div>
                             <div className="text-white font-medium">
@@ -840,7 +840,7 @@ function ProductList() {
                           {/* Inventory */}
                           <div className="flex items-baseline justify-between">
                             <div className="flex items-center gap-2">
-                              <ShoppingCart className="w-4 h-4 text-teal-400" />
+                              <ShoppingCart className="w-4 h-4 text-emerald-400" />
                               <span className="text-gray-300 text-sm">Stock:</span>
                             </div>
                             <div className={`font-medium ${product.available_quantity > 10 ? 'text-green-400' : 'text-orange-400'}`}>
@@ -852,10 +852,10 @@ function ProductList() {
                           {product.traceability && product.traceability.harvest_method && (
                             <div className="flex items-baseline justify-between">
                               <div className="flex items-center gap-2">
-                                <Info className="w-4 h-4 text-teal-400" />
+                                <Info className="w-4 h-4 text-emerald-400" />
                                 <span className="text-gray-300 text-sm">Farming:</span>
                               </div>
-                              <div className="text-teal-300 text-sm">
+                              <div className="text-emerald-300 text-sm">
                                 {product.traceability.harvest_method}
                               </div>
                             </div>
@@ -864,7 +864,7 @@ function ProductList() {
                           {/* View Details Button */}
                           <button
                             onClick={() => navigate(`/farmer/update/${product.id}`)}
-                            className="w-full mt-3 bg-teal-800/50 hover:bg-teal-700 text-teal-300 py-2 rounded-lg flex items-center justify-center gap-1 transition-colors"
+                            className="w-full mt-3 bg-emerald-800/50 hover:bg-emerald-700 text-emerald-300 py-2 rounded-lg flex items-center justify-center gap-1 transition-colors"
                           >
                             <Eye className="w-4 h-4" />
                             View Details
@@ -879,7 +879,7 @@ function ProductList() {
             
             {/* Pagination controls */}
             {filteredProducts.length > 0 && (
-              <div className="p-4 border-t border-teal-800/20 flex flex-col sm:flex-row justify-between items-center gap-4">
+              <div className="p-4 border-t border-emerald-800/20 flex flex-col sm:flex-row justify-between items-center gap-4">
                 <div className="text-sm text-gray-400">
                   Page {currentPage} of {totalPages}
                 </div>
@@ -891,7 +891,7 @@ function ProductList() {
                     <select
                       value={itemsPerPage}
                       onChange={(e) => setItemsPerPage(Number(e.target.value))}
-                      className="bg-[#1a332e] text-white px-2 py-1 rounded border border-teal-500/20 focus:outline-none focus:border-teal-500 text-sm"
+                      className="bg-[#1a332e] text-white px-2 py-1 rounded border border-emerald-500/20 focus:outline-none focus:border-emerald-500 text-sm"
                     >
                       {viewMode === 'grid' 
                         ? [6, 9, 12, 15].map(number => (
@@ -908,7 +908,7 @@ function ProductList() {
                   <button
                     onClick={prevPage}
                     disabled={currentPage === 1}
-                    className="p-2 rounded-md bg-teal-800/30 text-teal-300 hover:bg-teal-800/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="p-2 rounded-md bg-emerald-800/30 text-emerald-300 hover:bg-emerald-800/50 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </button>
@@ -935,8 +935,8 @@ function ProductList() {
                             onClick={() => paginate(pageNum)}
                             className={`w-8 h-8 flex items-center justify-center rounded-md text-sm ${
                               currentPage === pageNum 
-                                ? 'bg-teal-500 text-white' 
-                                : 'bg-teal-800/30 text-teal-300 hover:bg-teal-800/50'
+                                ? 'bg-emerald-500 text-white' 
+                                : 'bg-emerald-800/30 text-emerald-300 hover:bg-emerald-800/50'
                             }`}
                           >
                             {pageNum}
@@ -950,7 +950,7 @@ function ProductList() {
                   <button
                     onClick={nextPage}
                     disabled={currentPage === totalPages}
-                    className="p-2 rounded-md bg-teal-800/30 text-teal-300 hover:bg-teal-800/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="p-2 rounded-md bg-emerald-800/30 text-emerald-300 hover:bg-emerald-800/50 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <ChevronRight className="w-4 h-4" />
                   </button>

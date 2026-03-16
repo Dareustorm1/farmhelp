@@ -166,7 +166,7 @@ const ConsumerDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0c1816] to-[#0b1f1a] pb-20">
+    <div className="min-h-screen bg-gradient-to-b from-[#0d1612] to-[#0f1f18] pb-20">
       {/* Main Navbar */}
       <Navbar />
 
@@ -184,7 +184,7 @@ const ConsumerDashboard = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="text-center mb-16"
               >
-                <h1 className="font-serif text-4xl font-bold tracking-tighter text-green-900 dark:text-teal-50 mb-4">
+                <h1 className="font-serif text-4xl font-bold tracking-tighter text-green-900 dark:text-emerald-50 mb-4">
                   Consumer Dashboard
                 </h1>
                 <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
@@ -200,15 +200,15 @@ const ConsumerDashboard = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => navigate("/consumer/shop")}
-                    className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-green-200/20 dark:border-teal-800/20 hover:border-green-300/30 dark:hover:border-teal-700/30 transition-colors text-left cursor-pointer"
+                    className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-green-200/20 dark:border-emerald-800/20 hover:border-green-300/30 dark:hover:border-emerald-700/30 transition-colors text-left cursor-pointer"
                   >
                     <div className="flex items-center gap-3 mb-2">
-                      <FiShoppingBag className="w-5 h-5 text-green-600 dark:text-teal-400" />
+                      <FiShoppingBag className="w-5 h-5 text-green-600 dark:text-emerald-400" />
                       <span className="text-gray-600 dark:text-gray-300">
                         Browse Marketplace
                       </span>
                     </div>
-                    <p className="text-green-900 dark:text-teal-50 font-medium">
+                    <p className="text-green-900 dark:text-emerald-50 font-medium">
                       Discover fresh local produce
                     </p>
                   </motion.button>
@@ -217,15 +217,15 @@ const ConsumerDashboard = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => navigate("/consumer/track-orders")} // Updated path
-                    className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-green-200/20 dark:border-teal-800/20 hover:border-green-300/30 dark:hover:border-teal-700/30 transition-colors text-left cursor-pointer"
+                    className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-green-200/20 dark:border-emerald-800/20 hover:border-green-300/30 dark:hover:border-emerald-700/30 transition-colors text-left cursor-pointer"
                   >
                     <div className="flex items-center gap-3 mb-2">
-                      <FiPackage className="w-5 h-5 text-green-600 dark:text-teal-400" />
+                      <FiPackage className="w-5 h-5 text-green-600 dark:text-emerald-400" />
                       <span className="text-gray-600 dark:text-gray-300">
                         Track Orders
                       </span>
                     </div>
-                    <p className="text-green-900 dark:text-teal-50 font-medium">
+                    <p className="text-green-900 dark:text-emerald-50 font-medium">
                       View and track your orders
                     </p>
                   </motion.button>
@@ -234,20 +234,20 @@ const ConsumerDashboard = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => navigate("/consumer/cart")}
-                    className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-green-200/20 dark:border-teal-800/20 hover:border-green-300/30 dark:hover:border-teal-700/30 transition-colors text-left cursor-pointer"
+                    className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-green-200/20 dark:border-emerald-800/20 hover:border-green-300/30 dark:hover:border-emerald-700/30 transition-colors text-left cursor-pointer"
                   >
                     <div className="flex items-center gap-3 mb-2">
-                      <FiShoppingCart className="w-5 h-5 text-green-600 dark:text-teal-400" />
+                      <FiShoppingCart className="w-5 h-5 text-green-600 dark:text-emerald-400" />
                       <span className="text-gray-600 dark:text-gray-300">
                         My Cart
                       </span>
                       {cartItemCount > 0 && (
-                        <span className="bg-teal-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        <span className="bg-emerald-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                           {cartItemCount}
                         </span>
                       )}
                     </div>
-                    <p className="text-green-900 dark:text-teal-50 font-medium">
+                    <p className="text-green-900 dark:text-emerald-50 font-medium">
                       View your cart and checkout
                     </p>
                   </motion.button>
@@ -260,21 +260,21 @@ const ConsumerDashboard = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => navigate("/consumer/analytics")}
-                  className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-green-200/20 dark:border-teal-800/20 hover:border-green-300/30 dark:hover:border-teal-700/30 transition-colors text-left cursor-pointer col-span-3"
+                  className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-green-200/20 dark:border-emerald-800/20 hover:border-green-300/30 dark:hover:border-emerald-700/30 transition-colors text-left cursor-pointer col-span-3"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <FiBarChart2 className="w-5 h-5 text-green-600 dark:text-teal-400" />
+                      <FiBarChart2 className="w-5 h-5 text-green-600 dark:text-emerald-400" />
                       <div>
                         <span className="text-gray-600 dark:text-gray-300">
                           Analytics Dashboard
                         </span>
-                        <p className="text-green-900 dark:text-teal-50 font-medium">
+                        <p className="text-green-900 dark:text-emerald-50 font-medium">
                           Track your orders and spending patterns
                         </p>
                       </div>
                     </div>
-                    <FiArrowRight className="w-5 h-5 text-green-600 dark:text-teal-400" />
+                    <FiArrowRight className="w-5 h-5 text-green-600 dark:text-emerald-400" />
                   </div>
                 </motion.button>
               </div>
@@ -284,19 +284,19 @@ const ConsumerDashboard = () => {
                 <motion.div
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-green-200/20 dark:border-teal-800/20"
+                  className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-green-200/20 dark:border-emerald-800/20"
                 >
-                  <h2 className="font-serif text-2xl font-bold tracking-tighter text-green-900 dark:text-teal-50 mb-6">
+                  <h2 className="font-serif text-2xl font-bold tracking-tighter text-green-900 dark:text-emerald-50 mb-6">
                     Recent Orders
                   </h2>
                   <div className="space-y-4">
                     {recentOrders.map((order) => (
                       <div
                         key={order._id}
-                        className="flex items-center justify-between p-4 rounded-lg bg-white/5 border border-green-200/10 dark:border-teal-800/10"
+                        className="flex items-center justify-between p-4 rounded-lg bg-white/5 border border-green-200/10 dark:border-emerald-800/10"
                       >
                         <div>
-                          <p className="font-medium text-green-900 dark:text-teal-50">
+                          <p className="font-medium text-green-900 dark:text-emerald-50">
                             {order.items[0].name}
                             {order.items.length > 1 &&
                               ` +${order.items.length - 1} more`}
@@ -306,7 +306,7 @@ const ConsumerDashboard = () => {
                           </p>
                         </div>
                         <div className="text-right">
-                          <p className="font-medium text-green-900 dark:text-teal-50">
+                          <p className="font-medium text-green-900 dark:text-emerald-50">
                             ₹{order.totalAmount.toFixed(2)}
                           </p>
                           <div className="flex items-center gap-2 text-sm">
@@ -322,7 +322,7 @@ const ConsumerDashboard = () => {
                   <div className="mt-6 text-center">
                     <button
                       onClick={() => navigate("/consumer/track-orders")}
-                      className="inline-flex items-center px-4 py-2 border border-green-200/20 dark:border-teal-800/20 rounded-md text-sm font-medium text-green-900 dark:text-teal-50 hover:bg-white/10 transition-colors"
+                      className="inline-flex items-center px-4 py-2 border border-green-200/20 dark:border-emerald-800/20 rounded-md text-sm font-medium text-green-900 dark:text-emerald-50 hover:bg-white/10 transition-colors"
                     >
                       View All Orders
                       <svg

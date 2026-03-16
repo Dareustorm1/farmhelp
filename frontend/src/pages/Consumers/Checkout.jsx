@@ -48,29 +48,80 @@ const CheckoutPage = () => {
 
   // Load checkout data from localStorage
   useEffect(() => {
-    try {
-      const savedCheckout = localStorage.getItem("checkout");
-      if (savedCheckout) {
-        const checkoutInfo = JSON.parse(savedCheckout);
-        setCheckoutData(checkoutInfo);
-
-        // Try to load saved address if available
-        const savedAddress = localStorage.getItem("savedAddress");
-        if (savedAddress) {
-          setFormData({ ...formData, ...JSON.parse(savedAddress) });
-        }
-      } else {
-        setError("No checkout information found");
-        setTimeout(() => {
-          navigate("/consumer/cart");
-        }, 2000);
+    const buildFromServerCart = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) return null;
+        const res = await fetch(`${API_BASE_URL}/api/cart`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (!data.success || !data.cart) return null;
+        const items = data.cart.items || [];
+        // normalize similar to CartPage
+        const normalized = items.map(item => {
+          let price = item.price;
+          if (!price && item.product_details) price = item.product_details.price;
+          // ensure farmer_location string
+          if (item.farmer_location && typeof item.farmer_location === 'object') {
+            item.farmer_location = ensureString(item.farmer_location);
+          }
+          if (item.farmer_details && item.farmer_details.location && typeof item.farmer_details.location === 'object') {
+            item.farmer_details.location = ensureString(item.farmer_details.location);
+          }
+          return { ...item, price };
+        });
+        const subtotal = normalized.reduce((t,i)=> t + (i.price||0)*i.quantity, 0);
+        const shippingFee = normalized.length>0?4.99:0;
+        const taxAmount = subtotal*0.05;
+        const discountAmount = couponApplied ? subtotal*0.1 : 0;
+        return {
+          items: normalized,
+          subtotal,
+          shippingFee,
+          taxAmount,
+          discount: discountAmount,
+          total: subtotal+shippingFee+taxAmount-discountAmount,
+          couponCode: couponApplied ? couponCode : null
+        };
+      } catch (err) {
+        console.warn('Error building checkout from server cart', err);
+        return null;
       }
-    } catch (error) {
-      console.error("Error loading checkout data:", error);
-      setError("Failed to load checkout information");
-    } finally {
-      setLoading(false);
-    }
+    };
+
+    (async () => {
+      try {
+        const savedCheckout = localStorage.getItem("checkout");
+        if (savedCheckout) {
+          const checkoutInfo = JSON.parse(savedCheckout);
+          setCheckoutData(checkoutInfo);
+
+          // Try to load saved address if available
+          const savedAddress = localStorage.getItem("savedAddress");
+          if (savedAddress) {
+            setFormData({ ...formData, ...JSON.parse(savedAddress) });
+          }
+        } else {
+          // if user logged in try to fetch server cart
+          const fetched = await buildFromServerCart();
+          if (fetched) {
+            setCheckoutData(fetched);
+            localStorage.setItem('checkout', JSON.stringify(fetched));
+          } else {
+            setError("No checkout information found");
+            setTimeout(() => {
+              navigate("/consumer/cart");
+            }, 2000);
+          }
+        }
+      } catch (error) {
+        console.error("Error loading checkout data:", error);
+        setError("Failed to load checkout information");
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, [navigate]);
 
   // Handle form field change
@@ -120,9 +171,11 @@ const CheckoutPage = () => {
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log('Checkout form submitted', { formData, paymentMethod });
     setFormSubmitted(true);
 
     const errors = validateForm();
+    console.log('Validation errors', errors);
     setFormErrors(errors);
 
     if (Object.keys(errors).length === 0) {
@@ -167,6 +220,7 @@ const CheckoutPage = () => {
 
   // Process order based on payment method
   const processOrder = async () => {
+    console.log('processOrder() called, checkoutData:', checkoutData, 'formData:', formData, 'paymentMethod:', paymentMethod);
     setIsProcessing(true);
     try {
       // Generate a request ID to ensure idempotency
@@ -263,12 +317,19 @@ const CheckoutPage = () => {
       
       // For COD orders, show success and redirect
       if (paymentMethod === "cod") {
+        console.log('Order created successfully, COD path');
         setOrderPlaced(true);
+
+        // try clear server cart as well
+        await clearServerCart(token);
+        // clear local storage
+        localStorage.removeItem('cart');
+        localStorage.removeItem('checkout');
         
-        // Redirect after a short delay
+        // Redirect after a short delay to track orders
         setTimeout(() => {
-          navigate("/consumer/order-confirmation", {
-            state: { order: responseData.order }
+          navigate("/consumer/track-orders", {
+            state: { newOrder: responseData.order }
           });
         }, 2000);
         
@@ -276,6 +337,7 @@ const CheckoutPage = () => {
       
 
       } else if (paymentMethod === "razorpay") {
+        console.log('Order created successfully, Razorpay path');
         // For Razorpay, first create a Razorpay order through our backend
         const razorpayResponse = await fetch(
           `${API_BASE_URL}/api/orders/create-razorpay-order`,
@@ -346,7 +408,30 @@ const CheckoutPage = () => {
       setError(
         error.message || "Failed to process your order. Please try again."
       );
+    } finally {
+      // always clear processing state
       setIsProcessing(false);
+      // clear server cart just in case
+      const token = localStorage.getItem('token');
+      clearServerCart(token);
+      // if we created an order but didn't handle redirection (e.g. unknown paymentMethod), send user to orders
+      if (checkoutData && paymentMethod && !orderPlaced) {
+        console.log('ProcessOrder finished without redirection, fallback to orders page');
+        setTimeout(() => navigate('/consumer/orders'), 500);
+      }
+    }
+  };
+
+  // Helper to clear server cart for authenticated user
+  const clearServerCart = async (token) => {
+    try {
+      if (!token) return;
+      await fetch(`${API_BASE_URL}/api/cart/clear`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+    } catch (err) {
+      console.warn('Failed to clear server cart:', err);
     }
   };
 
@@ -399,7 +484,8 @@ const CheckoutPage = () => {
 
           const verifyResult = await verifyResponse.json();
 
-          // Clear cart and checkout data
+          // Clear server cart and local data
+          await clearServerCart(token);
           localStorage.removeItem("cart");
           localStorage.removeItem("checkout");
 
@@ -407,10 +493,10 @@ const CheckoutPage = () => {
           setOrderPlaced(true);
           setIsProcessing(false);
 
-          // Redirect to order confirmation
+          // Redirect to track orders
           setTimeout(() => {
-            navigate("/consumer/order-confirmation", {
-              state: { order: verifyResult.order },
+            navigate("/consumer/track-orders", {
+              state: { newOrder: verifyResult.order },
             });
           }, 2000);
         } catch (error) {
@@ -461,7 +547,7 @@ const CheckoutPage = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
@@ -480,8 +566,8 @@ const CheckoutPage = () => {
       {orderPlaced && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-[#1a2626] rounded-xl p-8 max-w-md flex flex-col items-center text-center">
-            <div className="w-16 h-16 rounded-full bg-teal-500/20 flex items-center justify-center mb-4">
-              <FiCheckCircle className="w-8 h-8 text-teal-500" />
+            <div className="w-16 h-16 rounded-full bg-emerald-500/20 flex items-center justify-center mb-4">
+              <FiCheckCircle className="w-8 h-8 text-emerald-500" />
             </div>
             <h2 className="text-2xl font-bold text-white mb-2">
               Order Placed Successfully!
@@ -489,7 +575,7 @@ const CheckoutPage = () => {
             <p className="text-gray-400 mb-6">
               Your order has been placed and is being processed.
             </p>
-            <div className="animate-pulse text-teal-400">
+            <div className="animate-pulse text-emerald-400">
               Redirecting to order confirmation...
             </div>
           </div>
@@ -504,7 +590,7 @@ const CheckoutPage = () => {
         <div className="flex items-center space-x-3 mb-6">
           <button
             onClick={goToCart}
-            className="flex items-center space-x-2 text-teal-400 hover:text-teal-300 transition-colors"
+            className="flex items-center space-x-2 text-emerald-400 hover:text-emerald-300 transition-colors"
           >
             <FiArrowLeft className="w-5 h-5" />
             <span>Back to Cart</span>
@@ -512,7 +598,7 @@ const CheckoutPage = () => {
         </div>
 
         <div className="flex items-center space-x-3">
-          <FiShoppingBag className="w-7 h-7 text-teal-400" />
+          <FiShoppingBag className="w-7 h-7 text-emerald-400" />
           <h1 className="text-3xl font-bold text-white">Checkout</h1>
         </div>
         <p className="text-gray-400 mt-2">
@@ -529,9 +615,9 @@ const CheckoutPage = () => {
         >
           <form onSubmit={handleSubmit}>
             {/* Shipping Address */}
-            <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-green-200/20 dark:border-teal-800/20 overflow-hidden mb-6">
-              <div className="p-6 border-b border-green-200/20 dark:border-teal-800/20 flex items-center space-x-3">
-                <FiMapPin className="w-5 h-5 text-teal-400" />
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-green-200/20 dark:border-emerald-800/20 overflow-hidden mb-6">
+              <div className="p-6 border-b border-green-200/20 dark:border-emerald-800/20 flex items-center space-x-3">
+                <FiMapPin className="w-5 h-5 text-emerald-400" />
                 <h2 className="text-xl font-semibold text-white">
                   Shipping Address
                 </h2>
@@ -555,8 +641,8 @@ const CheckoutPage = () => {
                       className={`w-full px-4 py-3 bg-white/5 border ${
                         formErrors.firstName
                           ? "border-red-500"
-                          : "border-green-200/20 dark:border-teal-800/20"
-                      } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-colors`}
+                          : "border-green-200/20 dark:border-emerald-800/20"
+                      } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors`}
                       placeholder="Enter your first name"
                     />
                     {formErrors.firstName && (
@@ -582,8 +668,8 @@ const CheckoutPage = () => {
                       className={`w-full px-4 py-3 bg-white/5 border ${
                         formErrors.lastName
                           ? "border-red-500"
-                          : "border-green-200/20 dark:border-teal-800/20"
-                      } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-colors`}
+                          : "border-green-200/20 dark:border-emerald-800/20"
+                      } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors`}
                       placeholder="Enter your last name"
                     />
                     {formErrors.lastName && (
@@ -611,8 +697,8 @@ const CheckoutPage = () => {
                       className={`w-full px-4 py-3 bg-white/5 border ${
                         formErrors.email
                           ? "border-red-500"
-                          : "border-green-200/20 dark:border-teal-800/20"
-                      } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-colors`}
+                          : "border-green-200/20 dark:border-emerald-800/20"
+                      } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors`}
                       placeholder="Enter your email address"
                     />
                     {formErrors.email && (
@@ -638,8 +724,8 @@ const CheckoutPage = () => {
                       className={`w-full px-4 py-3 bg-white/5 border ${
                         formErrors.phone
                           ? "border-red-500"
-                          : "border-green-200/20 dark:border-teal-800/20"
-                      } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-colors`}
+                          : "border-green-200/20 dark:border-emerald-800/20"
+                      } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors`}
                       placeholder="Enter your phone number"
                     />
                     {formErrors.phone && (
@@ -666,8 +752,8 @@ const CheckoutPage = () => {
                     className={`w-full px-4 py-3 bg-white/5 border ${
                       formErrors.address
                         ? "border-red-500"
-                        : "border-green-200/20 dark:border-teal-800/20"
-                    } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-colors`}
+                        : "border-green-200/20 dark:border-emerald-800/20"
+                    } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors`}
                     placeholder="Street address, apartment, suite, etc."
                   ></textarea>
                   {formErrors.address && (
@@ -694,8 +780,8 @@ const CheckoutPage = () => {
                       className={`w-full px-4 py-3 bg-white/5 border ${
                         formErrors.city
                           ? "border-red-500"
-                          : "border-green-200/20 dark:border-teal-800/20"
-                      } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-colors`}
+                          : "border-green-200/20 dark:border-emerald-800/20"
+                      } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors`}
                       placeholder="Enter your city"
                     />
                     {formErrors.city && (
@@ -721,8 +807,8 @@ const CheckoutPage = () => {
                       className={`w-full px-4 py-3 bg-white/5 border ${
                         formErrors.state
                           ? "border-red-500"
-                          : "border-green-200/20 dark:border-teal-800/20"
-                      } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-colors`}
+                          : "border-green-200/20 dark:border-emerald-800/20"
+                      } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors`}
                       placeholder="Enter your state"
                     />
                     {formErrors.state && (
@@ -750,8 +836,8 @@ const CheckoutPage = () => {
                       className={`w-full px-4 py-3 bg-white/5 border ${
                         formErrors.pincode
                           ? "border-red-500"
-                          : "border-green-200/20 dark:border-teal-800/20"
-                      } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-colors`}
+                          : "border-green-200/20 dark:border-emerald-800/20"
+                      } rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors`}
                       placeholder="Enter your pincode"
                     />
                     {formErrors.pincode && (
@@ -774,7 +860,7 @@ const CheckoutPage = () => {
                       name="country"
                       value={formData.country}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-white/5 border border-green-200/20 dark:border-teal-800/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-colors"
+                      className="w-full px-4 py-3 bg-white/5 border border-green-200/20 dark:border-emerald-800/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
                       placeholder="Enter your country"
                       disabled
                     />
@@ -788,7 +874,7 @@ const CheckoutPage = () => {
                     name="saveAddress"
                     checked={formData.saveAddress}
                     onChange={handleInputChange}
-                    className="w-4 h-4 border border-green-200/20 dark:border-teal-800/20 rounded bg-white/5 text-teal-500 focus:ring-teal-500"
+                    className="w-4 h-4 border border-green-200/20 dark:border-emerald-800/20 rounded bg-white/5 text-emerald-500 focus:ring-emerald-500"
                   />
                   <label
                     className="ml-2 block text-gray-300 text-sm"
@@ -801,9 +887,9 @@ const CheckoutPage = () => {
             </div>
 
             {/* Payment Methods */}
-            <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-green-200/20 dark:border-teal-800/20 overflow-hidden mb-6">
-              <div className="p-6 border-b border-green-200/20 dark:border-teal-800/20 flex items-center space-x-3">
-                <FiCreditCard className="w-5 h-5 text-teal-400" />
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-green-200/20 dark:border-emerald-800/20 overflow-hidden mb-6">
+              <div className="p-6 border-b border-green-200/20 dark:border-emerald-800/20 flex items-center space-x-3">
+                <FiCreditCard className="w-5 h-5 text-emerald-400" />
                 <h2 className="text-xl font-semibold text-white">
                   Payment Method
                 </h2>
@@ -820,8 +906,8 @@ const CheckoutPage = () => {
                 <div
                   className={`border ${
                     paymentMethod === "cod"
-                      ? "border-teal-500 bg-teal-500/10"
-                      : "border-green-200/20 dark:border-teal-800/20 hover:border-teal-500/50"
+                      ? "border-emerald-500 bg-emerald-500/10"
+                      : "border-green-200/20 dark:border-emerald-800/20 hover:border-emerald-500/50"
                   } rounded-lg p-4 cursor-pointer transition-all`}
                   onClick={() => setPaymentMethod("cod")}
                 >
@@ -832,13 +918,13 @@ const CheckoutPage = () => {
                       name="paymentMethod"
                       checked={paymentMethod === "cod"}
                       onChange={() => setPaymentMethod("cod")}
-                      className="w-4 h-4 text-teal-500 focus:ring-teal-500 border-gray-600"
+                      className="w-4 h-4 text-emerald-500 focus:ring-emerald-500 border-gray-600"
                     />
                     <label
                       htmlFor="cod"
                       className="flex items-center cursor-pointer"
                     >
-                      <FiDollarSign className="w-5 h-5 text-teal-400 mr-2" />
+                      <FiDollarSign className="w-5 h-5 text-emerald-400 mr-2" />
                       <span className="text-white font-medium">
                         Cash on Delivery
                       </span>
@@ -851,7 +937,7 @@ const CheckoutPage = () => {
                         Pay with cash upon delivery. Our delivery partner will
                         collect the payment.
                       </p>
-                      <div className="flex items-center mt-2 text-teal-400 text-xs">
+                      <div className="flex items-center mt-2 text-emerald-400 text-xs">
                         <FiInfo className="w-4 h-4 mr-1" />
                         <span>No additional charges for Cash on Delivery</span>
                       </div>
@@ -863,8 +949,8 @@ const CheckoutPage = () => {
                 <div
                   className={`border ${
                     paymentMethod === "razorpay"
-                      ? "border-teal-500 bg-teal-500/10"
-                      : "border-green-200/20 dark:border-teal-800/20 hover:border-teal-500/50"
+                      ? "border-emerald-500 bg-emerald-500/10"
+                      : "border-green-200/20 dark:border-emerald-800/20 hover:border-emerald-500/50"
                   } rounded-lg p-4 cursor-pointer transition-all`}
                   onClick={() => setPaymentMethod("razorpay")}
                 >
@@ -875,7 +961,7 @@ const CheckoutPage = () => {
                       name="paymentMethod"
                       checked={paymentMethod === "razorpay"}
                       onChange={() => setPaymentMethod("razorpay")}
-                      className="w-4 h-4 text-teal-500 focus:ring-teal-500 border-gray-600"
+                      className="w-4 h-4 text-emerald-500 focus:ring-emerald-500 border-gray-600"
                     />
                     <label
                       htmlFor="razorpay"
@@ -936,8 +1022,8 @@ const CheckoutPage = () => {
                 disabled={isProcessing}
                 className={`py-4 px-8 rounded-lg font-medium flex items-center justify-center ${
                   isProcessing
-                    ? "bg-teal-700 cursor-not-allowed"
-                    : "bg-teal-500 hover:bg-teal-600"
+                    ? "bg-emerald-700 cursor-not-allowed"
+                    : "bg-emerald-500 hover:bg-emerald-600"
                 } text-white transition-colors`}
               >
                 {isProcessing ? (
@@ -963,8 +1049,8 @@ const CheckoutPage = () => {
           className="md:w-1/3"
         >
           {checkoutData && (
-            <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-green-200/20 dark:border-teal-800/20 sticky top-28">
-              <div className="p-6 border-b border-green-200/20 dark:border-teal-800/20">
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-green-200/20 dark:border-emerald-800/20 sticky top-28">
+              <div className="p-6 border-b border-green-200/20 dark:border-emerald-800/20">
                 <h2 className="text-xl font-semibold text-white">
                   Order Summary
                 </h2>
@@ -1002,7 +1088,7 @@ const CheckoutPage = () => {
                           <span className="text-gray-400 text-xs">
                             Qty: {item.quantity}
                           </span>
-                          <span className="text-teal-400 text-sm font-medium">
+                          <span className="text-emerald-400 text-sm font-medium">
                             ₹{(item.price * item.quantity).toFixed(2)}
                           </span>
                         </div>
@@ -1011,7 +1097,7 @@ const CheckoutPage = () => {
                   ))}
                 </div>
 
-                <div className="space-y-2 pt-4 border-t border-green-200/10 dark:border-teal-800/10">
+                <div className="space-y-2 pt-4 border-t border-green-200/10 dark:border-emerald-800/10">
                   <div className="flex justify-between text-gray-300">
                     <span>Subtotal</span>
                     <span className="font-medium">
@@ -1034,7 +1120,7 @@ const CheckoutPage = () => {
                   </div>
 
                   {checkoutData.discount > 0 && (
-                    <div className="flex justify-between text-teal-400">
+                    <div className="flex justify-between text-emerald-400">
                       <span>Discount</span>
                       <span className="font-medium">
                         -₹{checkoutData.discount.toFixed(2)}
@@ -1042,10 +1128,10 @@ const CheckoutPage = () => {
                     </div>
                   )}
 
-                  <div className="pt-4 border-t border-green-200/10 dark:border-teal-800/10">
+                  <div className="pt-4 border-t border-green-200/10 dark:border-emerald-800/10">
                     <div className="flex justify-between text-white">
                       <span className="font-semibold">Total</span>
-                      <span className="font-bold text-teal-400">
+                      <span className="font-bold text-emerald-400">
                         ₹{checkoutData.total.toFixed(2)}
                       </span>
                     </div>
@@ -1054,17 +1140,17 @@ const CheckoutPage = () => {
 
                 <div className="mt-6 text-xs text-gray-400">
                   <div className="flex items-center space-x-1 mb-2">
-                    <FiTruck className="w-4 h-4 text-teal-400" />
+                    <FiTruck className="w-4 h-4 text-emerald-400" />
                     <span>Expected delivery: 3-5 business days</span>
                   </div>
 
                   <div className="flex items-center space-x-1 mb-2">
-                    <FiShield className="w-4 h-4 text-teal-400" />
+                    <FiShield className="w-4 h-4 text-emerald-400" />
                     <span>Secure payment processing</span>
                   </div>
 
                   <div className="flex items-center space-x-1">
-                    <FiClock className="w-4 h-4 text-teal-400" />
+                    <FiClock className="w-4 h-4 text-emerald-400" />
                     <span>Order placed: {new Date().toLocaleDateString()}</span>
                   </div>
                 </div>

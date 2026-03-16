@@ -90,13 +90,13 @@ function ProductList() {
               <input
                 type="text"
                 placeholder="Search products..."
-                className="w-full bg-[#2d4f47] text-white pl-10 pr-4 py-2.5 rounded-lg border border-teal-500/20 focus:outline-none focus:border-teal-500 transition-colors"
+                className="w-full bg-[#2d4f47] text-white pl-10 pr-4 py-2.5 rounded-lg border border-emerald-500/20 focus:outline-none focus:border-emerald-500 transition-colors"
               />
             </div>
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="bg-teal-500 text-white px-4 py-2.5 rounded-lg flex items-center gap-2 hover:bg-teal-600 transition-colors"
+              className="bg-emerald-500 text-white px-4 py-2.5 rounded-lg flex items-center gap-2 hover:bg-emerald-600 transition-colors"
             >
               <Plus className="w-5 h-5" />
               Add New Product
@@ -107,11 +107,11 @@ function ProductList() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-[#2d4f47] rounded-xl border border-teal-500/20 overflow-hidden"
+            className="bg-[#2d4f47] rounded-xl border border-emerald-500/20 overflow-hidden"
           >
             <table className="w-full">
               <thead>
-                <tr className="border-b border-teal-500/20">
+                <tr className="border-b border-emerald-500/20">
                   <th className="text-left py-4 px-6 text-gray-400 font-medium">Image</th>
                   <th className="text-left py-4 px-6 text-gray-400 font-medium">Product</th>
                   <th className="text-left py-4 px-6 text-gray-400 font-medium">Category</th>
@@ -123,7 +123,7 @@ function ProductList() {
               </thead>
               <tbody>
                 {products.map((product) => (
-                  <tr key={product.id} className="border-b border-teal-500/20 last:border-0">
+                  <tr key={product.id} className="border-b border-emerald-500/20 last:border-0">
                     <td className="py-4 px-6">
                       <img
                         src={product.image}
@@ -146,7 +146,7 @@ function ProductList() {
                     <td className="py-4 px-6">
                       <span className={`px-3 py-1 rounded-full text-sm ${
                         product.status === 'Active' 
-                          ? 'bg-teal-500/20 text-teal-400' 
+                          ? 'bg-emerald-500/20 text-emerald-400' 
                           : 'bg-red-500/20 text-red-400'
                       }`}>
                         {product.status}

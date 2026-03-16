@@ -82,7 +82,7 @@ const NotificationSystem = ({ role }) => {
       case 'order_processing':
         return <FiPackage className="w-4 h-4 text-yellow-400" />;
       case 'order_shipped':
-        return <FiTruck className="w-4 h-4 text-blue-400" />;
+        return <FiTruck className="w-4 h-4 text-emerald-400" />;
       case 'order_delivered':
         return <FiCheck className="w-4 h-4 text-green-400" />;
       default:
@@ -93,7 +93,7 @@ const NotificationSystem = ({ role }) => {
   const getFarmerIcon = (type) => {
     switch (type) {
       case 'new_order':
-        return <FiShoppingBag className="w-4 h-4 text-teal-400" />;
+        return <FiShoppingBag className="w-4 h-4 text-emerald-400" />;
       case 'order_cancelled':
         return <FiAlertCircle className="w-4 h-4 text-red-400" />;
       case 'order_completed':
@@ -132,7 +132,7 @@ const NotificationSystem = ({ role }) => {
     <div className="relative">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 rounded-full text-gray-300 hover:text-teal-400 hover:bg-teal-500/20"
+        className="relative p-2 rounded-full text-gray-300 hover:text-emerald-400 hover:bg-emerald-500/20"
       >
         <FiBell className="w-5 h-5" />
         {unreadCount > 0 && (
@@ -159,7 +159,7 @@ const NotificationSystem = ({ role }) => {
                   {unreadCount > 0 && (
                     <button
                       onClick={markAllAsRead}
-                      className="text-sm text-teal-400 hover:text-teal-300"
+                      className="text-sm text-emerald-400 hover:text-emerald-300"
                     >
                       Mark all as read
                     </button>

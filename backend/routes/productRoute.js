@@ -9,7 +9,8 @@ import {
   getSingleProduct,
   getFarmersForProduct,
   getUniqueProducts,
-  getProductImage
+  getProductImage,
+  debugGetAllProducts
 } from "../controllers/productController.js";
 import upload from '../middlewares/upload.js';
 
@@ -25,6 +26,7 @@ router.get("/:product_id", getSingleProduct);
 router.put("/update/:product_id", upload.single("image"), editProducts);
 router.delete("/delete/:product_id", deleteProducts);
 router.get('/unique', getUniqueProducts);
+router.get('/debug/all-products', debugGetAllProducts);
 router.get('/farmers/:productName', authenticate, getFarmersForProduct);
 
 

@@ -303,7 +303,7 @@ const Certificates = () => {
             className={`p-2 rounded-md ${
               currentPage === 1
                 ? 'text-gray-500 cursor-not-allowed'
-                : 'text-teal-400 hover:bg-teal-500/10'
+                : 'text-emerald-400 hover:bg-emerald-500/10'
             }`}
           >
             <ChevronLeft className="w-5 h-5" />
@@ -315,8 +315,8 @@ const Certificates = () => {
               onClick={() => handlePageChange(number)}
               className={`w-8 h-8 flex items-center justify-center rounded-md ${
                 currentPage === number
-                  ? 'bg-teal-500 text-white'
-                  : 'text-gray-400 hover:bg-teal-500/10 hover:text-white'
+                  ? 'bg-emerald-500 text-white'
+                  : 'text-gray-400 hover:bg-emerald-500/10 hover:text-white'
               }`}
             >
               {number}
@@ -329,7 +329,7 @@ const Certificates = () => {
             className={`p-2 rounded-md ${
               currentPage === totalPages
                 ? 'text-gray-500 cursor-not-allowed'
-                : 'text-teal-400 hover:bg-teal-500/10'
+                : 'text-emerald-400 hover:bg-emerald-500/10'
             }`}
           >
             <ChevronRight className="w-5 h-5" />
@@ -395,7 +395,7 @@ const Certificates = () => {
             className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8"
           >
             {Array.from({ length: 6 }).map((_, index) => (
-              <div key={index} className="bg-teal-500/5 animate-pulse rounded-xl p-6 h-32"></div>
+              <div key={index} className="bg-emerald-500/5 animate-pulse rounded-xl p-6 h-32"></div>
             ))}
           </motion.div>
         ) : (
@@ -404,16 +404,16 @@ const Certificates = () => {
             animate={{ opacity: 1, y: 0 }}
             className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8"
           >
-            <div className="bg-gradient-to-br from-[#386259] to-[#2d4f47] rounded-xl border border-teal-500/20 shadow-lg p-6">
+            <div className="bg-gradient-to-br from-[#386259] to-[#2d4f47] rounded-xl border border-emerald-500/20 shadow-lg p-6">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-gray-300 text-sm font-medium">Total Farmers</h3>
-                <Users className="h-5 w-5 text-teal-300" />
+                <Users className="h-5 w-5 text-emerald-300" />
               </div>
               <p className="text-3xl font-bold text-white">{stats?.totalFarmers || 0}</p>
               <p className="text-gray-400 text-xs mt-2">Registered farmers</p>
             </div>
             
-            <div className="bg-gradient-to-br from-[#386259] to-[#2d4f47] rounded-xl border border-teal-500/20 shadow-lg p-6">
+            <div className="bg-gradient-to-br from-[#386259] to-[#2d4f47] rounded-xl border border-emerald-500/20 shadow-lg p-6">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-gray-300 text-sm font-medium">Certified</h3>
                 <ShieldCheck className="h-5 w-5 text-green-300" />
@@ -422,16 +422,16 @@ const Certificates = () => {
               <p className="text-gray-400 text-xs mt-2">Blockchain certificates issued</p>
             </div>
             
-            <div className="bg-gradient-to-br from-[#386259] to-[#2d4f47] rounded-xl border border-teal-500/20 shadow-lg p-6">
+            <div className="bg-gradient-to-br from-[#386259] to-[#2d4f47] rounded-xl border border-emerald-500/20 shadow-lg p-6">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-gray-300 text-sm font-medium">Verified</h3>
-                <CheckCircle2 className="h-5 w-5 text-blue-300" />
+                <CheckCircle2 className="h-5 w-5 text-emerald-300" />
               </div>
               <p className="text-3xl font-bold text-white">{stats?.verified || 0}</p>
               <p className="text-gray-400 text-xs mt-2">Documents verified, awaiting certification</p>
             </div>
             
-            <div className="bg-gradient-to-br from-[#386259] to-[#2d4f47] rounded-xl border border-teal-500/20 shadow-lg p-6">
+            <div className="bg-gradient-to-br from-[#386259] to-[#2d4f47] rounded-xl border border-emerald-500/20 shadow-lg p-6">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-gray-300 text-sm font-medium">Pending</h3>
                 <Clock className="h-5 w-5 text-yellow-300" />
@@ -440,7 +440,7 @@ const Certificates = () => {
               <p className="text-gray-400 text-xs mt-2">Awaiting verification</p>
             </div>
             
-            <div className="bg-gradient-to-br from-[#386259] to-[#2d4f47] rounded-xl border border-teal-500/20 shadow-lg p-6">
+            <div className="bg-gradient-to-br from-[#386259] to-[#2d4f47] rounded-xl border border-emerald-500/20 shadow-lg p-6">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-gray-300 text-sm font-medium">Partial</h3>
                 <ClipboardList className="h-5 w-5 text-orange-300" />
@@ -449,7 +449,7 @@ const Certificates = () => {
               <p className="text-gray-400 text-xs mt-2">Incomplete document submission</p>
             </div>
             
-            <div className="bg-gradient-to-br from-[#386259] to-[#2d4f47] rounded-xl border border-teal-500/20 shadow-lg p-6">
+            <div className="bg-gradient-to-br from-[#386259] to-[#2d4f47] rounded-xl border border-emerald-500/20 shadow-lg p-6">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-gray-300 text-sm font-medium">Rejected</h3>
                 <AlertTriangle className="h-5 w-5 text-red-300" />
@@ -463,7 +463,7 @@ const Certificates = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-br from-[#386259] to-[#2d4f47] p-6 rounded-xl border border-teal-500/20 shadow-lg shadow-black/20 mb-8"
+          className="bg-gradient-to-br from-[#386259] to-[#2d4f47] p-6 rounded-xl border border-emerald-500/20 shadow-lg shadow-black/20 mb-8"
         >
           {/* Search & Filter */}
           <div className="flex flex-col md:flex-row justify-between mb-6 gap-4">
@@ -471,7 +471,7 @@ const Certificates = () => {
               <input
                 type="text"
                 placeholder="Search by farmer name or certificate ID..."
-                className="w-full bg-[#1c3631] text-white pl-10 pr-4 py-2 rounded-lg border border-[#2d4f47] focus:outline-none focus:ring-2 focus:ring-teal-500/50"
+                className="w-full bg-[#1c3631] text-white pl-10 pr-4 py-2 rounded-lg border border-[#2d4f47] focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
                 onKeyDown={handleSearch}
               />
               <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
@@ -480,7 +480,7 @@ const Certificates = () => {
             <div className="flex space-x-2">
               <div className="relative">
                 <select
-                  className="bg-[#1c3631] text-white pl-4 pr-10 py-2 rounded-lg border border-[#2d4f47] focus:outline-none focus:ring-2 focus:ring-teal-500/50 appearance-none"
+                  className="bg-[#1c3631] text-white pl-4 pr-10 py-2 rounded-lg border border-[#2d4f47] focus:outline-none focus:ring-2 focus:ring-emerald-500/50 appearance-none"
                   value={filter}
                   onChange={handleFilterChange}
                 >
@@ -496,11 +496,11 @@ const Certificates = () => {
           
           {/* Certificates Table */}
           <div className="overflow-x-auto">
-            <table className="w-full min-w-full divide-y divide-teal-500/10 text-white">
+            <table className="w-full min-w-full divide-y divide-emerald-500/10 text-white">
               <thead>
                 <tr>
                   <th 
-                    className="px-4 py-3 text-left text-xs font-medium text-teal-300 uppercase tracking-wider cursor-pointer"
+                    className="px-4 py-3 text-left text-xs font-medium text-emerald-300 uppercase tracking-wider cursor-pointer"
                     onClick={() => handleSort('farmerName')}
                   >
                     <div className="flex items-center">
@@ -508,11 +508,11 @@ const Certificates = () => {
                       <ArrowUpDown className="ml-1 w-3 h-3" />
                     </div>
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-teal-300 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-emerald-300 uppercase tracking-wider">
                     Farm Type
                   </th>
                   <th 
-                    className="px-4 py-3 text-left text-xs font-medium text-teal-300 uppercase tracking-wider cursor-pointer"
+                    className="px-4 py-3 text-left text-xs font-medium text-emerald-300 uppercase tracking-wider cursor-pointer"
                     onClick={() => handleSort('certificateIssueDate')}
                   >
                     <div className="flex items-center">
@@ -520,11 +520,11 @@ const Certificates = () => {
                       <ArrowUpDown className="ml-1 w-3 h-3" />
                     </div>
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-teal-300 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-emerald-300 uppercase tracking-wider">
                     Certificate ID
                   </th>
                   <th 
-                    className="px-4 py-3 text-left text-xs font-medium text-teal-300 uppercase tracking-wider cursor-pointer"
+                    className="px-4 py-3 text-left text-xs font-medium text-emerald-300 uppercase tracking-wider cursor-pointer"
                     onClick={() => handleSort('verificationStatus')}
                   >
                     <div className="flex items-center">
@@ -532,15 +532,15 @@ const Certificates = () => {
                       <ArrowUpDown className="ml-1 w-3 h-3" />
                     </div>
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-teal-300 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-emerald-300 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-teal-500/10">
+              <tbody className="divide-y divide-emerald-500/10">
                 {isLoading ? (
                   Array.from({ length: 5 }).map((_, index) => (
-                    <tr key={index} className="bg-teal-500/5 animate-pulse">
+                    <tr key={index} className="bg-emerald-500/5 animate-pulse">
                       <td className="px-4 py-4 whitespace-nowrap">
                         <div className="h-5 w-32 bg-gray-700 rounded"></div>
                       </td>
@@ -573,19 +573,19 @@ const Certificates = () => {
                     .map((certificate) => (
                       <tr 
                         key={certificate._id} 
-                        className="hover:bg-teal-500/10 transition-colors cursor-pointer"
+                        className="hover:bg-emerald-500/10 transition-colors cursor-pointer"
                         onClick={() => viewCertificate(certificate)}
                       >
                         <td className="px-4 py-4 whitespace-nowrap">
                           <div className="flex items-center">
-                            <div className="w-8 h-8 rounded-full bg-teal-500/20 flex items-center justify-center mr-3">
-                              <Users className="w-4 h-4 text-teal-300" />
+                            <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center mr-3">
+                              <Users className="w-4 h-4 text-emerald-300" />
                             </div>
                             <span className="font-medium">{certificate.farmerName}</span>
                           </div>
                         </td>
                         <td className="px-4 py-4 whitespace-nowrap">
-                          <span className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-xs">
+                          <span className="px-3 py-1 bg-emerald-500/20 text-emerald-300 rounded-full text-xs">
                             {certificate.farmerType}
                           </span>
                         </td>
@@ -607,7 +607,7 @@ const Certificates = () => {
                               e.stopPropagation();
                               viewCertificate(certificate);
                             }}
-                            className="text-teal-300 hover:text-teal-200 transition-colors"
+                            className="text-emerald-300 hover:text-emerald-200 transition-colors"
                           >
                             View Details
                           </button>
@@ -630,9 +630,9 @@ const Certificates = () => {
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-gradient-to-br from-[#386259] to-[#2d4f47] rounded-xl border border-teal-500/20 shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            className="bg-gradient-to-br from-[#386259] to-[#2d4f47] rounded-xl border border-emerald-500/20 shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
           >
-            <div className="flex justify-between items-center p-6 border-b border-teal-500/20">
+            <div className="flex justify-between items-center p-6 border-b border-emerald-500/20">
               <h3 className="text-xl font-bold text-white">Farmer Certificate</h3>
               <button 
                 onClick={closeModal}
@@ -643,15 +643,15 @@ const Certificates = () => {
             </div>
             
             <div className="p-6">
-              <div className="mb-6 p-6 bg-gradient-to-br from-[#2d4f47] to-[#1e3831] rounded-lg border border-teal-500/10">
+              <div className="mb-6 p-6 bg-gradient-to-br from-[#2d4f47] to-[#1e3831] rounded-lg border border-emerald-500/10">
                 <div className="flex justify-between items-center mb-4">
-                  <h4 className="text-teal-300 font-semibold">Certificate #{selectedCertificate.certificateId}</h4>
+                  <h4 className="text-emerald-300 font-semibold">Certificate #{selectedCertificate.certificateId}</h4>
                   {getStatusBadge(selectedCertificate.verificationStatus)}
                 </div>
                 
                 <div className="text-center mb-4">
-                  <div className="w-20 h-20 rounded-full bg-teal-500/20 flex items-center justify-center mx-auto mb-3">
-                    <ShieldCheck className="w-10 h-10 text-teal-300" />
+                  <div className="w-20 h-20 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto mb-3">
+                    <ShieldCheck className="w-10 h-10 text-emerald-300" />
                   </div>
                   <h3 className="text-white text-2xl font-bold mb-1">{selectedCertificate.farmerName}</h3>
                   <p className="text-gray-300 text-sm">Certified {selectedCertificate.farmerType} Farmer</p>
@@ -682,7 +682,7 @@ const Certificates = () => {
                         href={`https://hashscan.io/testnet/transaction/${selectedCertificate.blockchainTxId}`} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="ml-2 text-teal-400 hover:text-teal-300 inline-flex items-center"
+                        className="ml-2 text-emerald-400 hover:text-emerald-300 inline-flex items-center"
                         onClick={(e) => e.stopPropagation()}
                       >
                         <ExternalLink className="w-3 h-3" />
@@ -701,8 +701,8 @@ const Certificates = () => {
                     disabled={verificationLoading}
                     className={`w-full py-3 rounded-lg flex items-center justify-center ${
                       verificationLoading
-                        ? "bg-teal-600/50 cursor-not-allowed"
-                        : "bg-teal-600 hover:bg-teal-700"
+                        ? "bg-emerald-600/50 cursor-not-allowed"
+                        : "bg-emerald-600 hover:bg-emerald-700"
                     } text-white transition-colors`}
                   >
                     {verificationLoading ? (
@@ -782,13 +782,13 @@ const Certificates = () => {
               <div className="flex justify-between">
                 <button 
                   onClick={closeModal}
-                  className="px-4 py-2 border border-teal-500/30 rounded-lg text-white hover:bg-teal-500/20 transition-colors"
+                  className="px-4 py-2 border border-emerald-500/30 rounded-lg text-white hover:bg-emerald-500/20 transition-colors"
                 >
                   Close
                 </button>
                 <a 
                   href="#" 
-                  className="px-4 py-2 bg-teal-500 hover:bg-teal-600 rounded-lg text-white transition-colors flex items-center"
+                  className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 rounded-lg text-white transition-colors flex items-center"
                   onClick={(e) => e.preventDefault()}
                 >
                   <Download className="w-4 h-4 mr-2" />

@@ -59,21 +59,21 @@ const About = () => {
 
   return (
     
-  <div className="min-h-screen bg-gradient-to-b from-[#0c1816] to-[#0b1f1a] text-green-200 dark:text-white transition-colors duration-300">
+  <div className="min-h-screen bg-gradient-to-b from-[#0d1612] to-[#0f1f18] text-green-200 dark:text-white transition-colors duration-300">
       {/* Hero Section */}
       <Navbar />
       <motion.section
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="py-20 relative overflow-hidden bg-gradient-to-b from-[#0c1816] to-[#0b1f1a]"
+        className="py-20 relative overflow-hidden bg-gradient-to-b from-[#0d1612] to-[#0f1f18]"
       >
         <div className="absolute inset-0 bg-center opacity-10 dark:opacity-5"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative pt-20 ">
           <motion.div variants={itemVariants} className="text-center">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 text-green-200 dark:text-white">
               <span className="text-green-400 dark:text-lime-300 font-extrabold">About </span>
-              <span className="text-blue-400 dark:text-cyan-300 font-extrabold">Krushi Setu</span>
+              <span className="text-emerald-400 font-extrabold">Farmhelp</span>
             </h1>
             <p className="text-xl text-gray-100 dark:text-white max-w-3xl mx-auto font-semibold drop-shadow">
               Revolutionizing agriculture through blockchain technology, connecting farmers 
@@ -105,8 +105,8 @@ const About = () => {
               </div>
               
               <div className="bg-gradient-to-br from-[#11291f] to-[#1a2a2c] p-8 rounded-2xl transform hover:scale-105 transition-transform duration-300">
-                <Eye className="h-12 w-12 text-blue-400 mb-4" />
-                <h2 className="text-3xl font-bold text-blue-200 mb-4">Our Vision</h2>
+                <Eye className="h-12 w-12 text-emerald-400 mb-4" />
+                <h2 className="text-3xl font-bold text-emerald-200 mb-4">Our Vision</h2>
                 <p className="text-gray-100 leading-relaxed">
                   To create a sustainable agricultural ecosystem where trust, transparency, and 
                   quality are guaranteed through technology, fostering a healthier future for all.
@@ -118,7 +118,7 @@ const About = () => {
               variants={itemVariants}
               className="relative"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-green-900/40 to-blue-900/40 rounded-3xl transform -rotate-6"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-green-900/40 to-emerald-900/40 rounded-3xl transform -rotate-6"></div>
               <div className="relative bg-[#16231a]/80 p-8 rounded-3xl shadow-2xl">
                 <img
                   src="https://images.pexels.com/photos/4917821/pexels-photo-4917821.jpeg?auto=compress&cs=tinysrgb&w=800"
@@ -245,7 +245,7 @@ const About = () => {
               variants={itemVariants}
               className="relative"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-green-900/40 to-blue-900/40 rounded-3xl transform rotate-6 backdrop-blur-sm"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-green-900/40 to-emerald-900/40 rounded-3xl transform rotate-6 backdrop-blur-sm"></div>
               <div className="relative bg-[#16231a]/80 p-8 rounded-3xl border border-white/10">
                 <img
                   src="https://images.pexels.com/photos/5980889/pexels-photo-5980889.jpeg?auto=compress&cs=tinysrgb&w=800"

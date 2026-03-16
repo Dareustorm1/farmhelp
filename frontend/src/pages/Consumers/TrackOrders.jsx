@@ -4,6 +4,7 @@ import axios from 'axios';
 import { io } from 'socket.io-client';
 import { FiPackage, FiTruck, FiCheck, FiXCircle, FiBox, FiArrowLeft, FiArrowRight, FiCalendar, FiArrowDown } from 'react-icons/fi';
 import { TbTruckDelivery } from 'react-icons/tb';
+import { Link, useLocation } from 'react-router-dom';
 
 
 const TrackOrders = () => {
@@ -74,6 +75,8 @@ const TrackOrders = () => {
     };
   }, []);
 
+  const location = useLocation();
+
   const fetchOrders = async (page) => {
     try {
       const token = localStorage.getItem('token');
@@ -104,6 +107,15 @@ const TrackOrders = () => {
       setLoading(false);
     }
   };
+
+  // merge new order if navigated from confirmation page
+  React.useEffect(() => {
+    if (location.state && location.state.newOrder) {
+      setOrders(prev => [location.state.newOrder, ...prev]);
+      // clear the state so it doesn't duplicate on re-render
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   const cancelOrder = async (orderId) => {
     try {
@@ -197,7 +209,7 @@ const TrackOrders = () => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'created':
-        return 'text-blue-500';
+        return 'text-emerald-500';
       case 'processing':
         return 'text-yellow-500';
       case 'shipped':
@@ -241,11 +253,11 @@ const TrackOrders = () => {
           {steps.map((step, index) => (
             <div key={step.status} className="flex items-start sm:flex-col sm:items-center gap-3 sm:gap-2 mb-4 sm:mb-0">
               <div className={`relative z-10 flex items-center justify-center w-8 h-8 rounded-full 
-                ${index <= currentStep ? 'bg-teal-500' : 'bg-gray-700'} 
+                ${index <= currentStep ? 'bg-emerald-500' : 'bg-gray-700'} 
                 transition-colors duration-300`}>
                 {step.icon}
               </div>
-              <p className={`text-sm font-medium ${index <= currentStep ? 'text-teal-500' : 'text-gray-400'}`}>
+              <p className={`text-sm font-medium ${index <= currentStep ? 'text-emerald-500' : 'text-gray-400'}`}>
                 {step.label}
               </p>
             </div>
@@ -269,7 +281,7 @@ const TrackOrders = () => {
           disabled={!pagination.hasPrevPage}
           className={`px-3 py-2 rounded-lg flex items-center
             ${pagination.hasPrevPage 
-              ? 'bg-teal-500/20 text-teal-500 hover:bg-teal-500/30' 
+              ? 'bg-emerald-500/20 text-emerald-500 hover:bg-emerald-500/30' 
               : 'bg-gray-700/20 text-gray-500 cursor-not-allowed'}`}
         >
           <FiArrowLeft />
@@ -282,8 +294,8 @@ const TrackOrders = () => {
               onClick={() => setCurrentPage(number)}
               className={`w-8 h-8 rounded-lg flex items-center justify-center
                 ${currentPage === number 
-                  ? 'bg-teal-500 text-white' 
-                  : 'bg-teal-500/20 text-teal-500 hover:bg-teal-500/30'}`}
+                  ? 'bg-emerald-500 text-white' 
+                  : 'bg-emerald-500/20 text-emerald-500 hover:bg-emerald-500/30'}`}
             >
               {number}
             </button>
@@ -295,7 +307,7 @@ const TrackOrders = () => {
           disabled={!pagination.hasNextPage}
           className={`px-3 py-2 rounded-lg flex items-center
             ${pagination.hasNextPage 
-              ? 'bg-teal-500/20 text-teal-500 hover:bg-teal-500/30' 
+              ? 'bg-emerald-500/20 text-emerald-500 hover:bg-emerald-500/30' 
               : 'bg-gray-700/20 text-gray-500 cursor-not-allowed'}`}
         >
           <FiArrowRight />
@@ -310,8 +322,8 @@ const TrackOrders = () => {
         onClick={() => setActiveTab('active')}
         className={`flex-1 py-2 px-4 rounded-md transition-colors ${
           activeTab === 'active' 
-            ? 'bg-teal-500 text-white' 
-            : 'text-gray-400 hover:text-teal-500'
+            ? 'bg-emerald-500 text-white' 
+            : 'text-gray-400 hover:text-emerald-500'
         }`}
       >
         Active Orders
@@ -336,13 +348,13 @@ const TrackOrders = () => {
         <select
           value={dateFilter}
           onChange={(e) => setDateFilter(e.target.value)}
-          className="bg-transparent text-teal-50 outline-none w-full"
+          className="bg-transparent text-emerald-50 outline-none w-full"
         >
           {dateFilterOptions.map(option => (
             <option 
               key={option.value} 
               value={option.value}
-              className="bg-gray-800 text-teal-50"
+              className="bg-gray-800 text-emerald-50"
             >
               {option.label}
             </option>
@@ -355,7 +367,7 @@ const TrackOrders = () => {
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
-          className="bg-transparent text-teal-50 outline-none w-full"
+          className="bg-transparent text-emerald-50 outline-none w-full"
         >
           <option value="date" className="bg-gray-800">Sort by Date</option>
           <option value="amount" className="bg-gray-800">Sort by Amount</option>
@@ -367,7 +379,7 @@ const TrackOrders = () => {
         <select
           value={sortOrder}
           onChange={(e) => setSortOrder(e.target.value)}
-          className="bg-transparent text-teal-50 outline-none w-full"
+          className="bg-transparent text-emerald-50 outline-none w-full"
         >
           <option value="desc" className="bg-gray-800">Descending</option>
           <option value="asc" className="bg-gray-800">Ascending</option>
@@ -395,12 +407,12 @@ const TrackOrders = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className={`bg-white/5 backdrop-blur-sm rounded-xl p-6 border 
-          ${isUpdated ? 'border-teal-500 shadow-lg shadow-teal-500/20' : 'border-green-200/20'} 
+          ${isUpdated ? 'border-emerald-500 shadow-lg shadow-emerald-500/20' : 'border-green-200/20'} 
           transition-all duration-300`}
       >
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
           <div className="flex-1">
-            <h3 className="text-xl font-semibold text-teal-50">Order #{order.orderNumber}</h3>
+            <h3 className="text-xl font-semibold text-emerald-50">Order #{order.orderNumber}</h3>
             <p className="text-gray-400">{new Date(order.createdAt).toLocaleDateString()}</p>
           </div>
           <div className={`px-3 py-1 rounded-full ${getStatusColor(order.orderStatus)} bg-opacity-20`}>
@@ -412,31 +424,38 @@ const TrackOrders = () => {
           {order.items.map((item, index) => (
             <div key={index} className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white/5 p-4 rounded-lg gap-2">
               <div>
-                <p className="text-teal-50">{item.name}</p>
+                <p className="text-emerald-50">{item.name}</p>
                 <p className="text-gray-400">Quantity: {item.quantity}</p>
                 <p className="text-gray-400">Farmer: {item.farmer_details.name}</p>
               </div>
-              <p className="text-teal-50">₹{formatAmount(item.price * item.quantity)}</p>
+              <p className="text-emerald-50">₹{formatAmount(item.price * item.quantity)}</p>
             </div>
           ))}
         </div>
 
         <div className="mt-6 border-t border-gray-700 pt-4">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div className="text-teal-50">
+            <div className="text-emerald-50">
               <p>Total Amount:</p>
               <p className="text-xl font-semibold">₹{formatAmount(order.totalAmount)}</p>
             </div>
-            {showCancelButton && order.orderStatus !== 'delivered' && (
-              <div className="w-full md:w-auto">
+            <div className="flex flex-col md:flex-row gap-2">
+              <Link
+                to={`/consumer/order/${order._id}`}
+                state={{ order }}
+                className="px-4 py-2 bg-emerald-600/20 text-emerald-600 rounded-lg hover:bg-emerald-600/30 transition-colors text-center"
+              >
+                View Receipt
+              </Link>
+              {showCancelButton && order.orderStatus !== 'delivered' && (
                 <button
                   onClick={() => cancelOrder(order._id)}
-                  className="w-full md:inline-block px-4 py-2 bg-red-500/20 text-red-500 rounded-lg hover:bg-red-500/30 transition-colors"
+                  className="px-4 py-2 bg-red-500/20 text-red-500 rounded-lg hover:bg-red-500/30 transition-colors"
                 >
                   Cancel Order
                 </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           <OrderTimeline status={order.orderStatus} />
@@ -448,7 +467,7 @@ const TrackOrders = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-teal-50">Loading orders...</div>
+        <div className="text-emerald-50">Loading orders...</div>
       </div>
     );
   }
@@ -462,10 +481,10 @@ const TrackOrders = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0c1816] to-[#0b1f1a]">
+    <div className="min-h-screen bg-gradient-to-b from-[#0d1612] to-[#0f1f18]">
       <div className="max-w-7xl mx-auto px-6 py-8 pt-0">
         <div className="max-w-4xl mx-auto px-4 py-8">
-          <h2 className="text-3xl font-bold text-teal-50 mb-8">Track Orders</h2>
+          <h2 className="text-3xl font-bold text-emerald-50 mb-8">Track Orders</h2>
           
           <TabSelector />
           <FilterBar />

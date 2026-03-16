@@ -93,12 +93,12 @@ const Analytics = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#0c1816] to-[#0b1f1a] pt-20 px-6">
+      <div className="min-h-screen bg-gradient-to-b from-[#0d1612] to-[#0f1f18] pt-20 px-6">
         <div className="max-w-7xl mx-auto flex items-center justify-center min-h-[60vh]">
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            className="w-16 h-16 border-t-4 border-teal-500 border-solid rounded-full"
+            className="w-16 h-16 border-t-4 border-emerald-500 border-solid rounded-full"
           />
         </div>
       </div>
@@ -107,7 +107,7 @@ const Analytics = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#0c1816] to-[#0b1f1a] pt-20 px-6">
+      <div className="min-h-screen bg-gradient-to-b from-[#0d1612] to-[#0f1f18] pt-20 px-6">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -122,14 +122,14 @@ const Analytics = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0c1816] to-[#0b1f1a]">
+    <div className="min-h-screen bg-gradient-to-b from-[#0d1612] to-[#0f1f18]">
       <div className="pt-0 px-6 pb-12">
         <div className="max-w-7xl mx-auto">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate('/consumer')}
-            className="mb-8 flex items-center gap-2 text-teal-400 hover:text-teal-300 transition-colors"
+            className="mb-8 flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-colors"
           >
             <FiArrowLeft className="w-5 h-5" />
             <span>Back to Dashboard</span>
@@ -140,7 +140,7 @@ const Analytics = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-12"
           >
-            <h1 className="text-4xl font-bold text-teal-50 mb-4">Order Analytics</h1>
+            <h1 className="text-4xl font-bold text-emerald-50 mb-4">Order Analytics</h1>
             <p className="text-gray-400">Track your ordering patterns and spending history</p>
           </motion.div>
 
@@ -163,9 +163,9 @@ const Analytics = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-teal-200/20"
+              className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-emerald-200/20"
             >
-              <h3 className="text-xl font-bold text-teal-50 mb-6">Most Bought Products</h3>
+              <h3 className="text-xl font-bold text-emerald-50 mb-6">Most Bought Products</h3>
               <div className="h-[400px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
@@ -201,17 +201,17 @@ const Analytics = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-teal-200/20"
+              className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-emerald-200/20"
             >
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-teal-50">Order Frequency</h3>
+                <h3 className="text-xl font-bold text-emerald-50">Order Frequency</h3>
                 <div className="flex items-center gap-2 bg-gray-900/50 rounded-lg p-1">
                   <button
                     onClick={() => setTimeFrame('weekly')}
                     className={`px-4 py-2 rounded-md transition-all duration-300 ${
                       timeFrame === 'weekly' 
-                        ? 'bg-teal-500/20 text-teal-400' 
-                        : 'text-gray-400 hover:text-teal-400'
+                        ? 'bg-emerald-500/20 text-emerald-400' 
+                        : 'text-gray-400 hover:text-emerald-400'
                     }`}
                   >
                     Weekly
@@ -220,8 +220,8 @@ const Analytics = () => {
                     onClick={() => setTimeFrame('monthly')}
                     className={`px-4 py-2 rounded-md transition-all duration-300 ${
                       timeFrame === 'monthly' 
-                        ? 'bg-teal-500/20 text-teal-400' 
-                        : 'text-gray-400 hover:text-teal-400'
+                        ? 'bg-emerald-500/20 text-emerald-400' 
+                        : 'text-gray-400 hover:text-emerald-400'
                     }`}
                   >
                     Monthly
@@ -230,8 +230,8 @@ const Analytics = () => {
                     onClick={() => setTimeFrame('yearly')}
                     className={`px-4 py-2 rounded-md transition-all duration-300 ${
                       timeFrame === 'yearly' 
-                        ? 'bg-teal-500/20 text-teal-400' 
-                        : 'text-gray-400 hover:text-teal-400'
+                        ? 'bg-emerald-500/20 text-emerald-400' 
+                        : 'text-gray-400 hover:text-emerald-400'
                     }`}
                   >
                     Yearly
@@ -270,10 +270,10 @@ const Analytics = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-teal-200/20 mb-8"
+            className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-emerald-200/20 mb-8"
           >
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold text-teal-50">Spending Analysis</h3>
+              <h3 className="text-xl font-bold text-emerald-50">Spending Analysis</h3>
             </div>
             <div className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
@@ -325,13 +325,13 @@ const StatsCard = ({ icon, title, value }) => (
       translateZ: 20
     }}
     transition={{ duration: 0.3 }}
-    className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-teal-200/20 transform hover:shadow-2xl hover:border-teal-400/30"
+    className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-emerald-200/20 transform hover:shadow-2xl hover:border-emerald-400/30"
   >
     <div className="flex items-center gap-3 mb-2">
-      <span className="text-teal-400">{icon}</span>
+      <span className="text-emerald-400">{icon}</span>
       <span className="text-gray-300">{title}</span>
     </div>
-    <p className="text-2xl font-bold text-teal-50">
+    <p className="text-2xl font-bold text-emerald-50">
       {value}
     </p>
   </motion.div>

@@ -115,9 +115,9 @@ function MarketPlace() {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2 }}
-                className="inline-block p-3 rounded-full bg-teal-500/10 mb-6"
+                className="inline-block p-3 rounded-full bg-emerald-500/10 mb-6"
               >
-                <Package className="w-8 h-8 text-teal-400" />
+                <Package className="w-8 h-8 text-emerald-400" />
               </motion.div>
               <h2 className="text-4xl font-bold text-white sm:text-5xl mb-4">
                 Fresh from the Farm
@@ -135,11 +135,11 @@ function MarketPlace() {
                   <input
                     type="text"
                     placeholder="Search products..."
-                    className="w-full pl-10 pr-4 py-3 rounded-lg bg-[#2d4f47] border border-teal-500/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    className="w-full pl-10 pr-4 py-3 rounded-lg bg-[#2d4f47] border border-emerald-500/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
                 <Button
-                  className="bg-teal-500 text-white hover:bg-teal-600 flex items-center gap-2"
+                  className="bg-emerald-500 text-white hover:bg-emerald-600 flex items-center gap-2"
                 >
                   <Filter className="w-5 h-5" />
                   Filters
@@ -155,8 +155,8 @@ function MarketPlace() {
                   onClick={() => setSelectedCategory(category.id)}
                   className={`px-6 py-2 rounded-full whitespace-nowrap transition-all ${
                     selectedCategory === category.id
-                      ? 'bg-teal-500 text-white'
-                      : 'bg-[#2d4f47] text-gray-300 hover:bg-teal-500/20'
+                      ? 'bg-emerald-500 text-white'
+                      : 'bg-[#2d4f47] text-gray-300 hover:bg-emerald-500/20'
                   }`}
                 >
                   {category.name}
@@ -176,7 +176,7 @@ function MarketPlace() {
                   key={product.id}
                   variants={itemVariants}
                   whileHover={{ y: -10 }}
-                  className="bg-[#2d4f47] rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 border border-teal-500/20"
+                  className="bg-[#2d4f47] rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 border border-emerald-500/20"
                 >
                   <div className="relative">
                     <img
@@ -185,7 +185,7 @@ function MarketPlace() {
                       className="w-full h-64 object-cover"
                     />
                     {product.isOrganic && (
-                      <div className="absolute top-4 left-4 bg-teal-500/90 text-white px-3 py-1 rounded-full text-sm flex items-center gap-2">
+                      <div className="absolute top-4 left-4 bg-emerald-500/90 text-white px-3 py-1 rounded-full text-sm flex items-center gap-2">
                         <Leaf className="w-4 h-4" />
                         Organic
                       </div>
@@ -224,7 +224,7 @@ function MarketPlace() {
 
                     <div className="flex gap-3">
                       <Button
-                        className="flex-1 bg-teal-500 text-white hover:bg-teal-600 flex items-center justify-center gap-2"
+                        className="flex-1 bg-emerald-500 text-white hover:bg-emerald-600 flex items-center justify-center gap-2"
                       >
                         <ShoppingCart className="w-5 h-5" />
                         Add to Cart

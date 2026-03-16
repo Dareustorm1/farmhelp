@@ -8,6 +8,7 @@ import Profile from '../Profile';
 import FarmerOrders from './Farmerorder';
 import DocumentUpload from './DocumentUpload';
 import FarmerCertificate from './FarmerCertificate';
+import Analytics from './Analytics';
 
 const FarmerRoutes = () => {
     return (
@@ -18,9 +19,10 @@ const FarmerRoutes = () => {
             <Route path="/add-product" element={<AddProduct />} />
             <Route path="/update/:productId" element={<EditProduct />} />
             <Route path="/orders" element={<FarmerOrders />} />
+            <Route path="/analytics" element={<Analytics />} />
             <Route path="/documents" element={<DocumentUpload />} />
             <Route path="/certificate/:certificateId" element={<FarmerCertificate />} />
-            {/* Add more routes as needed */}   
+            <Route path="/settings" element={<Profile />} />
         </Routes>
     );
 };

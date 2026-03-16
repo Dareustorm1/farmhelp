@@ -22,9 +22,16 @@ const app = express();
 const httpServer = createServer(app);
 
 // Update CORS configuration
+// Allow CORS from production domains and local development origins
 app.use(cors({
-  origin: ["https://krushisetu-dishangpatel-13-1.onrender.com", "https://krushi-setu.netlify.app"],
-
+  origin: [
+    "https://krushisetu-dishangpatel-13-1.onrender.com",
+    "https://krushi-setu.netlify.app",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000"
+  ],
   credentials: true
 }));
 
@@ -42,12 +49,15 @@ app.use('/api/products', productRoute);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/users', ProfileRoutes);
-app.use('/api/farmer', FarmerOrdersRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/documents', documentRoutes);
 app.use('/api/certificates', certificateRoutes);
-app.use('/api/farmer1', farmerRioutes); // Register farmer routes
+// Mount farmer-specific routes: profile, products, orders
+// Mount farmer routes and farmer order routes under the same base so endpoints
+// like /api/farmer/stats and /api/farmer/profile are available.
+app.use('/api/farmer', FarmerOrdersRoutes);
+app.use('/api/farmer', farmerRioutes);
 // Connect MongoDB
 connectMongoDB();
 

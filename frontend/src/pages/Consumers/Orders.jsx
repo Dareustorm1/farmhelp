@@ -177,7 +177,7 @@ const Orders = () => {
                           order.status === "Delivered"
                             ? "bg-[#0EA5E9]/10 text-[#0EA5E9]"
                             : order.status === "Processing"
-                            ? "bg-blue-400/10 text-blue-400"
+                            ? "bg-emerald-400/10 text-emerald-400"
                             : "bg-yellow-400/10 text-yellow-400"
                         }`}>
                           {order.status}

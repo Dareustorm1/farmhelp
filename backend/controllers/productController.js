@@ -469,27 +469,47 @@ export const getUniqueProducts = async (req, res) => {
 export const getFarmersForProduct = async (req, res) => {
   try {
     const { productName } = req.params;
-    const maxDistance = 500; // Increased for Indian road conditions and rural connectivity
-    let consumerPincode = (req.user && req.user.pincode) ? req.user.pincode : req.query.pincode;
+    const maxDistance = 100; // Marketplace radius (100 km) per project requirements
+    let consumerCoords = null;
+    let consumerPincode = null; // ensure defined for later use
 
-    // Add debug logging
-    console.log(`Processing request for product: ${productName}`);
-    console.log(`Consumer pincode: ${consumerPincode}`);
-    console.log(`User from token:`, req.user);
+    console.log('=== getFarmersForProduct called ===');
+    console.log('Params:', req.params);
+    console.log('Query:', req.query);
+    console.log('User in request (pre-auth):', req.user);
 
-    if (!consumerPincode) {
-      return res.status(400).json({
-        success: false,
-        message: "Consumer pincode is required. Please update your profile with your pincode.",
-      });
-    }
+    // allow either lat/lng or pincode to determine location
+    if (req.query.lat && req.query.lng) {
+      consumerCoords = {
+        lat: parseFloat(req.query.lat),
+        lng: parseFloat(req.query.lng),
+        formatted: `(${req.query.lat}, ${req.query.lng})`
+      };
+      console.log('Using coordinates from query:', consumerCoords);
+      // leave consumerPincode null when using explicit coordinates
+    } else {
+      consumerPincode = (req.user && req.user.pincode) ? req.user.pincode : req.query.pincode;
+      console.log(`Processing request for product: ${productName}`);
+      console.log(`Consumer pincode: ${consumerPincode}`);
+      console.log(`User from token:`, req.user);
 
-    const consumerCoords = await getCoordinatesFromPincode(consumerPincode);
-    if (!consumerCoords) {
-      return res.status(400).json({
-        success: false,
-        message: "Unable to find location for the provided pincode. Please check your pincode in profile settings.",
-      });
+      if (!consumerPincode) {
+        console.warn('No consumer pincode available');
+        return res.status(400).json({
+          success: false,
+          message: "Consumer pincode or location coordinates are required. Please update your profile or allow location access.",
+        });
+      }
+
+      consumerCoords = await getCoordinatesFromPincode(consumerPincode);
+      console.log('Coordinates returned for consumer pincode:', consumerCoords);
+      if (!consumerCoords) {
+        console.warn('Failed to obtain coords for consumer pincode');
+        return res.status(400).json({
+          success: false,
+          message: "Unable to find location for the provided pincode. Please check your pincode in profile settings.",
+        });
+      }
     }
 
     const products = await Product.find({
@@ -511,43 +531,49 @@ export const getFarmersForProduct = async (req, res) => {
     };
 
     const farmersPromises = products.map(async product => {
-      const farmer = product.farmer_id;
-      if (!farmer || !farmer.pincode) {
-        console.log(`Skipping farmer - missing pincode: ${farmer?.name || 'Unknown'}`);
-        return null;
-      }
-      
-      const farmerCoords = await getCoordinatesFromPincode(farmer.pincode);
-      if (!farmerCoords) {
-        console.log(`Could not get coordinates for farmer ${farmer.name} with pincode ${farmer.pincode}`);
-        return null;
-      }
-      
-      const distance = calculateDistanceKm(consumerCoords, farmerCoords);
-      
-      // Log all farmers and their distances for debugging
-      console.log(`Farmer ${farmer.name} (${farmer.pincode}): ${distance.toFixed(2)} km`);
-      
-      if (distance > maxDistance) {
-        console.log(`Excluding farmer ${farmer.name} - distance ${distance.toFixed(2)} km exceeds limit ${maxDistance} km`);
-        return null;
-      }
+      try {
+        const farmer = product.farmer_id;
+        if (!farmer || !farmer.pincode) {
+          console.log(`Skipping farmer - missing pincode: ${farmer?.name || 'Unknown'}`);
+          return null;
+        }
+        
+        const farmerCoords = await getCoordinatesFromPincode(farmer.pincode);
+        if (!farmerCoords) {
+          console.log(`Could not get coordinates for farmer ${farmer.name} with pincode ${farmer.pincode}`);
+          return null;
+        }
+        
+        const distance = calculateDistanceKm(consumerCoords, farmerCoords);
+        
+        // Log all farmers and their distances for debugging
+        console.log(`Farmer ${farmer.name} (${farmer.pincode}): ${distance.toFixed(2)} km`);
+        
+        if (distance > maxDistance) {
+          console.log(`Excluding farmer ${farmer.name} - distance ${distance.toFixed(2)} km exceeds limit ${maxDistance} km`);
+          return null;
+        }
 
-      return {
-        farmer_id: farmer._id,
-        name: farmer.name,
-        email: farmer.email,
-        farmer_mobile: farmer.phoneNumber,
-        farmer_location: `${farmer.location?.city || farmer.location?.district || 'Unknown City'}, ${farmer.location?.state || 'Unknown State'}`,
-        role: farmer.role,
-        profileImage: farmer.profileImage,
-        pincode: farmer.pincode,
-        distance: Math.round(distance * 10) / 10,
-        price: product.price,
-        available_quantity: product.available_quantity,
-        product_id: product._id,
-        traceability: product.traceability
-      };
+        return {
+          farmer_id: farmer._id,
+          name: farmer.name,
+          email: farmer.email,
+          farmer_mobile: farmer.phoneNumber,
+          farmer_location: `${farmer.location?.city || farmer.location?.district || 'Unknown City'}, ${farmer.location?.state || 'Unknown State'}`,
+          role: farmer.role,
+          profileImage: farmer.profileImage,
+          pincode: farmer.pincode,
+          distance: Math.round(distance * 10) / 10,
+          price: product.price,
+          available_quantity: product.available_quantity,
+          product_id: product._id,
+          traceability: product.traceability
+        };
+      } catch (innerErr) {
+        console.error(`Error processing farmer record for product ${productName}:`, innerErr);
+        // continue by returning null so other farmers still evaluated
+        return null;
+      }
     });
 
     let farmersWithDistance = await Promise.all(farmersPromises);
@@ -556,9 +582,10 @@ export const getFarmersForProduct = async (req, res) => {
       .sort((a, b) => a.distance - b.distance); // Sort by distance
 
     if (farmers.length === 0) {
+      const locText = consumerPincode ? consumerPincode : (consumerCoords?.formatted || 'your location');
       return res.status(404).json({
         success: false,
-        message: `No nearby farmers found selling ${productName} within ${maxDistance} km of your location (${consumerPincode}). Try browsing other products or check back later.`,
+        message: `No nearby farmers found selling ${productName} within ${maxDistance} km of your location (${locText}). Try browsing other products or check back later.`,
       });
     }
 
@@ -568,14 +595,69 @@ export const getFarmersForProduct = async (req, res) => {
       farmers,
       count: farmers.length,
       searchRadius: maxDistance,
-      userLocation: consumerPincode
+      userLocation: consumerPincode || consumerCoords?.formatted
     });
   } catch (error) {
+    // Log complete error object for debugging
     console.error('Detailed error in getFarmersForProduct:', error);
+    // fallback message if none provided
+    const errMsg = error && error.message ? error.message : String(error) || 'Unknown server error';
     res.status(500).json({
       success: false,
       message: "Error finding farmers for this product. Please try again.",
-      error: error.message,
+      error: errMsg,
+      stack: error.stack
+    });
+  }
+};
+
+// Debug endpoint - check all data in MongoDB
+export const debugGetAllProducts = async (req, res) => {
+  try {
+    const allProducts = await Product.find().populate('farmer_id', 'name email phoneNumber location pincode');
+    const totalCount = await Product.countDocuments();
+    
+    // Get summary of products
+    const productNames = allProducts.map(p => p.name);
+    const uniqueNames = [...new Set(productNames)];
+    
+    // Get farmer breakdown
+    const farmerBreakdown = {};
+    allProducts.forEach(p => {
+      if (p.farmer_id) {
+        const farmerId = p.farmer_id._id;
+        if (!farmerBreakdown[farmerId]) {
+          farmerBreakdown[farmerId] = {
+            name: p.farmer_id.name,
+            pincode: p.farmer_id.pincode,
+            products: 0
+          };
+        }
+        farmerBreakdown[farmerId].products += 1;
+      }
+    });
+    
+    res.status(200).json({
+      success: true,
+      message: "Debug data - all products in MongoDB",
+      totalCount,
+      uniqueProductNames: uniqueNames,
+      uniqueProductCount: uniqueNames.length,
+      farmerBreakdown,
+      sampleProducts: allProducts.slice(0, 5).map(p => ({
+        name: p.name,
+        price: p.price,
+        available_quantity: p.available_quantity,
+        farmerName: p.farmer_id?.name,
+        farmerPincode: p.farmer_id?.pincode
+      }))
+    });
+  } catch (error) {
+    console.error('Error in debugGetAllProducts:', error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching debug data",
+      error: error.message
     });
   }
 };

@@ -205,7 +205,7 @@ function AddProduct() {
           {/* Back Button */}
           <Link 
             to="/farmer/products"
-            className="inline-flex items-center text-teal-400 hover:text-teal-300 mb-6 transition-colors"
+            className="inline-flex items-center text-emerald-400 hover:text-emerald-300 mb-6 transition-colors"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
             Back to Products
@@ -229,7 +229,7 @@ function AddProduct() {
             className="space-y-8"
           >
             {/* Product Information Section */}
-            <div className="bg-[#2d4f47] rounded-xl p-6 border border-teal-500/20">
+            <div className="bg-[#2d4f47] rounded-xl p-6 border border-emerald-500/20">
               <h2 className="text-xl font-bold text-white mb-6">Product Information</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -240,7 +240,7 @@ function AddProduct() {
                     value={formData.name}
                     onChange={handleInputChange}
                     placeholder="Enter product name"
-                    className="w-full bg-[#1a332e] text-white px-4 py-2.5 rounded-lg border border-teal-500/20 focus:outline-none focus:border-teal-500"
+                    className="w-full bg-[#1a332e] text-white px-4 py-2.5 rounded-lg border border-emerald-500/20 focus:outline-none focus:border-emerald-500"
                     required
                   />
                 </div>
@@ -250,7 +250,7 @@ function AddProduct() {
                     name="category"
                     value={formData.category}
                     onChange={handleInputChange}
-                    className="w-full bg-[#1a332e] text-white px-4 py-2.5 rounded-lg border border-teal-500/20 focus:outline-none focus:border-teal-500"
+                    className="w-full bg-[#1a332e] text-white px-4 py-2.5 rounded-lg border border-emerald-500/20 focus:outline-none focus:border-emerald-500"
                     required
                   >
                     <option value="">Select category</option>
@@ -275,7 +275,7 @@ function AddProduct() {
                       placeholder="0.00"
                       step="0.01"
                       min="0"
-                      className="w-full bg-[#1a332e] text-white pl-8 pr-4 py-2.5 rounded-lg border border-teal-500/20 focus:outline-none focus:border-teal-500"
+                      className="w-full bg-[#1a332e] text-white pl-8 pr-4 py-2.5 rounded-lg border border-emerald-500/20 focus:outline-none focus:border-emerald-500"
                       required
                     />
                   </div>
@@ -291,12 +291,12 @@ function AddProduct() {
                       placeholder="0"
                       min="0"
                       max="100"
-                      className="w-full bg-[#1a332e] text-white px-4 py-2.5 rounded-lg border border-teal-500/20 focus:outline-none focus:border-teal-500"
+                      className="w-full bg-[#1a332e] text-white px-4 py-2.5 rounded-lg border border-emerald-500/20 focus:outline-none focus:border-emerald-500"
                     />
                     <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">%</span>
                   </div>
                   {formData.discount > 0 && formData.price && (
-                    <p className="text-xs text-teal-400 mt-1">
+                    <p className="text-xs text-emerald-400 mt-1">
                       Final price: ₹{(formData.price * (1 - formData.discount/100)).toFixed(2)}
                     </p>
                   )}
@@ -307,7 +307,7 @@ function AddProduct() {
                     name="unit"
                     value={formData.unit}
                     onChange={handleInputChange}
-                    className="w-full bg-[#1a332e] text-white px-4 py-2.5 rounded-lg border border-teal-500/20 focus:outline-none focus:border-teal-500"
+                    className="w-full bg-[#1a332e] text-white px-4 py-2.5 rounded-lg border border-emerald-500/20 focus:outline-none focus:border-emerald-500"
                     required
                   >
                     {units.map(unit => (
@@ -333,7 +333,7 @@ function AddProduct() {
                   onChange={handleInputChange}
                   placeholder="Enter available quantity"
                   min="0"
-                  className="w-full bg-[#1a332e] text-white px-4 py-2.5 rounded-lg border border-teal-500/20 focus:outline-none focus:border-teal-500"
+                  className="w-full bg-[#1a332e] text-white px-4 py-2.5 rounded-lg border border-emerald-500/20 focus:outline-none focus:border-emerald-500"
                   required
                 />
                 <p className="text-xs text-gray-400 mt-1">
@@ -343,7 +343,7 @@ function AddProduct() {
             </div>
 
             {/* Product Description Section */}
-            <div className="bg-[#2d4f47] rounded-xl p-6 border border-teal-500/20">
+            <div className="bg-[#2d4f47] rounded-xl p-6 border border-emerald-500/20">
               <h2 className="text-xl font-bold text-white mb-6">Product Description*</h2>
               <textarea
                 name="description"
@@ -351,13 +351,13 @@ function AddProduct() {
                 onChange={handleInputChange}
                 placeholder="Describe your product..."
                 rows="4"
-                className="w-full bg-[#1a332e] text-white px-4 py-2.5 rounded-lg border border-teal-500/20 focus:outline-none focus:border-teal-500"
+                className="w-full bg-[#1a332e] text-white px-4 py-2.5 rounded-lg border border-emerald-500/20 focus:outline-none focus:border-emerald-500"
                 required
               />
             </div>
             
             {/* Traceability Section */}
-            <div className="bg-[#2d4f47] rounded-xl p-6 border border-teal-500/20">
+            <div className="bg-[#2d4f47] rounded-xl p-6 border border-emerald-500/20">
               <h2 className="text-xl font-bold text-white mb-6">Product Traceability</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -366,7 +366,7 @@ function AddProduct() {
                     name="traceability.harvest_method"
                     value={formData.traceability.harvest_method}
                     onChange={handleInputChange}
-                    className="w-full bg-[#1a332e] text-white px-4 py-2.5 rounded-lg border border-teal-500/20 focus:outline-none focus:border-teal-500"
+                    className="w-full bg-[#1a332e] text-white px-4 py-2.5 rounded-lg border border-emerald-500/20 focus:outline-none focus:border-emerald-500"
                   >
                     {harvestMethods.map(method => (
                       <option key={method} value={method}>{method}</option>
@@ -381,16 +381,16 @@ function AddProduct() {
                     value={formData.traceability.harvest_date}
                     onChange={handleInputChange}
                     max={new Date().toISOString().split('T')[0]}
-                    className="w-full bg-[#1a332e] text-white px-4 py-2.5 rounded-lg border border-teal-500/20 focus:outline-none focus:border-teal-500"
+                    className="w-full bg-[#1a332e] text-white px-4 py-2.5 rounded-lg border border-emerald-500/20 focus:outline-none focus:border-emerald-500"
                   />
                 </div>
               </div>
             </div>
 
             {/* Product Image Section */}
-            <div className="bg-[#2d4f47] rounded-xl p-6 border border-teal-500/20">
+            <div className="bg-[#2d4f47] rounded-xl p-6 border border-emerald-500/20">
               <h2 className="text-xl font-bold text-white mb-6">Product Image*</h2>
-              <div className="border-2 border-dashed border-teal-500/20 rounded-xl p-8">
+              <div className="border-2 border-dashed border-emerald-500/20 rounded-xl p-8">
                 <div className="text-center">
                   {formData.image_url ? (
                     <div className="mb-4">
@@ -401,7 +401,7 @@ function AddProduct() {
                       />
                     </div>
                   ) : (
-                    <Upload className="w-12 h-12 text-teal-400 mx-auto mb-4" />
+                    <Upload className="w-12 h-12 text-emerald-400 mx-auto mb-4" />
                   )}
                   <p className="text-white mb-2">Upload main product image</p>
                   <p className="text-gray-400 text-sm mb-4">Drag and drop or click to upload (max 5MB)</p>
@@ -414,7 +414,7 @@ function AddProduct() {
                   />
                   <label
                     htmlFor="image-upload"
-                    className="inline-block bg-teal-500/20 text-teal-400 px-4 py-2 rounded-lg cursor-pointer hover:bg-teal-500/30 transition-colors"
+                    className="inline-block bg-emerald-500/20 text-emerald-400 px-4 py-2 rounded-lg cursor-pointer hover:bg-emerald-500/30 transition-colors"
                   >
                     Select File
                   </label>
@@ -435,7 +435,7 @@ function AddProduct() {
                 whileTap={{ scale: 0.98 }}
                 type="submit"
                 disabled={isLoading}
-                className="bg-teal-500 text-white px-8 py-3 rounded-lg font-medium hover:bg-teal-600 transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex items-center"
+                className="bg-emerald-500 text-white px-8 py-3 rounded-lg font-medium hover:bg-emerald-600 transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex items-center"
               >
                 {isLoading ? (
                   <>

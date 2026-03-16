@@ -6,6 +6,6 @@ export default defineConfig({
   ],
   preview: {
     // Allow the Render preview host and onrender domains
-    allowedHosts: ['krushisetu-dishangpatel-13-forntend.onrender.com', '.onrender.com']
+    allowedHosts: ['farmhelp-frontend.onrender.com', '.onrender.com']
   }
 })

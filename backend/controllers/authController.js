@@ -134,7 +134,8 @@ export const loginUser = async (req, res) => {
         updatedAt: user.updatedAt
       },
       token,
-      refreshToken
+      refreshToken,
+      success: true
     });
 
   } catch (error) {

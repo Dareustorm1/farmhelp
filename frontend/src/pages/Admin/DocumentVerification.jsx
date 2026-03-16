@@ -221,7 +221,7 @@ function DocumentVerification() {
 
   const getDocumentTypeIcon = (type) => {
     switch (type) {
-      case 'aadhaar': return <User className="w-5 h-5 text-blue-400" />;
+      case 'aadhaar': return <User className="w-5 h-5 text-emerald-400" />;
       case 'certificate': return <Shield className="w-5 h-5 text-green-400" />;
       default: return <FileText className="w-5 h-5 text-gray-400" />;
     }
@@ -246,7 +246,7 @@ function DocumentVerification() {
           <p className="text-gray-300 text-center mb-6">You don't have permission to access this page.</p>
           <Link
             to="/"
-            className="block w-full bg-teal-500 text-white text-center py-2 rounded-lg hover:bg-teal-600 transition-colors"
+            className="block w-full bg-emerald-500 text-white text-center py-2 rounded-lg hover:bg-emerald-600 transition-colors"
           >
             Return Home
           </Link>
@@ -263,7 +263,7 @@ function DocumentVerification() {
           {/* Back Button */}
           <Link 
             to="/admin"
-            className="inline-flex items-center text-teal-400 hover:text-teal-300 mb-6 transition-colors"
+            className="inline-flex items-center text-emerald-400 hover:text-emerald-300 mb-6 transition-colors"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
             Back to Dashboard
@@ -296,7 +296,7 @@ function DocumentVerification() {
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="lg:w-2/5 bg-[#2d4f47] rounded-xl p-6 border border-teal-500/20"
+              className="lg:w-2/5 bg-[#2d4f47] rounded-xl p-6 border border-emerald-500/20"
             >
               <h2 className="text-xl font-bold text-white mb-6 flex items-center">
                 <Clock className="mr-2 w-6 h-6" />
@@ -323,8 +323,8 @@ function DocumentVerification() {
                         onClick={() => handleSelectFarmer(farmerId)}
                         className={`p-4 rounded-lg cursor-pointer transition-colors ${
                           selectedFarmer && selectedFarmer.farmerId === farmerId
-                            ? 'bg-teal-500/30 border border-teal-500/50'
-                            : 'bg-[#1a332e] hover:bg-[#243e39] border border-teal-500/10'
+                            ? 'bg-emerald-500/30 border border-emerald-500/50'
+                            : 'bg-[#1a332e] hover:bg-[#243e39] border border-emerald-500/10'
                         }`}
                       >
                         <div className="flex items-center justify-between">
@@ -352,7 +352,7 @@ function DocumentVerification() {
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="lg:w-3/5 bg-[#2d4f47] rounded-xl p-6 border border-teal-500/20"
+              className="lg:w-3/5 bg-[#2d4f47] rounded-xl p-6 border border-emerald-500/20"
             >
               <h2 className="text-xl font-bold text-white mb-6">Verify Documents</h2>
 
@@ -364,7 +364,7 @@ function DocumentVerification() {
               ) : (
                 <div>
                   {/* Farmer Info */}
-                  <div className="bg-[#1a332e] p-6 rounded-lg border border-teal-500/10 mb-6">
+                  <div className="bg-[#1a332e] p-6 rounded-lg border border-emerald-500/10 mb-6">
                     <h3 className="text-lg font-semibold text-white mb-4">Farmer Information</h3>
                     
                     <div className="grid grid-cols-2 gap-4 mb-4">
@@ -384,16 +384,16 @@ function DocumentVerification() {
                       {selectedFarmer.documents.aadhaar && (
                         <div className="bg-[#2d4f47] p-3 rounded flex justify-between items-center">
                           <div className="flex items-center">
-                            <User className="w-5 h-5 text-blue-400 mr-2" />
+                            <User className="w-5 h-5 text-emerald-400 mr-2" />
                             <span className="text-white">Aadhaar Card</span>
                           </div>
                           <button 
                             onClick={() => handleViewDocument('aadhaar', selectedFarmer.farmerId)}
                             aria-label={`View Aadhaar for ${selectedFarmer.farmerName}`}
                             title={`View Aadhaar for ${selectedFarmer.farmerName}`}
-                            className="p-2 bg-teal-500/20 rounded-lg hover:bg-teal-500/30 transition-colors"
+                            className="p-2 bg-emerald-500/20 rounded-lg hover:bg-emerald-500/30 transition-colors"
                           >
-                            <Eye className="w-4 h-4 text-teal-300" />
+                            <Eye className="w-4 h-4 text-emerald-300" />
                           </button>
                         </div>
                       )}
@@ -408,9 +408,9 @@ function DocumentVerification() {
                             onClick={() => handleViewDocument('certificate', selectedFarmer.farmerId)}
                             aria-label={`View Certificate for ${selectedFarmer.farmerName}`}
                             title={`View Certificate for ${selectedFarmer.farmerName}`}
-                            className="p-2 bg-teal-500/20 rounded-lg hover:bg-teal-500/30 transition-colors"
+                            className="p-2 bg-emerald-500/20 rounded-lg hover:bg-emerald-500/30 transition-colors"
                           >
-                            <Eye className="w-4 h-4 text-teal-300" />
+                            <Eye className="w-4 h-4 text-emerald-300" />
                           </button>
                         </div>
                       )}
@@ -428,7 +428,7 @@ function DocumentVerification() {
                           className={`flex items-center px-4 py-3 rounded-lg border transition-colors ${
                             verificationStatus === 'verified'
                               ? 'bg-green-500/20 border-green-500/50 text-green-300'
-                              : 'bg-[#1a332e] border-teal-500/10 text-white hover:bg-[#243e39]'
+                              : 'bg-[#1a332e] border-emerald-500/10 text-white hover:bg-[#243e39]'
                           }`}
                         >
                           <CheckCircle className="w-5 h-5 mr-2" />
@@ -441,7 +441,7 @@ function DocumentVerification() {
                           className={`flex items-center px-4 py-3 rounded-lg border transition-colors ${
                             verificationStatus === 'rejected'
                               ? 'bg-red-500/20 border-red-500/50 text-red-300'
-                              : 'bg-[#1a332e] border-teal-500/10 text-white hover:bg-[#243e39]'
+                              : 'bg-[#1a332e] border-emerald-500/10 text-white hover:bg-[#243e39]'
                           }`}
                         >
                           <XCircle className="w-5 h-5 mr-2" />
@@ -456,7 +456,7 @@ function DocumentVerification() {
                         value={verificationRemarks}
                         onChange={(e) => setVerificationRemarks(e.target.value)}
                         placeholder="Enter any notes or comments about this verification..."
-                        className="w-full bg-[#1a332e] text-white p-3 rounded-lg border border-teal-500/20 focus:outline-none focus:border-teal-500 min-h-[100px]"
+                        className="w-full bg-[#1a332e] text-white p-3 rounded-lg border border-emerald-500/20 focus:outline-none focus:border-emerald-500 min-h-[100px]"
                       ></textarea>
                     </div>
                     

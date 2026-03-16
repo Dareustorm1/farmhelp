@@ -15,7 +15,7 @@ const HomeAdd = () => {
       {/* Steps */}
       <div className="grid md:grid-cols-3 gap-8 text-center">
         <div className="bg-[#131722] p-6 rounded-lg">
-          <div className="text-teal-400 text-4xl mb-3">📄</div>
+          <div className="text-emerald-400 text-4xl mb-3">📄</div>
           <h3 className="font-semibold">1. Document Submission</h3>
           <p className="text-gray-400 text-sm">
             Farmers submit their credentials and certifications through our
@@ -23,7 +23,7 @@ const HomeAdd = () => {
           </p>
         </div>
         <div className="bg-[#131722] p-6 rounded-lg">
-          <div className="text-blue-400 text-4xl mb-3">🔗</div>
+          <div className="text-emerald-400 text-4xl mb-3">🔗</div>
           <h3 className="font-semibold">2. Blockchain Verification</h3>
           <p className="text-gray-400 text-sm">
             Our system verifies and secures the information on the blockchain
@@ -86,7 +86,7 @@ const HomeAdd = () => {
           </p>
         </div>
         <div className="bg-[#131722] p-6 rounded-lg">
-          <div className="text-blue-400 text-3xl mb-2">💳</div>
+          <div className="text-emerald-400 text-3xl mb-2">💳</div>
           <h3 className="font-semibold">Digital Wallet</h3>
           <p className="text-gray-400 text-sm">
             Manage your digital certificates and credentials securely.

@@ -231,7 +231,7 @@ const ProfilePage = ({ onLogout }) => {
 
   const backgroundStyle = {
     minHeight: "100vh",
-    background: "linear-gradient(to bottom, #0c1816, #0b1f1a)",
+    background: "linear-gradient(to bottom, #0d1612, #0f1f18)",
      // Account for navbar
     paddingBottom: "40px" // Add bottom padding
   };
@@ -239,7 +239,7 @@ const ProfilePage = ({ onLogout }) => {
   if (loading) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center">
-        <div className="w-16 h-16 border-t-4 border-teal-500 border-solid rounded-full animate-spin"></div>
+        <div className="w-16 h-16 border-t-4 border-emerald-500 border-solid rounded-full animate-spin"></div>
         <p className="mt-4 text-gray-300">Loading your profile...</p>
       </div>
     );
@@ -258,7 +258,7 @@ const ProfilePage = ({ onLogout }) => {
         <div className="flex gap-4 justify-center">
           <button 
             onClick={fetchUserProfile}
-            className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg flex items-center justify-center"
+            className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg flex items-center justify-center"
           >
             Try Again
           </button>
@@ -279,7 +279,7 @@ const ProfilePage = ({ onLogout }) => {
       <div className="max-w-4xl mx-auto mb-6">
         <button
           onClick={goToDashboard}
-          className="flex items-center gap-2 text-teal-400 hover:text-teal-300 transition-colors"
+          className="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-colors"
         >
           <ArrowLeft size={20} />
           <span>Back to Dashboard</span>
@@ -294,7 +294,7 @@ const ProfilePage = ({ onLogout }) => {
       >
         {/* Profile Header */}
         <div className="relative mb-6">
-          <div className="absolute inset-0 bg-teal-600/10 h-32 rounded-t-xl -mx-8 top-0"></div>
+          <div className="absolute inset-0 bg-emerald-600/10 h-32 rounded-t-xl -mx-8 top-0"></div>
           
           <div className="relative pt-4 flex flex-col md:flex-row items-center">
             <div className="relative group">
@@ -314,11 +314,11 @@ const ProfilePage = ({ onLogout }) => {
                 />
                 {uploadingImage && (
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-10 h-10 border-t-2 border-teal-500 border-solid rounded-full animate-spin"></div>
+                    <div className="w-10 h-10 border-t-2 border-emerald-500 border-solid rounded-full animate-spin"></div>
                   </div>
                 )}
               </div>
-              <label htmlFor="profileImageUpload" className="absolute bottom-0 right-0 bg-teal-500 hover:bg-teal-600 p-2 rounded-full cursor-pointer shadow-lg transition-all">
+              <label htmlFor="profileImageUpload" className="absolute bottom-0 right-0 bg-emerald-500 hover:bg-emerald-600 p-2 rounded-full cursor-pointer shadow-lg transition-all">
                 <Camera size={18} />
                 <input type="file" id="profileImageUpload" className="hidden" onChange={handleImageUpload} accept="image/*" />
               </label>
@@ -361,7 +361,7 @@ const ProfilePage = ({ onLogout }) => {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                     placeholder="Your full name"
                   />
                 </div>
@@ -397,7 +397,7 @@ const ProfilePage = ({ onLogout }) => {
                     name="phoneNumber"
                     value={formData.phoneNumber || ""}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                     placeholder="Your phone number"
                   />
                 </div>
@@ -414,7 +414,7 @@ const ProfilePage = ({ onLogout }) => {
                     name="city"
                     value={formData.city || ""}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                     placeholder="Your city or village"
                   />
                 </div>
@@ -431,7 +431,7 @@ const ProfilePage = ({ onLogout }) => {
                     name="district"
                     value={formData.district || ""}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                     placeholder="Your district"
                   />
                 </div>
@@ -448,7 +448,7 @@ const ProfilePage = ({ onLogout }) => {
                     name="pincode"
                     value={formData.pincode || ""}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                     placeholder="Your pincode"
                   />
                 </div>
@@ -465,7 +465,7 @@ const ProfilePage = ({ onLogout }) => {
                     name="state"
                     value={formData.state || ""}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                     placeholder="Your state"
                   />
                 </div>
@@ -482,7 +482,7 @@ const ProfilePage = ({ onLogout }) => {
                     name="country"
                     value={formData.country || ""}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                     placeholder="Your country"
                   />
                 </div>
@@ -500,7 +500,7 @@ const ProfilePage = ({ onLogout }) => {
                   value={formData.bio || ""}
                   onChange={handleChange}
                   rows={4}
-                  className="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                   placeholder="Tell us about yourself"
                 ></textarea>
               </div>
@@ -510,7 +510,7 @@ const ProfilePage = ({ onLogout }) => {
               <button
                 type="submit"
                 disabled={saving}
-                className="flex-1 bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg flex items-center justify-center disabled:opacity-60 disabled:cursor-not-allowed"
+                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg flex items-center justify-center disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {saving ? (
                   <>
@@ -544,17 +544,17 @@ const ProfilePage = ({ onLogout }) => {
             transition={{ duration: 0.3 }}
           >
             <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
-              <h3 className="text-xl font-semibold mb-4 text-teal-400">Bio</h3>
+              <h3 className="text-xl font-semibold mb-4 text-emerald-400">Bio</h3>
               <p className="text-gray-300 whitespace-pre-line">
                 {formData.bio || "No bio information available."}
               </p>
             </div>
             
             <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
-              <h3 className="text-xl font-semibold mb-4 text-teal-400">Contact Information</h3>
+              <h3 className="text-xl font-semibold mb-4 text-emerald-400">Contact Information</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex items-start">
-                  <Phone size={18} className="text-teal-400 mt-0.5 mr-3 flex-shrink-0" />
+                  <Phone size={18} className="text-emerald-400 mt-0.5 mr-3 flex-shrink-0" />
                   <div>
                     <p className="text-gray-400 text-sm">Phone Number</p>
                     <p className="text-white">{formData.phoneNumber || "Not provided"}</p>
@@ -562,7 +562,7 @@ const ProfilePage = ({ onLogout }) => {
                 </div>
                 
                 <div className="flex items-start">
-                  <Mail size={18} className="text-teal-400 mt-0.5 mr-3 flex-shrink-0" />
+                  <Mail size={18} className="text-emerald-400 mt-0.5 mr-3 flex-shrink-0" />
                   <div>
                     <p className="text-gray-400 text-sm">Email Address</p>
                     <p className="text-white">{formData.email}</p>
@@ -572,10 +572,10 @@ const ProfilePage = ({ onLogout }) => {
             </div>
             
             <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
-              <h3 className="text-xl font-semibold mb-4 text-teal-400">Location</h3>
+              <h3 className="text-xl font-semibold mb-4 text-emerald-400">Location</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex items-start">
-                  <Home size={18} className="text-teal-400 mt-0.5 mr-3 flex-shrink-0" />
+                  <Home size={18} className="text-emerald-400 mt-0.5 mr-3 flex-shrink-0" />
                   <div>
                     <p className="text-gray-400 text-sm">City / Village</p>
                     <p className="text-white">{formData.city || "Not provided"}</p>
@@ -583,7 +583,7 @@ const ProfilePage = ({ onLogout }) => {
                 </div>
                 
                 <div className="flex items-start">
-                  <MapPin size={18} className="text-teal-400 mt-0.5 mr-3 flex-shrink-0" />
+                  <MapPin size={18} className="text-emerald-400 mt-0.5 mr-3 flex-shrink-0" />
                   <div>
                     <p className="text-gray-400 text-sm">District</p>
                     <p className="text-white">{formData.district || "Not provided"}</p>
@@ -591,7 +591,7 @@ const ProfilePage = ({ onLogout }) => {
                 </div>
                 
                 <div className="flex items-start">
-                  <Map size={18} className="text-teal-400 mt-0.5 mr-3 flex-shrink-0" />
+                  <Map size={18} className="text-emerald-400 mt-0.5 mr-3 flex-shrink-0" />
                   <div>
                     <p className="text-gray-400 text-sm">State</p>
                     <p className="text-white">{formData.state || "Not provided"}</p>
@@ -599,7 +599,7 @@ const ProfilePage = ({ onLogout }) => {
                 </div>
                 
                 <div className="flex items-start">
-                  <Globe size={18} className="text-teal-400 mt-0.5 mr-3 flex-shrink-0" />
+                  <Globe size={18} className="text-emerald-400 mt-0.5 mr-3 flex-shrink-0" />
                   <div>
                     <p className="text-gray-400 text-sm">Country</p>
                     <p className="text-white">{formData.country || "Not provided"}</p>
@@ -607,7 +607,7 @@ const ProfilePage = ({ onLogout }) => {
                 </div>
                 
                 <div className="flex items-start">
-                  <MapPin size={18} className="text-teal-400 mt-0.5 mr-3 flex-shrink-0" />
+                  <MapPin size={18} className="text-emerald-400 mt-0.5 mr-3 flex-shrink-0" />
                   <div>
                     <p className="text-gray-400 text-sm">Pincode</p>
                     <p className="text-white">{formData.pincode || "Not provided"}</p>
@@ -618,7 +618,7 @@ const ProfilePage = ({ onLogout }) => {
             
             <button
               onClick={() => setEditing(true)}
-              className="w-full bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg flex items-center justify-center mt-6"
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg flex items-center justify-center mt-6"
             >
               <Edit size={18} className="mr-2" />
               Edit Profile

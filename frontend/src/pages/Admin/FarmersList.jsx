@@ -96,7 +96,7 @@ const   FarmersList = () => {
                 <div className="text-red-500 text-xl mb-4">{error}</div>
                 <button 
                     onClick={() => navigate('/admin')}
-                    className="text-teal-500 hover:text-teal-400"
+                    className="text-emerald-500 hover:text-emerald-400"
                 >
                     Back to Dashboard
                 </button>
@@ -110,7 +110,7 @@ const   FarmersList = () => {
                 <div className="text-white text-xl mb-4">No farmers found</div>
                 <button 
                     onClick={() => navigate('/admin')}
-                    className="text-teal-500 hover:text-teal-400"
+                    className="text-emerald-500 hover:text-emerald-400"
                 >
                     Back to Dashboard
                 </button>

@@ -142,6 +142,14 @@ const createOrder = async (req, res) => {
     try {
       await order.save();
       
+      // clear user's cart (if using server cart)
+      try {
+        const Cart = require('../models/Cart.js').default || require('../models/Cart.js');
+        await Cart.deleteOne({ user: req.user.id });
+      } catch (cartErr) {
+        console.warn('Failed to clear cart after order:', cartErr.message);
+      }
+
       const uniqueFarmerIds = [...new Set(itemsWithFarmerId.map(item => item.farmer_id))];
       for (const farmerId of uniqueFarmerIds) {
         if (farmerId) {

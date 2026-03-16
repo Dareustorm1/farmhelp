@@ -304,7 +304,7 @@ function DocumentUpload() {
           {/* Back Button */}
           <Link 
             to="/farmer/"
-            className="inline-flex items-center text-teal-400 hover:text-teal-300 mb-6 transition-colors"
+            className="inline-flex items-center text-emerald-400 hover:text-emerald-300 mb-6 transition-colors"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
             Back to Dashboard
@@ -324,13 +324,13 @@ function DocumentUpload() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-8 p-6 rounded-xl bg-[#2d4f47] border border-teal-500/20"
+            className="mb-8 p-6 rounded-xl bg-[#2d4f47] border border-emerald-500/20"
           >
             <h2 className="text-xl font-bold text-white mb-4">Document Status</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Aadhaar Card Status */}
-              <div className="bg-[#1a332e] p-4 rounded-lg border border-teal-500/10">
+              <div className="bg-[#1a332e] p-4 rounded-lg border border-emerald-500/10">
                 <div className="flex items-center">
                   {getStatusIcon(getDocumentStatus('aadhaar'))}
                   <div className="ml-3">
@@ -343,7 +343,7 @@ function DocumentUpload() {
               </div>
               
               {/* Certificate Status */}
-              <div className="bg-[#1a332e] p-4 rounded-lg border border-teal-500/10">
+              <div className="bg-[#1a332e] p-4 rounded-lg border border-emerald-500/10">
                 <div className="flex items-center">
                   {getStatusIcon(getDocumentStatus('certificate'))}
                   <div className="ml-3">
@@ -357,12 +357,12 @@ function DocumentUpload() {
             </div>
             
             {farmerDocs && farmerDocs.verificationStatus && (
-              <div className="mt-4 pt-4 border-t border-teal-500/10">
+              <div className="mt-4 pt-4 border-t border-emerald-500/10">
                 <p className="text-gray-300">
                   <span className="font-medium">Overall Status:</span> 
                   <span className={`ml-2 capitalize ${
                     farmerDocs.verificationStatus === 'certified' ? 'text-green-400' : 
-                    farmerDocs.verificationStatus === 'complete' ? 'text-blue-400' : 
+                    farmerDocs.verificationStatus === 'complete' ? 'text-emerald-400' : 
                     farmerDocs.verificationStatus === 'rejected' ? 'text-red-400' :
                     'text-yellow-400'
                   }`}>
@@ -381,7 +381,7 @@ function DocumentUpload() {
               onSubmit={handleSubmit}
               className="space-y-8"
             >
-              <div className="bg-[#2d4f47] rounded-xl p-6 border border-teal-500/20">
+              <div className="bg-[#2d4f47] rounded-xl p-6 border border-emerald-500/20">
                 <h2 className="text-xl font-bold text-white mb-6">Upload Documents</h2>
                 <p className="text-gray-300 mb-6">For verification, you need to upload <strong>both</strong> your Aadhaar card and government-issued farmer certificate.</p>
                 
@@ -408,12 +408,12 @@ function DocumentUpload() {
                           <span className="ml-2 text-red-400 text-sm">(Rejected - Please reupload)</span>
                         )}
                       </label>
-                      <div className="border-2 border-dashed border-teal-500/20 rounded-xl p-6">
+                      <div className="border-2 border-dashed border-emerald-500/20 rounded-xl p-6">
                         <div className="text-center">
                           {aadhaarFile ? (
-                            <div className="mb-2 text-teal-300">{aadhaarFile.name}</div>
+                            <div className="mb-2 text-emerald-300">{aadhaarFile.name}</div>
                           ) : (
-                            <Upload className="w-10 h-10 text-teal-400 mx-auto mb-2" />
+                            <Upload className="w-10 h-10 text-emerald-400 mx-auto mb-2" />
                           )}
                           <p className="text-gray-300 mb-2">Upload your Aadhaar card</p>
                           <p className="text-gray-400 text-sm mb-4">PDF or image file (max 5MB)</p>
@@ -426,7 +426,7 @@ function DocumentUpload() {
                           />
                           <label
                             htmlFor="aadhaar-upload"
-                            className=" mb-3 inline-block bg-teal-500/20 text-teal-300 px-4 py-2 rounded-lg cursor-pointer hover:bg-teal-500/30 transition-colors"
+                            className=" mb-3 inline-block bg-emerald-500/20 text-emerald-300 px-4 py-2 rounded-lg cursor-pointer hover:bg-emerald-500/30 transition-colors"
                           >
                             {aadhaarFile ? 'Change File' : 'Select File'}
                           </label>
@@ -436,7 +436,7 @@ function DocumentUpload() {
                   ) : (
                     <div>
                       <label className="block text-white font-medium mb-2">Aadhaar Card</label>
-                      <div className="bg-[#1a332e] p-4 rounded-lg border border-teal-500/10">
+                      <div className="bg-[#1a332e] p-4 rounded-lg border border-emerald-500/10">
                         <div className="flex items-center">
                           {getStatusIcon(getDocumentStatus('aadhaar'))}
                           <div className="ml-3">
@@ -457,12 +457,12 @@ function DocumentUpload() {
                           <span className="ml-2 text-red-400 text-sm">(Rejected - Please reupload)</span>
                         )}
                       </label>
-                      <div className="border-2 border-dashed border-teal-500/20 rounded-xl p-6">
+                      <div className="border-2 border-dashed border-emerald-500/20 rounded-xl p-6">
                         <div className="text-center">
                           {certificateFile ? (
-                            <div className="mb-2 text-teal-300">{certificateFile.name}</div>
+                            <div className="mb-2 text-emerald-300">{certificateFile.name}</div>
                           ) : (
-                            <Upload className="w-10 h-10 text-teal-400 mx-auto mb-2" />
+                            <Upload className="w-10 h-10 text-emerald-400 mx-auto mb-2" />
                           )}
                           <p className="text-gray-300 mb-2">Upload your government-issued farmer certificate</p>
                           <p className="text-gray-400 text-sm mb-4">PDF or image file (max 5MB)</p>
@@ -475,7 +475,7 @@ function DocumentUpload() {
                           />
                           <label
                             htmlFor="certificate-upload"
-                            className="inline-block bg-teal-500/20 text-teal-300 px-4 py-2 rounded-lg cursor-pointer hover:bg-teal-500/30 transition-colors"
+                            className="inline-block bg-emerald-500/20 text-emerald-300 px-4 py-2 rounded-lg cursor-pointer hover:bg-emerald-500/30 transition-colors"
                           >
                             {certificateFile ? 'Change File' : 'Select File'}
                           </label>
@@ -485,7 +485,7 @@ function DocumentUpload() {
                   ) : (
                     <div>
                       <label className="block text-white font-medium mb-2">Government Farmer Certificate</label>
-                      <div className="bg-[#1a332e] p-4 rounded-lg border border-teal-500/10">
+                      <div className="bg-[#1a332e] p-4 rounded-lg border border-emerald-500/10">
                         <div className="flex items-center">
                           {getStatusIcon(getDocumentStatus('certificate'))}
                           <div className="ml-3">
@@ -510,7 +510,7 @@ function DocumentUpload() {
                     className={`px-8 py-3 rounded-lg font-medium transition-colors ${
                       uploading || (!aadhaarFile && !certificateFile) 
                         ? 'bg-gray-500 text-gray-300 cursor-not-allowed' 
-                        : 'bg-teal-500 text-white hover:bg-teal-600'
+                        : 'bg-emerald-500 text-white hover:bg-emerald-600'
                     }`}
                   >
                     {uploading ? 'Uploading...' : aadhaarFile && certificateFile ? 'Upload Both Documents' : 'Upload Document'}
@@ -534,7 +534,7 @@ function DocumentUpload() {
               {hasBlockchainCertificate() && (
                 <button
                   onClick={viewCertificate}
-                  className="mt-4 bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-600 transition-colors"
+                  className="mt-4 bg-emerald-500 text-white px-4 py-2 rounded-lg hover:bg-emerald-600 transition-colors"
                 >
                   View Certificate
                 </button>

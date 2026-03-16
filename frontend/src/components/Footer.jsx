@@ -6,7 +6,7 @@ const Footer = () => {
   const footerLinkVariants = {
     hover: {
       x: 5,
-      color: "#2dd4bf",
+      color: "#34d399",
       transition: { duration: 0.2 }
     }
   };
@@ -27,7 +27,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-[#0D1116] text-white pt-16 pb-8">
+    <footer className="bg-[#0d1612] text-white pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand Section */}
@@ -38,7 +38,7 @@ const Footer = () => {
             className="space-y-4"
           >
             <h2 className="text-2xl font-bold">
-              <span className="text-teal-400">Krushi</span> Setu
+              <span className="text-emerald-400">Farmhelp</span>
             </h2>
             <p className="text-gray-400 text-sm">
               Bridging trust between farmers and consumers through removing middlemen.
@@ -55,8 +55,8 @@ const Footer = () => {
                   href={link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={{ scale: 1.2, color: "#2dd4bf" }}
-                  className="text-gray-400 hover:text-teal-400 transition-colors"
+                  whileHover={{ scale: 1.2, color: "#34d399" }}
+                  className="text-gray-400 hover:text-emerald-400 transition-colors"
                 >
                   <div className="w-8 h-8 border border-gray-700 rounded-full flex items-center justify-center">
                     {icon}
@@ -84,7 +84,7 @@ const Footer = () => {
                       href="#"
                       variants={footerLinkVariants}
                       whileHover="hover"
-                      className="text-gray-400 hover:text-teal-400 transition-colors text-sm block"
+                      className="text-gray-400 hover:text-emerald-400 transition-colors text-sm block"
                     >
                       {link}
                     </motion.a>
@@ -104,14 +104,14 @@ const Footer = () => {
         >
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-gray-400 text-sm">
-              © 2025 Krushi Setu. All rights reserved.
+              © 2025 Farmhelp. All rights reserved.
             </p>
             <div className="flex space-x-6">
               <motion.a
                 href="#"
                 variants={footerLinkVariants}
                 whileHover="hover"
-                className="text-gray-400 hover:text-teal-400 transition-colors text-sm"
+                className="text-gray-400 hover:text-emerald-400 transition-colors text-sm"
               >
                 Privacy Policy
               </motion.a>
@@ -119,7 +119,7 @@ const Footer = () => {
                 href="#"
                 variants={footerLinkVariants}
                 whileHover="hover"
-                className="text-gray-400 hover:text-teal-400 transition-colors text-sm"
+                className="text-gray-400 hover:text-emerald-400 transition-colors text-sm"
               >
                 Terms of Service
               </motion.a>
@@ -127,7 +127,7 @@ const Footer = () => {
                 href="#"
                 variants={footerLinkVariants}
                 whileHover="hover"
-                className="text-gray-400 hover:text-teal-400 transition-colors text-sm"
+                className="text-gray-400 hover:text-emerald-400 transition-colors text-sm"
               >
                 Cookie Settings
               </motion.a>

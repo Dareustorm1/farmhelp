@@ -137,7 +137,7 @@ function ProductFarmers() {
   };
 
   // ✅ FIXED: Updated fetchFarmersForProduct to use correct backend APIs
-  const fetchFarmersForProduct = async (userPincode) => {
+  const fetchFarmersForProduct = async (locationValue) => {
     try {
       setLoading(true);
       setError(null);
@@ -148,9 +148,9 @@ function ProductFarmers() {
         return;
       }
 
-      if (!userPincode) {
-        setError("Please update your pincode in your profile to find nearby farmers");
-        toast.error("Pincode is not entered. Please update your pincode to find nearby farmers.");
+      if (!locationValue) {
+        setError("Please provide your location (pincode or allow geolocation) to find nearby farmers");
+        toast.error("Location required. Please update your profile or share your location.");
         return;
       }
 
@@ -160,10 +160,17 @@ function ProductFarmers() {
       }
       
       console.log('Fetching farmers for product:', actualProductName);
-      console.log('Using user pincode:', userPincode);
+      console.log('Using location value:', locationValue);
       
-      // Use the actual product name for the API call
-      const apiUrl = `${API_BASE_URL}/api/products/farmers/${encodeURIComponent(actualProductName)}?pincode=${userPincode}`;
+      // Build query string depending on type
+      let query = '';
+      if (typeof locationValue === 'object' && locationValue.lat && locationValue.lng) {
+        query = `lat=${locationValue.lat}&lng=${locationValue.lng}`;
+      } else {
+        query = `pincode=${locationValue}`;
+      }
+
+      const apiUrl = `${API_BASE_URL}/api/products/farmers/${encodeURIComponent(actualProductName)}?${query}`;
       console.log('API URL:', apiUrl);
       
       const response = await fetch(apiUrl, {
@@ -179,7 +186,12 @@ function ProductFarmers() {
       if (!response.ok) {
         const errorData = await response.json();
         console.error('API Error:', errorData);
-        throw new Error(errorData.message || "Failed to fetch farmers");
+        // build detailed message with server error if available
+        let errMsg = errorData.message || "Failed to fetch farmers";
+        if (errorData.error) {
+          errMsg += ` (details: ${errorData.error})`;
+        }
+        throw new Error(errMsg);
       }
       
       const data = await response.json();
@@ -270,10 +282,14 @@ function ProductFarmers() {
       
     } catch (error) {
       console.error("Error fetching farmers:", error);
+      // if server responded with known no-farmers message include that logic
       if (error.message.includes("No farmers found within")) {
         setError(`No nearby farmers found selling ${actualProductName}. Try checking other products or expand your search area.`);
-      } else {
+      } else if (error.message.includes("Unable to find location")) {
         setError(error.message);
+      } else {
+        // show generic error, maybe including details
+        setError(error.message || "Error finding farmers for this product. Please try again.");
       }
     } finally {
       setLoading(false);
@@ -362,9 +378,42 @@ function ProductFarmers() {
   };
 
   // Handle buy from specific farmer
-  const handleBuyFromFarmer = (product) => {
+  const handleBuyFromFarmer = async (product) => {
     console.log("Adding to cart from farmer:", product.farmerName);
-    
+    const token = localStorage.getItem('token');
+
+    // Construct minimal request payload
+    const payload = {
+      productId: product.product_id || product._id,
+      quantity: 1
+    };
+
+    if (token) {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/cart/add`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+        if (data.success) {
+          toast.success(`${product.name} added to cart`);
+          // optionally refresh cart page or state via event
+          window.dispatchEvent(new Event('cartUpdated'));
+        } else {
+          toast.error(data.message || 'Failed to add to cart');
+        }
+      } catch (err) {
+        console.error('Server cart add error:', err);
+        toast.error('Error adding to cart');
+      }
+      return;
+    }
+
+    // fallback to localStorage as before
     try {
       // Get existing cart
       const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -462,6 +511,42 @@ function ProductFarmers() {
         returnUrl: location.pathname 
       }
     });
+  };
+
+  // Allow manual pincode entry if profile doesn't have one
+  const [manualPincode, setManualPincode] = useState('');
+  const [manualCoords, setManualCoords] = useState(null);
+
+  const handleManualPincodeSubmit = async () => {
+    if (manualPincode.match(/^\d{6}$/)) {
+      setError(null);
+      console.log('Manual pincode submitted:', manualPincode);
+      await fetchFarmersForProduct(manualPincode);
+    } else {
+      setError('Pincode must be 6 digits');
+    }
+  };
+
+  const handleUseLocation = () => {
+    if (navigator.geolocation) {
+      setLoading(true);
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          console.log('Geolocation obtained:', coords);
+          setManualCoords(coords);
+          // Immediately fetch farmers after getting coords
+          await fetchFarmersForProduct(coords);
+        },
+        (err) => {
+          console.error('Geolocation error', err);
+          setError('Unable to get your location. Please enter pincode manually.');
+          setLoading(false);
+        }
+      );
+    } else {
+      setError('Geolocation not supported by your browser');
+    }
   };
 
   // Farmer verification functions
@@ -685,7 +770,7 @@ function ProductFarmers() {
         );
       case 'verified':
         return (
-          <span className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-xs flex items-center">
+          <span className="px-3 py-1 bg-emerald-500/20 text-emerald-300 rounded-full text-xs flex items-center">
             <CheckCircle2 className="w-3 h-3 mr-1" /> Verified
           </span>
         );
@@ -704,7 +789,7 @@ function ProductFarmers() {
     }
   };
 
-  // Initialize data when component mounts
+  // Initialize data when component mounts or when manual pincode submitted
   useEffect(() => {
     const initializeData = async () => {
       // Don't proceed if we don't have a valid product name
@@ -717,21 +802,25 @@ function ProductFarmers() {
 
       console.log("Initializing data for product:", actualProductName);
       const profile = await fetchUserProfile();
-      if (profile && profile.pincode) {
+      
+      // If profile has pincode, use it. Otherwise show manual entry UI.
+      if (profile?.pincode) {
+        console.log("Using profile pincode:", profile.pincode);
         await fetchFarmersForProduct(profile.pincode);
-      } else if (profile && !profile.pincode) {
+      } else {
+        console.log("Profile has no pincode. Showing manual entry UI.");
         setLoading(false);
-        setError("Please update your pincode in your profile to find nearby farmers");
+        setError("Please provide a pincode or allow geolocation to find nearby farmers");
       }
     };
     
     initializeData();
-  }, [actualProductName]); // Only depend on actualProductName
+  }, [actualProductName]); // Only depend on productName, NOT manualPincode
 
   // Early return for invalid product name
   if (!actualProductName) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#0c1816] to-[#0b1f1a] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-[#0d1612] to-[#0f1f18] flex items-center justify-center">
         <div className="text-center text-red-500 max-w-md mx-auto p-6">
           <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
           <h2 className="text-2xl font-bold mb-4">Invalid Product</h2>
@@ -760,7 +849,7 @@ function ProductFarmers() {
   // Loading state
   if (profileLoading || loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#0c1816] to-[#0b1f1a] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-[#0d1612] to-[#0f1f18] flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500 mx-auto mb-4"></div>
           <p className="text-gray-300">
@@ -773,23 +862,56 @@ function ProductFarmers() {
 
   // Error state
   if (error) {
+    // determine header text
+    const headerText = error.toLowerCase().includes('finding farmers') || error.toLowerCase().includes('error')
+      ? 'Something went wrong'
+      : 'No Nearby Farmers Found';
+
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#0c1816] to-[#0b1f1a] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-[#0d1612] to-[#0f1f18] flex items-center justify-center">
         <div className="text-center text-red-500 max-w-md mx-auto p-6">
           <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold mb-4">No Nearby Farmers Found</h2>
+          <h2 className="text-2xl font-bold mb-4">{headerText}</h2>
           <p className="mb-6 text-gray-300">{error}</p>
+          {error.includes('details:') && (
+            <p className="text-xs text-gray-500 mt-2">
+              (See server logs or the debug endpoint for more information.)
+            </p>
+          )}
           
           <div className="space-y-3">
             {error.includes("pincode") && (
+            <>
               <button 
                 onClick={handleUpdateProfile}
-                className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
+                className="w-full px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors flex items-center justify-center space-x-2"
               >
                 <Settings className="w-5 h-5" />
                 <span>Update Profile</span>
               </button>
-            )}
+              <div className="mt-4 space-y-3">
+                <input
+                  type="text"
+                  placeholder="Enter pincode"
+                  value={manualPincode}
+                  onChange={(e) => setManualPincode(e.target.value)}
+                  className="w-full px-4 py-2 rounded-lg bg-gray-800 text-white placeholder-gray-500 focus:outline-none"
+                />
+                <button
+                  onClick={handleManualPincodeSubmit}
+                  className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  Use this pincode
+                </button>
+                <button
+                  onClick={handleUseLocation}
+                  className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  Use My Location
+                </button>
+              </div>
+            </>
+          )}
             
             <button 
               onClick={() => fetchFarmersForProduct(userProfile?.pincode)}
@@ -828,7 +950,7 @@ function ProductFarmers() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0c1816] to-[#0b1f1a] py-8">
+    <div className="min-h-screen bg-gradient-to-b from-[#0d1612] to-[#0f1f18] py-8">
       <div className="max-w-6xl mx-auto px-6">
         
         {/* Navigation Buttons */}
@@ -838,7 +960,7 @@ function ProductFarmers() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             onClick={() => navigate(-1)}
-            className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-teal-400 transition-colors"
+            className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-emerald-400 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Products</span>
@@ -858,7 +980,7 @@ function ProductFarmers() {
           className="text-center mb-12"
         >
          
-          <h1 className="font-serif text-4xl font-bold text-green-900 dark:text-teal-50 mb-4 capitalize">
+          <h1 className="font-serif text-4xl font-bold text-green-900 dark:text-emerald-50 mb-4 capitalize">
             {actualProductName} Farmers
           </h1>
           <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
@@ -871,10 +993,10 @@ function ProductFarmers() {
           {/* Product Info Summary */}
           {farmers.length > 0 && (
             <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm">
-              <span className="px-3 py-1 bg-green-100 dark:bg-teal-900/30 text-green-800 dark:text-teal-300 rounded-full">
+              <span className="px-3 py-1 bg-green-100 dark:bg-emerald-900/30 text-green-800 dark:text-emerald-300 rounded-full">
                 {productDetails?.category || farmers[0]?.category}
               </span>
-              <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full">
+              <span className="px-3 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 rounded-full">
                 ₹{Math.min(...farmers.map(f => f.price))} - ₹{Math.max(...farmers.map(f => f.price))}
               </span>
               <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 rounded-full">
@@ -918,7 +1040,7 @@ function ProductFarmers() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white/5 backdrop-blur-sm rounded-xl border border-green-200/20 dark:border-teal-800/20 overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
+                className="bg-white/5 backdrop-blur-sm rounded-xl border border-green-200/20 dark:border-emerald-800/20 overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 <div className="flex flex-col lg:flex-row">
                   
@@ -949,7 +1071,7 @@ function ProductFarmers() {
                         <div className="flex items-center space-x-3 mb-3">
                           <div className="flex items-center space-x-2">
                             <User className="w-5 h-5 text-gray-400" />
-                            <h3 className="text-xl font-semibold text-gray-900 dark:text-teal-50">
+                            <h3 className="text-xl font-semibold text-gray-900 dark:text-emerald-50">
                               {farmer.farmerName}
                             </h3>
                           </div>
@@ -977,7 +1099,7 @@ function ProductFarmers() {
                             <span>{farmer.farmerType} Farmer</span>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <FileCheck className="w-4 h-4 text-blue-400 flex-shrink-0" />
+                            <FileCheck className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                             <span>Cert: {farmer.certificateId}</span>
                           </div>
                         </div>
@@ -991,7 +1113,7 @@ function ProductFarmers() {
                       {/* Price and Actions */}
                       <div className="lg:ml-6 lg:text-right">
                         <div className="mb-4">
-                          <div className="text-3xl font-bold text-green-600 dark:text-teal-400 mb-1">
+                          <div className="text-3xl font-bold text-green-600 dark:text-emerald-400 mb-1">
                             ₹{farmer.price}
                           </div>
                           <div className="text-sm text-gray-500">
@@ -1016,7 +1138,7 @@ function ProductFarmers() {
                           {/* ✅ ADD THIS VERIFY BUTTON */}
                           <button
                             onClick={() => viewFarmerVerification(farmer)}
-                            className="w-full lg:w-auto px-6 py-2 border border-teal-500 text-teal-300 rounded-lg hover:bg-teal-500/10 transition-colors flex items-center justify-center space-x-2"
+                            className="w-full lg:w-auto px-6 py-2 border border-emerald-500 text-emerald-300 rounded-lg hover:bg-emerald-500/10 transition-colors flex items-center justify-center space-x-2"
                           >
                             <ShieldCheck className="w-4 h-4" />
                             <span>Verify Certificate</span>
@@ -1031,7 +1153,7 @@ function ProductFarmers() {
                         {farmer.category}
                       </span>
                       {farmer.isVerified && (
-                        <span className="px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded">
+                        <span className="px-2 py-1 text-xs bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 rounded">
                           Verified Farmer ✓
                         </span>
                       )}
@@ -1068,11 +1190,11 @@ function ProductFarmers() {
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-gradient-to-br from-[#386259] to-[#2d4f47] rounded-xl border border-teal-500/20 shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative"
+            className="bg-gradient-to-br from-[#386259] to-[#2d4f47] rounded-xl border border-emerald-500/20 shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative"
             style={{ zIndex: 100000 }}
           >
             {/* ✅ ENHANCED HEADER with better close button */}
-            <div className="sticky top-0 bg-gradient-to-br from-[#386259] to-[#2d4f47] z-50 flex justify-between items-center p-6 border-b border-teal-500/20">
+            <div className="sticky top-0 bg-gradient-to-br from-[#386259] to-[#2d4f47] z-50 flex justify-between items-center p-6 border-b border-emerald-500/20">
               <h3 className="text-xl font-bold text-white">Farmer Certificate Verification</h3>
               <button 
                 onClick={() => {
@@ -1100,15 +1222,15 @@ function ProductFarmers() {
             
             <div className="p-6">
               {/* Certificate Info */}
-              <div className="mb-6 p-6 bg-gradient-to-br from-[#2d4f47] to-[#1e3831] rounded-lg border border-teal-500/10">
+              <div className="mb-6 p-6 bg-gradient-to-br from-[#2d4f47] to-[#1e3831] rounded-lg border border-emerald-500/10">
                 <div className="flex justify-between items-center mb-4">
-                  <h4 className="text-teal-300 font-semibold">Certificate #{selectedFarmer.certificateId}</h4>
+                  <h4 className="text-emerald-300 font-semibold">Certificate #{selectedFarmer.certificateId}</h4>
                   {selectedFarmer.verificationStatus === 'certified' ? (
                     <span className="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-xs flex items-center">
                       <Check className="w-3 h-3 mr-1" /> Certified
                     </span>
                   ) : selectedFarmer.verificationStatus === 'verified' ? (
-                    <span className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-xs flex items-center">
+                    <span className="px-3 py-1 bg-emerald-500/20 text-emerald-300 rounded-full text-xs flex items-center">
                       <ShieldCheck className="w-3 h-3 mr-1" /> Verified
                     </span>
                   ) : selectedFarmer.verificationStatus === 'pending' ? (
@@ -1123,8 +1245,8 @@ function ProductFarmers() {
                 </div>
                 
                 <div className="text-center mb-4">
-                  <div className="w-20 h-20 rounded-full bg-teal-500/20 flex items-center justify-center mx-auto mb-3">
-                    <ShieldCheck className="w-10 h-10 text-teal-300" />
+                  <div className="w-20 h-20 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto mb-3">
+                    <ShieldCheck className="w-10 h-10 text-emerald-300" />
                   </div>
                   <h3 className="text-white text-2xl font-bold mb-1">{selectedFarmer.farmerName}</h3>
                   <p className="text-gray-300 text-sm">
@@ -1158,7 +1280,7 @@ function ProductFarmers() {
                           href={`https://hashscan.io/testnet/transaction/${selectedFarmer.blockchainTxId}`} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="ml-2 text-teal-400 hover:text-teal-300 inline-flex items-center"
+                          className="ml-2 text-emerald-400 hover:text-emerald-300 inline-flex items-center"
                           onClick={(e) => e.stopPropagation()}
                         >
                           <ExternalLink className="w-3 h-3" />
@@ -1179,8 +1301,8 @@ function ProductFarmers() {
                     disabled={verificationLoading}
                     className={`w-full py-3 rounded-lg flex items-center justify-center ${
                       verificationLoading
-                        ? "bg-teal-600/50 cursor-not-allowed"
-                        : "bg-teal-600 hover:bg-teal-700"
+                        ? "bg-emerald-600/50 cursor-not-allowed"
+                        : "bg-emerald-600 hover:bg-emerald-700"
                     } text-white transition-colors`}
                   >
                     {verificationLoading ? (

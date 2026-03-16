@@ -85,7 +85,7 @@ function Services() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-16"
           >
-            <h1 className="font-serif text-4xl font-bold tracking-tighter text-green-900 dark:text-teal-50 mb-4">
+            <h1 className="font-serif text-4xl font-bold tracking-tighter text-green-900 dark:text-emerald-50 mb-4">
               Our Services
             </h1>
             <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
@@ -104,13 +104,13 @@ function Services() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-green-200/20 dark:border-teal-800/20 hover:border-green-300/30 dark:hover:border-teal-700/30 transition-colors"
+                  className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-green-200/20 dark:border-emerald-800/20 hover:border-green-300/30 dark:hover:border-emerald-700/30 transition-colors"
                 >
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 rounded-lg bg-green-100 dark:bg-teal-900/50">
-                      <Icon className="w-6 h-6 text-green-600 dark:text-teal-400" />
+                    <div className="p-2 rounded-lg bg-green-100 dark:bg-emerald-900/50">
+                      <Icon className="w-6 h-6 text-green-600 dark:text-emerald-400" />
                     </div>
-                    <h3 className="font-serif text-xl font-bold tracking-tighter text-green-900 dark:text-teal-50">
+                    <h3 className="font-serif text-xl font-bold tracking-tighter text-green-900 dark:text-emerald-50">
                       {service.title}
                     </h3>
                   </div>
@@ -123,12 +123,12 @@ function Services() {
                         key={feature}
                         className="flex items-center gap-2 text-gray-600 dark:text-gray-300"
                       >
-                        <ArrowRight className="w-4 h-4 text-green-600 dark:text-teal-400" />
+                        <ArrowRight className="w-4 h-4 text-green-600 dark:text-emerald-400" />
                         {feature}
                       </li>
                     ))}
                   </ul>
-                  <button className="w-full flex items-center justify-center gap-2 bg-green-600 dark:bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-green-700 dark:hover:bg-teal-600 transition-colors">
+                  <button className="w-full flex items-center justify-center gap-2 bg-green-600 dark:bg-emerald-500 text-white px-4 py-2 rounded-lg hover:bg-green-700 dark:hover:bg-emerald-600 transition-colors">
                     Learn More
                     <ArrowRight className="w-4 h-4" />
                   </button>

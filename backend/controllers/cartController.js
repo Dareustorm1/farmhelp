@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 
 // Get current user's cart
 export const getCart = async (req, res) => {
+  console.log('GET /api/cart called by user:', req.user?.id);
   try {
     const userId = req.user.id;
     
@@ -47,6 +48,7 @@ export const getCart = async (req, res) => {
 
 // Add item to cart
 export const addToCart = async (req, res) => {
+  console.log('POST /api/cart/add invoked by user:', req.user?.id, 'body:', req.body);
   try {
     const userId = req.user.id;
     const { productId, quantity = 1 } = req.body;
@@ -145,6 +147,7 @@ export const addToCart = async (req, res) => {
 
 // Update cart item quantity
 export const updateCartItem = async (req, res) => {
+  console.log('PUT /api/cart/update called by user:', req.user?.id, 'body:', req.body);
   try {
     const userId = req.user.id;
     const { itemId, quantity } = req.body;
@@ -200,6 +203,7 @@ export const updateCartItem = async (req, res) => {
 
 // Remove item from cart
 export const removeCartItem = async (req, res) => {
+  console.log('DELETE /api/cart/remove/:itemId called by user:', req.user?.id, 'params:', req.params);
   try {
     const userId = req.user.id;
     const { itemId } = req.params;
@@ -231,6 +235,7 @@ export const removeCartItem = async (req, res) => {
 
 // Clear entire cart
 export const clearCart = async (req, res) => {
+  console.log('DELETE /api/cart/clear called by user:', req.user?.id);
   try {
     const userId = req.user.id;
     
@@ -257,6 +262,7 @@ export const clearCart = async (req, res) => {
 
 // Apply coupon to cart
 export const applyCoupon = async (req, res) => {
+  console.log('POST /api/cart/coupon called by user:', req.user?.id, 'body:', req.body);
   try {
     const userId = req.user.id;
     const { couponCode } = req.body;
@@ -303,6 +309,7 @@ export const applyCoupon = async (req, res) => {
 
 // Get cart count
 export const getCartCount = async (req, res) => {
+  console.log('GET /api/cart/count called by user:', req.user?.id);
   try {
     const userId = req.user.id;
     

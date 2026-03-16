@@ -75,9 +75,9 @@ function Farmers() {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2 }}
-                className="inline-block p-3 rounded-full bg-teal-500/10 mb-6"
+                className="inline-block p-3 rounded-full bg-emerald-500/10 mb-6"
               >
-                <Leaf className="w-8 h-8 text-teal-400" />
+                <Leaf className="w-8 h-8 text-emerald-400" />
               </motion.div>
               <h2 className="text-4xl font-bold text-white sm:text-5xl mb-4">
                 Verified Farmers
@@ -98,7 +98,7 @@ function Farmers() {
                   key={index}
                   variants={itemVariants}
                   whileHover={{ y: -10 }}
-                  className="bg-[#2d4f47] rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 border border-teal-500/20"
+                  className="bg-[#2d4f47] rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 border border-emerald-500/20"
                 >
                   <div className="relative">
                     <img
@@ -107,7 +107,7 @@ function Farmers() {
                       className="w-full h-64 object-cover"
                     />
                     {farmer.verified && (
-                      <div className="absolute top-4 right-4 bg-teal-500/90 text-white px-3 py-1 rounded-full text-sm flex items-center gap-2">
+                      <div className="absolute top-4 right-4 bg-emerald-500/90 text-white px-3 py-1 rounded-full text-sm flex items-center gap-2">
                         <CheckCircle className="w-4 h-4" />
                         Verified
                       </div>
@@ -127,7 +127,7 @@ function Farmers() {
                       <span>{farmer.location}</span>
                     </div>
 
-                    <div className="flex items-center gap-2 text-teal-400 mb-4">
+                    <div className="flex items-center gap-2 text-emerald-400 mb-4">
                       <Award className="w-4 h-4" />
                       <span>{farmer.specialty}</span>
                     </div>
@@ -138,7 +138,7 @@ function Farmers() {
                         {farmer.certifications.map((cert, idx) => (
                           <span
                             key={idx}
-                            className="text-xs bg-teal-500/10 text-teal-400 px-2 py-1 rounded-full"
+                            className="text-xs bg-emerald-500/10 text-emerald-400 px-2 py-1 rounded-full"
                           >
                             {cert}
                           </span>
@@ -147,7 +147,7 @@ function Farmers() {
                     </div>
 
                     <Button
-                      className="w-full bg-teal-500 text-white hover:bg-teal-600 flex items-center justify-center gap-2"
+                      className="w-full bg-emerald-500 text-white hover:bg-emerald-600 flex items-center justify-center gap-2"
                       onClick={() => console.log(`View profile of ${farmer.name}`)}
                     >
                       View Profile
